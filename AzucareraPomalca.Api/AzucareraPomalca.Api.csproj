@@ -7,8 +7,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Autofac" Version="6.5.0" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.13" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AzucareraPomalca.Application\AzucareraPomalca.Application.csproj" />
+    <ProjectReference Include="..\AzucareraPomalca.Infrastructure\AzucareraPomalca.Infrastructure.csproj" />
+    <ProjectReference Include="..\AzucareraPomalca.Utils\AzucareraPomalca.Utils.csproj" />
   </ItemGroup>
 
 </Project>
