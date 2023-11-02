@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using AzucareraPomalca.Domain;
+using AzucareraPomalca.Domain.Models;
 
 namespace AzucareraPomalca.Application.Dtos.TipoProfesiones.Profiles
 {

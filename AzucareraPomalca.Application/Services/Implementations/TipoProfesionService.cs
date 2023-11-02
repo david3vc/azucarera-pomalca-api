@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
-using AzucareraPomalca.Application.Core.Exceptions;
+using AzucareraPomalca.Application.Cores.Exceptions;
 using AzucareraPomalca.Application.Dtos.TipoProfesiones;
-using AzucareraPomalca.Application.Services.Abstractions;
-using AzucareraPomalca.Domain;
-using AzucareraPomalca.Infrastructure.Repositories.Abstractions;
+using AzucareraPomalca.Domain.Models;
+using AzucareraPomalca.Domain.Repositories;
 
 namespace AzucareraPomalca.Application.Services.Implementations
 {

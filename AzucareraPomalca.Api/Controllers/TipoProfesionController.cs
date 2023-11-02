@@ -1,5 +1,5 @@
 ﻿using AzucareraPomalca.Application.Dtos.TipoProfesiones;
-using AzucareraPomalca.Application.Services.Abstractions;
+using AzucareraPomalca.Application.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AzucareraPomalca.Api.Controllers
