@@ -1,5 +1,8 @@
-﻿using AzucareraPomalca.Application.Dtos.Profesiones;
+﻿using AzucareraPomalca.Api.Exceptions;
+using AzucareraPomalca.Application.Dtos.Profesiones;
 using AzucareraPomalca.Application.Services;
+using AzucareraPomalca.Core.Paginations;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AzucareraPomalca.Api.Controllers
@@ -16,6 +19,7 @@ namespace AzucareraPomalca.Api.Controllers
 
         // GET: api/values
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProfesionDto))]
         public async Task<IEnumerable<ProfesionDto>> Get()
         {
             return await _profesionService.FindAllAsync();
@@ -23,9 +27,44 @@ namespace AzucareraPomalca.Api.Controllers
 
         // GET: api/values/2
         [HttpGet("{id}")]
-        public async Task<ProfesionDto> Get(int id)
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ProfesionDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorModel))]
+        public async Task<Results<NotFound, Ok<ProfesionDto>>> Get(int id)
         {
-            return await _profesionService.FindByIdAsync(id);
+            var response = await _profesionService.FindByIdAsync(id);
+
+            return TypedResults.Ok(response);
+        }
+
+        // POST api/values
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(ProfesionDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorResponse))]
+        public async Task<Results<BadRequest, CreatedAtRoute<ProfesionDto>>> Post([FromBody] ProfesionSaveDto saveDto)
+        {
+            var response = await _profesionService.CreateAsync(saveDto);
+
+            return TypedResults.CreatedAtRoute(response);
+        }
+
+        // PUT api/values/5
+        [HttpPut("{id}")]
+        public async Task<ProfesionDto> Put(int id, [FromBody] ProfesionSaveDto saveDto)
+        {
+            return await _profesionService.EditAsync(id, saveDto);
+        }
+
+        // DELETE api/values/5
+        [HttpDelete("{id}")]
+        public async Task<ProfesionDto> Delete(int id)
+        {
+            return await _profesionService.DisabledAsync(id);
+        }
+
+        [HttpGet("PaginatedSearch")]
+        public async Task<ResponsePagination<ProfesionDto>> PaginatedSearch([FromQuery] RequestPagination<ProfesionFilterDto> request)
+        {
+            return await _profesionService.PaginatedSearch(request);
         }
     }
 }

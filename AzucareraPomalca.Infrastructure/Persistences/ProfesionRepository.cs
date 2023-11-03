@@ -47,10 +47,12 @@ namespace AzucareraPomalca.Infrastructure.Persistences
                     .Where(f =>
                         (string.IsNullOrWhiteSpace(filter.Codigo) || f.Codigo.ToUpper().Contains(filter.Codigo.ToUpper()))
                         && (string.IsNullOrWhiteSpace(filter.Nombre) || f.Nombre.ToUpper().Contains(filter.Nombre.ToUpper()))
+                        && (filter.IdTipoProfesion == 0 || f.IdTipoProfesion == filter.IdTipoProfesion)
                     );
             }
 
-            query = query.OrderByDescending(f => f.Id);
+            query = query.OrderByDescending(f => f.Id)
+                            .Include(t => t.TipoProfesion);
 
             return await _paginator.Paginate(query, request);
         }

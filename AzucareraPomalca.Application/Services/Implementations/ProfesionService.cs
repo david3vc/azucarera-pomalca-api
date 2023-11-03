@@ -33,7 +33,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
         {
             Profesion? profesion = await _profesionRepository.FindByIdAsync(id);
 
-            if (profesion == null) throw ProfesionNotFound(id);
+            if (profesion is null) throw ProfesionNotFound(id);
 
             profesion.State = false;
 
@@ -46,9 +46,11 @@ namespace AzucareraPomalca.Application.Services.Implementations
         {
             Profesion? profesion = await _profesionRepository.FindByIdAsync(id);
 
-            if (profesion == null) throw ProfesionNotFound(id);
+            if (profesion is null) throw ProfesionNotFound(id);
 
             _mapper.Map<ProfesionSaveDto, Profesion>(saveDto, profesion);
+
+            profesion.UpdatedAt = DateTime.UtcNow;
 
             await _profesionRepository.SaveAsync(profesion);
 
@@ -66,7 +68,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
         {
             Profesion? profesion = await _profesionRepository.FindByIdAsync(id);
 
-            if (profesion == null) throw ProfesionNotFound(id);
+            if (profesion is null) throw ProfesionNotFound(id);
 
             return _mapper.Map<ProfesionDto>(profesion);
         }
