@@ -28,6 +28,8 @@ namespace AzucareraPomalca.Application.Services.Implementations
         {
             TipoProfesion? tipoProfesion = await _tipoProfesionRepository.FindByIdAsync(id);
 
+            if (tipoProfesion is null) throw TipoProfesionNotFound(id);
+
             return _mapper.Map<TipoProfesionDto>(tipoProfesion);
         }
 
