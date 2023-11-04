@@ -20,6 +20,7 @@ namespace AzucareraPomalca.Infrastructure.Persistences
             return await _dbContext.Set<Departamento>()
                 .Include(t => t.Gerencia)
                 .Include(t => t.Division)
+                .Include(t => t.Secciones)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -29,6 +30,7 @@ namespace AzucareraPomalca.Infrastructure.Persistences
             return await _dbContext.Set<Departamento>()
                 .Include(t => t.Gerencia)
                 .Include(t => t.Division)
+                .Include(t => t.Secciones)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
     }

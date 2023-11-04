@@ -6,31 +6,31 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AzucareraPomalca.Infrastructure.Persistences
 {
-    public class DivisionRepository : CrudRepository<Division, int>, IDivisionRepository
+    public class SeccionRepository : CrudRepository<Seccion, int>, ISeccionRepository
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public DivisionRepository(ApplicationDbContext dbContext) : base(dbContext)
+        public SeccionRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public override async Task<IReadOnlyList<Division>> FindAllAsync()
+        public override async Task<IReadOnlyList<Seccion>> FindAllAsync()
         {
-            return await _dbContext.Set<Division>()
+            return await _dbContext.Set<Seccion>()
                 .Include(t => t.Gerencia)
-                .Include(t => t.Departamentos).ThenInclude(t => t.Secciones)
-                .Include(t => t.Secciones)
+                .Include(t => t.Division)
+                .Include(t => t.Departamento)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
-        public override async Task<Division?> FindByIdAsync(int id)
+        public override async Task<Seccion?> FindByIdAsync(int id)
         {
-            return await _dbContext.Set<Division>()
+            return await _dbContext.Set<Seccion>()
                 .Include(t => t.Gerencia)
-                .Include(t => t.Departamentos).ThenInclude(t => t.Secciones)
-                .Include(t => t.Secciones)
+                .Include(t => t.Division)
+                .Include(t => t.Departamento)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
     }
