@@ -6,29 +6,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AzucareraPomalca.Infrastructure.Persistences
 {
-    public class DivisionRepository : CrudRepository<Division, int>, IDivisionRepository
+    public class DepartamentoRepository : CrudRepository<Departamento, int>, IDepartamentoRepository
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public DivisionRepository(ApplicationDbContext dbContext) : base(dbContext)
+        public DepartamentoRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public override async Task<IReadOnlyList<Division>> FindAllAsync()
+        public override async Task<IReadOnlyList<Departamento>> FindAllAsync()
         {
-            return await _dbContext.Set<Division>()
+            return await _dbContext.Set<Departamento>()
                 .Include(t => t.Gerencia)
-                .Include(t => t.Departamentos)
+                .Include(t => t.Division)
                 .AsNoTracking()
                 .ToListAsync();
         }
 
-        public override async Task<Division?> FindByIdAsync(int id)
+        public override async Task<Departamento?> FindByIdAsync(int id)
         {
-            return await _dbContext.Set<Division>()
+            return await _dbContext.Set<Departamento>()
                 .Include(t => t.Gerencia)
-                .Include(t => t.Departamentos)
+                .Include(t => t.Division)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
     }

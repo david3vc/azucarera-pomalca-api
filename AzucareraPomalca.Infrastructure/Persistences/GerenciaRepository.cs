@@ -18,7 +18,8 @@ namespace AzucareraPomalca.Infrastructure.Persistences
         public override async Task<IReadOnlyList<Gerencia>> FindAllAsync()
         {
             return await _dbContext.Set<Gerencia>()
-                .Include(t => t.Divisiones)
+                .Include(t => t.Divisiones).ThenInclude(t => t.Departamentos)
+                .Include(t => t.Departamentos)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -26,7 +27,8 @@ namespace AzucareraPomalca.Infrastructure.Persistences
         public override async Task<Gerencia?> FindByIdAsync(int id)
         {
             return await _dbContext.Set<Gerencia>()
-                .Include(t => t.Divisiones)
+                .Include(t => t.Divisiones).ThenInclude(t => t.Departamentos)
+                .Include(t => t.Departamentos)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
     }

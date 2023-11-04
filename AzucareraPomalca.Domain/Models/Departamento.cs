@@ -2,12 +2,13 @@
 
 namespace AzucareraPomalca.Domain.Models
 {
-    public class Division : CoreModel<int>
+    public class Departamento : CoreModel<int>
     {
         public string Nombre { get; set; }
+        public int? IdDivision { get; set; }
         public int? IdGerencia { get; set; }
 
+        public virtual Division? Division { get; set; }
         public virtual Gerencia? Gerencia { get; set; }
-        public virtual ICollection<Departamento>? Departamentos { get; set; }
     }
 }
