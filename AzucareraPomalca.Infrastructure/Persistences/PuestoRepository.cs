@@ -1,0 +1,45 @@
+﻿using AzucareraPomalca.Domain.Models;
+using AzucareraPomalca.Domain.Repositories;
+using AzucareraPomalca.Infrastructure.Cores.Contexts;
+using AzucareraPomalca.Infrastructure.Cores.Persistences;
+using Microsoft.EntityFrameworkCore;
+
+namespace AzucareraPomalca.Infrastructure.Persistences
+{
+    public class PuestoRepository : CrudRepository<Puesto, int>, IPuestoRepository
+    {
+        private readonly ApplicationDbContext _dbContext;
+
+        public PuestoRepository(ApplicationDbContext dbContext) : base(dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
+        public override async Task<IReadOnlyList<Puesto>> FindAllAsync()
+        {
+            return await _dbContext.Set<Puesto>()
+                .Include(t => t.PuestoSupervisor)
+                .Include(t => t.PuestosSubalternos).ThenInclude(t => t.PuestosSubalternos).ThenInclude(t => t.PuestosSubalternos).ThenInclude(t => t.PuestosSubalternos).ThenInclude(t => t.PuestosSubalternos)
+                .Include(t => t.ClaseOcupacional)
+                .Include(t => t.Gerencia)
+                .Include(t => t.Division)
+                .Include(t => t.Departamento)
+                .Include(t => t.Seccion)
+                .AsNoTracking()
+                .ToListAsync();
+        }
+
+        public override async Task<Puesto?> FindByIdAsync(int id)
+        {
+            return await _dbContext.Set<Puesto>()
+                .Include(t => t.PuestoSupervisor)
+                .Include(t => t.PuestosSubalternos)
+                .Include(t => t.ClaseOcupacional)
+                .Include(t => t.Gerencia)
+                .Include(t => t.Division)
+                .Include(t => t.Departamento)
+                .Include(t => t.Seccion)
+                .FirstOrDefaultAsync(t => t.Id == id);
+        }
+    }
+}

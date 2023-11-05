@@ -8,5 +8,6 @@ namespace AzucareraPomalca.Domain.Models
         public int IdGrupoOcupacional { get; set; }
 
         public virtual GrupoOcupacional GrupoOcupacional { get; set; }
+        public virtual ICollection<Puesto>? Puestos { get; set; }
     }
 }

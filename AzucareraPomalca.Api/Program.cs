@@ -4,6 +4,7 @@ using AzucareraPomalca.Api.Middlewares;
 using AzucareraPomalca.Application.Cores.Contexts;
 using AzucareraPomalca.Infrastructure.Cores.Contexts;
 using FluentValidation.AspNetCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +20,10 @@ var builder = WebApplication.CreateBuilder(args);
 //builder.Logging.AddSerilog(logger);
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
 //builder.Services.AddControllers(options =>
 //{
 //    options.Filters.Add(new ValidationFilter());
@@ -72,7 +76,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseMiddleware<ExceptionMiddleware>();
+//app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseHttpsRedirection();
 
