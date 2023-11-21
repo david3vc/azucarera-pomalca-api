@@ -22,10 +22,9 @@ namespace AzucareraPomalca.Application.Dtos.Puestos
 
         public PuestoDto? PuestoSupervisor { get; set; }
         public ClaseOcupacionalDto? ClaseOcupacional { get; set; }
-        public GerenciaDto? Gerencia { get; set; }
-        public DivisionDto? Division { get; set; }
-        public DepartamentoDto? Departamento { get; set; }
-        public SeccionDto? Seccion { get; set; }
-        public List<PuestoDto>? PuestosSubalternos { get; set; }
+        public GerenciaSimpleDto? Gerencia { get; set; }
+        public DivisionSimpleDto? Division { get; set; }
+        public DepartamentoSimpleDto? Departamento { get; set; }
+        public SeccionSimpleDto? Seccion { get; set; }
     }
 }

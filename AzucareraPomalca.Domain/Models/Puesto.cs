@@ -24,6 +24,8 @@ namespace AzucareraPomalca.Domain.Models
         public virtual Division? Division { get; set; }
         public virtual Departamento? Departamento { get; set; }
         public virtual Seccion? Seccion { get; set; }
+
         public virtual ICollection<Puesto>? PuestosSubalternos { get; set; }
+        public virtual ICollection<Empleado> Empleados { get; set; }
     }
 }

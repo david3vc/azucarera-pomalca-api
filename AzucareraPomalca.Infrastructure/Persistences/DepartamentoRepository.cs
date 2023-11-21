@@ -20,7 +20,6 @@ namespace AzucareraPomalca.Infrastructure.Persistences
             return await _dbContext.Set<Departamento>()
                 .Include(t => t.Gerencia)
                 .Include(t => t.Division)
-                .Include(t => t.Secciones)
                 .AsNoTracking()
                 .ToListAsync();
         }
@@ -30,8 +29,31 @@ namespace AzucareraPomalca.Infrastructure.Persistences
             return await _dbContext.Set<Departamento>()
                 .Include(t => t.Gerencia)
                 .Include(t => t.Division)
-                .Include(t => t.Secciones)
                 .FirstOrDefaultAsync(t => t.Id == id);
+        }
+
+        public async Task<List<Departamento>> FindByIdDivisionAsync(int id)
+        {
+            return await _dbContext.Set<Departamento>()
+                .Where(t => t.IdDivision == id)
+                .ToListAsync();
+        }
+
+        public async Task<List<Departamento>> FindByIdGerenciaAsync(int id)
+        {
+            return await _dbContext.Set<Departamento>()
+                .Where(t => t.IdGerencia == id)
+                .ToListAsync();
+        }
+
+        public async Task<List<Departamento>> SearchByUnidadOrganizacional(Departamento request)
+        {
+            return await _dbContext.Set<Departamento>()
+                .Where(t =>
+                    (t.IdGerencia == request.IdGerencia)
+                    && (t.IdDivision == request.IdDivision)
+                )
+                .ToListAsync();
         }
     }
 }

@@ -35,7 +35,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
             if (profesion is null) throw ProfesionNotFound(id);
 
-            profesion.State = false;
+            profesion.State = !profesion.State;
 
             await _profesionRepository.SaveAsync(profesion);
 

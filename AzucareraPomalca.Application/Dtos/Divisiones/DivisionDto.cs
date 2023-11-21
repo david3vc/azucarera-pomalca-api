@@ -1,6 +1,4 @@
-﻿using AzucareraPomalca.Application.Dtos.Departamentos;
-using AzucareraPomalca.Application.Dtos.Gerencias;
-using AzucareraPomalca.Application.Dtos.Secciones;
+﻿using AzucareraPomalca.Application.Dtos.Gerencias;
 
 namespace AzucareraPomalca.Application.Dtos.Divisiones
 {
@@ -13,7 +11,5 @@ namespace AzucareraPomalca.Application.Dtos.Divisiones
         public bool State { get; set; }
 
         public GerenciaSimpleDto? Gerencia { get; set; }
-        public List<DepartamentoDto>? Departamentos { get; set; }
-        public List<SeccionDto>? Secciones { get; set; }
     }
 }

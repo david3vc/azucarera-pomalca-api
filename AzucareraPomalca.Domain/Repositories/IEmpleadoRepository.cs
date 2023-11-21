@@ -3,8 +3,8 @@ using AzucareraPomalca.Domain.Models;
 
 namespace AzucareraPomalca.Domain.Repositories
 {
-    public interface IDivisionRepository : ICrudRepository<Division, int>
+    public interface IEmpleadoRepository : ICrudRepository<Empleado, int>
     {
-        Task<List<Division>> FindByIdGerenciaAsync(int id);
+        Task<List<Empleado>> FindByIdPuestoAsync(int id);
     }
 }

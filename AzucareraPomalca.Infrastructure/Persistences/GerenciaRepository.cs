@@ -15,23 +15,19 @@ namespace AzucareraPomalca.Infrastructure.Persistences
             _dbContext = dbContext;
         }
 
-        public override async Task<IReadOnlyList<Gerencia>> FindAllAsync()
+        public async Task<Gerencia?> FindByNombreAsync(string nombre)
         {
             return await _dbContext.Set<Gerencia>()
-                .Include(t => t.Divisiones).ThenInclude(t => t.Departamentos).ThenInclude(t => t.Secciones)
-                .Include(t => t.Departamentos).ThenInclude(t => t.Secciones)
-                .Include(t => t.Secciones)
-                .AsNoTracking()
-                .ToListAsync();
+                .Include(t => t.Puestos)
+                .FirstOrDefaultAsync(t => t.Nombre.ToUpper().Contains(nombre.ToUpper()));
         }
 
-        public override async Task<Gerencia?> FindByIdAsync(int id)
+        public async Task<List<Gerencia>> FindGerenciasSubalternasAsync()
         {
             return await _dbContext.Set<Gerencia>()
-                .Include(t => t.Divisiones).ThenInclude(t => t.Departamentos).ThenInclude(t => t.Secciones)
-                .Include(t => t.Departamentos).ThenInclude(t => t.Secciones)
-                .Include(t => t.Secciones)
-                .FirstOrDefaultAsync(t => t.Id == id);
+                .Include(t => t.Puestos)
+                .Where(f => f.Nombre != "GERENCIA GENERAL")
+                .ToListAsync();
         }
     }
 }

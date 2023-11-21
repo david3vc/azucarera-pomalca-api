@@ -16,6 +16,11 @@
   <ItemGroup>
     <ProjectReference Include="..\AzucareraPomalca.Core\AzucareraPomalca.Core.csproj" />
     <ProjectReference Include="..\AzucareraPomalca.Domain\AzucareraPomalca.Domain.csproj" />
+    <ProjectReference Include="..\AzucareraPomalca.Utils\AzucareraPomalca.Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Dtos\ArbolOrganizacional\Profiles\" />
   </ItemGroup>
 
 </Project>
