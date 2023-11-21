@@ -1,22 +1,20 @@
-﻿using AzucareraPomalca.Core.Paginations;
-using AzucareraPomalca.Domain.Cores.Paginations;
+﻿using AzucareraPomalca.Domain.Cores.Models;
 using AzucareraPomalca.Domain.Models;
 using AzucareraPomalca.Domain.Repositories;
 using AzucareraPomalca.Infrastructure.Cores.Contexts;
 using AzucareraPomalca.Infrastructure.Cores.Persistences;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace AzucareraPomalca.Infrastructure.Persistences
 {
     public class ProfesionRepository : CrudRepository<Profesion, int>, IProfesionRepository
     {
         private readonly ApplicationDbContext _dbContext;
-        private readonly IPaginator<Profesion> _paginator;
 
-        public ProfesionRepository(ApplicationDbContext dbContext, IPaginator<Profesion> paginator) : base(dbContext)
+        public ProfesionRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
             _dbContext = dbContext;
-            _paginator = paginator;
         }
 
         public override async Task<IReadOnlyList<Profesion>> FindAllAsync()
@@ -34,27 +32,10 @@ namespace AzucareraPomalca.Infrastructure.Persistences
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
 
-        public async Task<ResponsePagination<Profesion>> PaginatedSearch(RequestPagination<Profesion> request)
-        {
-            var filter = request.Filter;
+        //public override async Task<PagedResult<Profesion>> FindAllPaginatedAsync(Paging pagin,
+        //    Expression<Func<Profesion, bool>> predicate)
+        //{
 
-            var query = _dbContext.Set<Profesion>().AsQueryable();
-
-
-            if (filter is not null)
-            {
-                query = query
-                    .Where(f =>
-                        (string.IsNullOrWhiteSpace(filter.Codigo) || f.Codigo.ToUpper().Contains(filter.Codigo.ToUpper()))
-                        && (string.IsNullOrWhiteSpace(filter.Nombre) || f.Nombre.ToUpper().Contains(filter.Nombre.ToUpper()))
-                        && (filter.IdTipoProfesion == 0 || f.IdTipoProfesion == filter.IdTipoProfesion)
-                    );
-            }
-
-            query = query.OrderByDescending(f => f.Id)
-                            .Include(t => t.TipoProfesion);
-
-            return await _paginator.Paginate(query, request);
-        }
+        //}
     }
 }

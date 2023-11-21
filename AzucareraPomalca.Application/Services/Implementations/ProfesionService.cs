@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using AzucareraPomalca.Application.Cores.Dtos;
 using AzucareraPomalca.Application.Cores.Exceptions;
 using AzucareraPomalca.Application.Dtos.Profesiones;
-using AzucareraPomalca.Core.Paginations;
+using AzucareraPomalca.Domain.Cores.Models;
 using AzucareraPomalca.Domain.Models;
 using AzucareraPomalca.Domain.Repositories;
+using System.Linq.Expressions;
 
 namespace AzucareraPomalca.Application.Services.Implementations
 {
@@ -64,6 +66,27 @@ namespace AzucareraPomalca.Application.Services.Implementations
             return _mapper.Map<IReadOnlyList<ProfesionDto>>(profesiones);
         }
 
+        public async Task<PageResponse<ProfesionDto>> FindAllPaginatedAsync(PageRequest<ProfesionFilterDto> request)
+        {
+            var filter = request.Filter ?? new ProfesionFilterDto();
+            var paging = new Paging() { PageNumber = request.Page, PageSize = request.PerPage };
+
+            Expression<Func<Profesion, bool>> predicate = x =>
+                (string.IsNullOrWhiteSpace(filter.Codigo) || x.Codigo.ToUpper().Contains(filter.Codigo.ToUpper()))
+                && (string.IsNullOrWhiteSpace(filter.Nombre) || x.Nombre.ToUpper().Contains(filter.Nombre.ToUpper()))
+                && (!filter.IdTipoProfesion.HasValue || x.IdTipoProfesion == filter.IdTipoProfesion)
+                && (!filter.State.HasValue || x.State == filter.State);
+
+            List<Expression<Func<Profesion, object>>> includes = new List<Expression<Func<Profesion, object>>>()
+            {
+                t => t.TipoProfesion
+            };
+
+            var response = await _profesionRepository.FindAllPaginatedAsync(paging: paging, predicate: predicate, includes: includes);
+
+            return _mapper.Map<PageResponse<ProfesionDto>>(response);
+        }
+
         public async Task<ProfesionDto> FindByIdAsync(int id)
         {
             Profesion? profesion = await _profesionRepository.FindByIdAsync(id);
@@ -71,14 +94,6 @@ namespace AzucareraPomalca.Application.Services.Implementations
             if (profesion is null) throw ProfesionNotFound(id);
 
             return _mapper.Map<ProfesionDto>(profesion);
-        }
-
-        public async Task<ResponsePagination<ProfesionDto>> PaginatedSearch(RequestPagination<ProfesionFilterDto> request)
-        {
-            var entity = _mapper.Map<RequestPagination<Profesion>>(request);
-            var response = await _profesionRepository.PaginatedSearch(entity);
-
-            return _mapper.Map<ResponsePagination<ProfesionDto>>(response);
         }
 
         private NotFoundCoreException ProfesionNotFound(int id)

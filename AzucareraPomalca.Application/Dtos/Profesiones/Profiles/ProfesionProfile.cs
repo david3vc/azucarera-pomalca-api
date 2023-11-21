@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using AzucareraPomalca.Application.Cores.Dtos;
 using AzucareraPomalca.Core.Paginations;
+using AzucareraPomalca.Domain.Cores.Models;
 using AzucareraPomalca.Domain.Models;
 
 namespace AzucareraPomalca.Application.Dtos.Profesiones.Profiles
@@ -14,6 +16,8 @@ namespace AzucareraPomalca.Application.Dtos.Profesiones.Profiles
 
             CreateMap<ResponsePagination<Profesion>, ResponsePagination<ProfesionDto>>();
             CreateMap<RequestPagination<Profesion>, RequestPagination<ProfesionFilterDto>>().ReverseMap();
+
+            CreateMap<PagedResult<Profesion>, PageResponse<ProfesionDto>>();
         }
     }
 }

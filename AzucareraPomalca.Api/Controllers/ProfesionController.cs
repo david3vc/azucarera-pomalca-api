@@ -1,7 +1,7 @@
 ﻿using AzucareraPomalca.Api.Exceptions;
+using AzucareraPomalca.Application.Cores.Dtos;
 using AzucareraPomalca.Application.Dtos.Profesiones;
 using AzucareraPomalca.Application.Services;
-using AzucareraPomalca.Core.Paginations;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -62,9 +62,9 @@ namespace AzucareraPomalca.Api.Controllers
         }
 
         [HttpGet("PaginatedSearch")]
-        public async Task<ResponsePagination<ProfesionDto>> PaginatedSearch([FromQuery] RequestPagination<ProfesionFilterDto> request)
+        public async Task<PageResponse<ProfesionDto>> PaginatedSearch([FromQuery] PageRequest<ProfesionFilterDto> request)
         {
-            return await _profesionService.PaginatedSearch(request);
+            return await _profesionService.FindAllPaginatedAsync(request);
         }
     }
 }
