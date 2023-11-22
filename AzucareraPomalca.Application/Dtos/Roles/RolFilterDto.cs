@@ -1,0 +1,9 @@
+﻿namespace AzucareraPomalca.Application.Dtos.Roles
+{
+    public class RolFilterDto
+    {
+        public string? Nombre { get; set; }
+        public string? Descripcion { get; set; }
+        public bool? State { get; set; }
+    }
+}

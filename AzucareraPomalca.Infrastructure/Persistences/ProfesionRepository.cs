@@ -1,10 +1,8 @@
-﻿using AzucareraPomalca.Domain.Cores.Models;
-using AzucareraPomalca.Domain.Models;
+﻿using AzucareraPomalca.Domain.Models;
 using AzucareraPomalca.Domain.Repositories;
 using AzucareraPomalca.Infrastructure.Cores.Contexts;
 using AzucareraPomalca.Infrastructure.Cores.Persistences;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace AzucareraPomalca.Infrastructure.Persistences
 {
@@ -31,11 +29,5 @@ namespace AzucareraPomalca.Infrastructure.Persistences
                 .Include(t => t.TipoProfesion)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
-
-        //public override async Task<PagedResult<Profesion>> FindAllPaginatedAsync(Paging pagin,
-        //    Expression<Func<Profesion, bool>> predicate)
-        //{
-
-        //}
     }
 }
