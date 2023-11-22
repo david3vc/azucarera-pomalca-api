@@ -1,10 +1,7 @@
 ﻿using AzucareraPomalca.Api.Exceptions;
 using AzucareraPomalca.Application.Cores.Dtos;
-using AzucareraPomalca.Application.Dtos.Profesiones;
-using AzucareraPomalca.Application.Dtos.Puestos;
 using AzucareraPomalca.Application.Dtos.Roles;
 using AzucareraPomalca.Application.Services;
-using AzucareraPomalca.Application.Services.Implementations;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +11,7 @@ namespace AzucareraPomalca.Api.Controllers
     public class RolController : Controller
     {
         private readonly IRolService _rolService;
-        
+
         public RolController(IRolService rolService)
         {
             _rolService = rolService;

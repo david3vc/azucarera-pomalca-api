@@ -5,9 +5,9 @@ using AzucareraPomalca.Infrastructure.Cores.Persistences;
 
 namespace AzucareraPomalca.Infrastructure.Persistences
 {
-    public class RolRepository : CrudRepository<Rol, int>, IRolRepository
+    public class MenuRepository : CrudRepository<Menu, int>, IMenuRepository
     {
-        public RolRepository(ApplicationDbContext dbContext) : base(dbContext)
+        public MenuRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
     }
