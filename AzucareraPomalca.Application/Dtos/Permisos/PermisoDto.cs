@@ -17,5 +17,6 @@ namespace AzucareraPomalca.Application.Dtos.Permisos
 
         public MenuDto Menu { get; set; }
         public RolDto Rol { get; set; }
+        public List<PermisoDto>? Children { get; set; }
     }
 }

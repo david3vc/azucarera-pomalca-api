@@ -3,6 +3,7 @@ using AzucareraPomalca.Application.Cores.Exceptions;
 using AzucareraPomalca.Application.Dtos.Menus;
 using AzucareraPomalca.Domain.Models;
 using AzucareraPomalca.Domain.Repositories;
+using System.Linq.Expressions;
 
 namespace AzucareraPomalca.Application.Services.Implementations
 {
@@ -19,7 +20,9 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
         public async Task<IReadOnlyList<MenuDto>> FindAllAsync()
         {
-            IReadOnlyList<Menu> menus = await _menuRepository.FindAllAsync();
+            Expression<Func<Menu, bool>> predicate = x => x.Nivel == 2;
+
+            IReadOnlyList<Menu> menus = await _menuRepository.FindAllAsync(predicate: predicate);
 
             return _mapper.Map<IReadOnlyList<MenuDto>>(menus);
         }

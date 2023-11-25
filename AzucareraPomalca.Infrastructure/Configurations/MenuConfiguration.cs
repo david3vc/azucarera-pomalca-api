@@ -20,6 +20,9 @@ namespace AzucareraPomalca.Infrastructure.Configurations
             builder.Property(t => t.CreatedAt).HasColumnName("created_at");
             builder.Property(t => t.UpdatedAt).HasColumnName("updated_at");
             builder.Property(t => t.State).HasColumnName("state");
+            builder.Property(t => t.IdMenuPadre).HasColumnName("id_menu_padre");
+
+            builder.HasOne(one => one.MenuPadre).WithMany(many => many.MenusHijo).HasForeignKey(fk => fk.IdMenuPadre);
         }
     }
 }

@@ -128,7 +128,12 @@ namespace AzucareraPomalca.Application.Services.Implementations
         {
             Expression<Func<Usuario, bool>> predicate = x => x.Correo == userAuth.Correo;
 
-            Usuario? usuario = await _usuarioRepository.FindFirstOrDefaultAsync(predicate: predicate);
+            List<Expression<Func<Usuario, object>>> includes = new List<Expression<Func<Usuario, object>>>()
+            {
+                t => t.Rol
+            };
+
+            Usuario? usuario = await _usuarioRepository.FindFirstOrDefaultAsync(predicate: predicate, includes: includes);
 
             if (usuario is null) throw new NotFoundCoreException("Usuario no esta registrado en nuestro Sistema.");
 

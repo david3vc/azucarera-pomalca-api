@@ -62,7 +62,7 @@ namespace AzucareraPomalca.Core.Securities.Services.Implementations
             return new SecurityEntity()
             {
                 TokenType = "Bearer",
-                AccesTocken = token,
+                AccesToken = token,
                 ExpireOn = expireDateTime
             };
         }

@@ -13,5 +13,8 @@
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public bool State { get; set; }
+        public int? IdMenuPadre { get; set; }
+
+        public MenuDto? MenuPadre { get; set; }
     }
 }
