@@ -6,6 +6,9 @@ namespace AzucareraPomalca.Domain.Models
     {
         public string Nombre { get; set; }
         public string? Descripcion { get; set; }
+        public bool Consultar { get; set; }
+        public bool Editar { get; set; }
+        public bool Eliminar { get; set; }
 
         public virtual ICollection<Permiso> Permisos { get; set; }
         public virtual ICollection<Usuario> Usuarios { get; set; }

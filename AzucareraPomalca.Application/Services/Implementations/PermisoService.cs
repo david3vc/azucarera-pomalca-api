@@ -40,9 +40,6 @@ namespace AzucareraPomalca.Application.Services.Implementations
             {
                 Permiso newPermisoMenuPadre = new Permiso()
                 {
-                    Consultar = true,
-                    Editar = true,
-                    Eliminar = true,
                     CreatedAt = DateTime.Now,
                     State = true,
                     IdMenu = menuPadre.Id,
@@ -70,6 +67,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
             _mapper.Map<PermisoSaveDto, Permiso>(saveDto, permiso);
 
             permiso.UpdatedAt = DateTime.UtcNow;
+            permiso.State = !permiso.State;
 
             await _permisoRepository.SaveAsync(permiso);
 
@@ -109,10 +107,9 @@ namespace AzucareraPomalca.Application.Services.Implementations
                     PermisoDto newPermiso = new PermisoDto()
                     {
                         IdMenu = menu.Id,
-                        IdRol = id,
-                        Consultar = false,
-                        Editar = false,
-                        Eliminar = false,
+                        //Consultar = false,
+                        //Editar = false,
+                        //Eliminar = false,
                         Menu = _mapper.Map<MenuDto>(menu)
                     };
                     response.Add(_mapper.Map<PermisoDto>(newPermiso));
@@ -124,7 +121,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
         public async Task<List<PermisoDto>> MenusByIdRolAsync(int id)
         {
-            Expression<Func<Permiso, bool>> predicate = x => x.IdRol == id;
+            Expression<Func<Permiso, bool>> predicate = x => x.IdRol == id && x.State == true;
 
             List<Expression<Func<Permiso, object>>> includes = new List<Expression<Func<Permiso, object>>>()
             {
@@ -135,7 +132,8 @@ namespace AzucareraPomalca.Application.Services.Implementations
             var response = await _permisoRepository.FindAllAsync(predicate: predicate, includes: includes, orderBy: x => x.OrderBy(t => t.Menu.Orden));
 
             var menusPadre = response.Where(t => t.Menu.Nivel == 1);
-            var menusHijo = response.Where(t => t.Menu.Nivel == 2 && (t.Consultar == true || t.Editar == true || t.Eliminar == true));
+            //var menusHijo = response.Where(t => t.Menu.Nivel == 2 && (t.Consultar == true || t.Editar == true || t.Eliminar == true));
+            var menusHijo = response.Where(t => t.Menu.Nivel == 2);
 
             var menusReponse = new List<PermisoDto>();
 

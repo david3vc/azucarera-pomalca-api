@@ -11,9 +11,6 @@ namespace AzucareraPomalca.Infrastructure.Configurations
             builder.ToTable("permiso");
             builder.HasKey(t => t.Id);
             builder.Property(t => t.Id).HasColumnName("id_permiso");
-            builder.Property(t => t.Consultar).HasColumnName("consultar");
-            builder.Property(t => t.Editar).HasColumnName("editar");
-            builder.Property(t => t.Eliminar).HasColumnName("eliminar");
             builder.Property(t => t.IdMenu).HasColumnName("id_menu");
             builder.Property(t => t.IdRol).HasColumnName("id_rol");
             builder.Property(t => t.CreatedAt).HasColumnName("created_at");

@@ -6,9 +6,6 @@ namespace AzucareraPomalca.Application.Dtos.Permisos
     public class PermisoDto
     {
         public int Id { get; set; }
-        public bool Consultar { get; set; }
-        public bool Editar { get; set; }
-        public bool Eliminar { get; set; }
         public int IdMenu { get; set; }
         public int IdRol { get; set; }
         public DateTime CreatedAt { get; set; }

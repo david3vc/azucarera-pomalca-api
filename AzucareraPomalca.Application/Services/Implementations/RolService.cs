@@ -74,7 +74,10 @@ namespace AzucareraPomalca.Application.Services.Implementations
             Expression<Func<Rol, bool>> predicate = x =>
                 (string.IsNullOrWhiteSpace(filter.Descripcion) || x.Descripcion.ToUpper().Contains(filter.Descripcion.ToUpper()))
                 && (string.IsNullOrWhiteSpace(filter.Nombre) || x.Nombre.ToUpper().Contains(filter.Nombre.ToUpper()))
-                && (!filter.State.HasValue || x.State == filter.State);
+                && (!filter.State.HasValue || x.State == filter.State)
+                && (!filter.Consultar.HasValue || x.Consultar == filter.Consultar)
+                && (!filter.Editar.HasValue || x.Editar == filter.Editar)
+                && (!filter.Eliminar.HasValue || x.Eliminar == filter.Eliminar);
 
             var response = await _rolRepository.FindAllPaginatedAsync(paging: paging, predicate: predicate);
 

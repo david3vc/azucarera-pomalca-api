@@ -16,6 +16,9 @@ namespace AzucareraPomalca.Infrastructure.Configurations
             builder.Property(t => t.CreatedAt).HasColumnName("created_at");
             builder.Property(t => t.UpdatedAt).HasColumnName("updated_at");
             builder.Property(t => t.State).HasColumnName("state");
+            builder.Property(t => t.Consultar).HasColumnName("consultar");
+            builder.Property(t => t.Editar).HasColumnName("editar");
+            builder.Property(t => t.Eliminar).HasColumnName("eliminar");
         }
     }
 }
