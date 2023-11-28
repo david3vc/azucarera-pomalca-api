@@ -23,6 +23,20 @@ namespace AzucareraPomalca.Api.Controllers
             return await _seccionService.FindAllAsync();
         }
 
+        // GET: api/listsimple
+        [HttpGet("listasimple")]
+        public async Task<IEnumerable<SeccionSimpleDto>> GetSimple()
+        {
+            return await _seccionService.SimpleListAsync();
+        }
+
+        // GET: api/listasimplebyids
+        [HttpGet("listasimplebyids")]
+        public async Task<IEnumerable<SeccionSimpleDto>> GetSimpleByIds([FromQuery] SeccionSimpleFilterDto request)
+        {
+            return await _seccionService.SimpleListByIdsAsync(request);
+        }
+
         // GET: api/values/2
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(SeccionDto))]

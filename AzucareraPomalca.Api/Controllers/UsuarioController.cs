@@ -1,11 +1,7 @@
 ﻿using AzucareraPomalca.Api.Exceptions;
 using AzucareraPomalca.Application.Cores.Dtos;
-using AzucareraPomalca.Application.Dtos.Profesiones;
-using AzucareraPomalca.Application.Dtos.Puestos;
 using AzucareraPomalca.Application.Dtos.Usuarios;
 using AzucareraPomalca.Application.Services;
-using AzucareraPomalca.Application.Services.Implementations;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 

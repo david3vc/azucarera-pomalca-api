@@ -36,7 +36,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
             Permiso? permisoMenuPadre = await _permisoRepository.FindByIdAsync(predicate: predicatePermiso);
 
-            if(permisoMenuPadre is null)
+            if (permisoMenuPadre is null)
             {
                 Permiso newPermisoMenuPadre = new Permiso()
                 {
@@ -93,12 +93,12 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
             List<PermisoDto> response = new List<PermisoDto>();
 
-            foreach(var menu in menus)
+            foreach (var menu in menus)
             {
                 var flag = false;
-                foreach(var permiso in permisos)
+                foreach (var permiso in permisos)
                 {
-                    if(menu.Id == permiso.IdMenu)
+                    if (menu.Id == permiso.IdMenu)
                     {
                         flag = true;
                         response.Add(_mapper.Map<PermisoDto>(permiso));
@@ -139,14 +139,14 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
             var menusReponse = new List<PermisoDto>();
 
-            foreach(var menuPadre in menusPadre)
+            foreach (var menuPadre in menusPadre)
             {
                 var menuResponse = new PermisoDto();
                 menuResponse = _mapper.Map<PermisoDto>(menuPadre);
                 menuResponse.Children = new List<PermisoDto>();
-                foreach(var menuHijo in menusHijo)
+                foreach (var menuHijo in menusHijo)
                 {
-                    if(menuHijo.Menu.IdMenuPadre == menuPadre.Menu.Id)
+                    if (menuHijo.Menu.IdMenuPadre == menuPadre.Menu.Id)
                     {
                         menuResponse.Children.Add(_mapper.Map<PermisoDto>(menuHijo));
                     }

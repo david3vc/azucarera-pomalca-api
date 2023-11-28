@@ -23,6 +23,20 @@ namespace AzucareraPomalca.Api.Controllers
             return await _claseOcupacionalService.FindAllAsync();
         }
 
+        // GET: api/listsimple
+        [HttpGet("listasimple")]
+        public async Task<IEnumerable<ClaseOcupacionalSimpleDto>> GetSimple()
+        {
+            return await _claseOcupacionalService.SimpleListAsync();
+        }
+
+        // GET: api/listasimplebyidgrupoocupacional
+        [HttpGet("listasimplebyidgrupoocupacional/{id}")]
+        public async Task<IEnumerable<ClaseOcupacionalSimpleDto>> GetSimpleByIdGrupoOcupacional(int id)
+        {
+            return await _claseOcupacionalService.SimpleListByIdGrupoOcupacionalAsync(id);
+        }
+
         // GET: api/values/2
         [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ClaseOcupacionalDto))]

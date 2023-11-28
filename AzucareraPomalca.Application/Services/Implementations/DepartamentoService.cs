@@ -3,6 +3,7 @@ using AzucareraPomalca.Application.Cores.Exceptions;
 using AzucareraPomalca.Application.Dtos.Departamentos;
 using AzucareraPomalca.Domain.Models;
 using AzucareraPomalca.Domain.Repositories;
+using System.Linq.Expressions;
 
 namespace AzucareraPomalca.Application.Services.Implementations
 {
@@ -31,6 +32,23 @@ namespace AzucareraPomalca.Application.Services.Implementations
             if (departamento is null) throw DepartamentoNotFound(id);
 
             return _mapper.Map<DepartamentoDto>(departamento);
+        }
+
+        public async Task<IReadOnlyList<DepartamentoSimpleDto>> SimpleListAsync()
+        {
+            IReadOnlyList<Departamento> departamentos = await _departamentoRepository.FindAllAsync();
+
+            return _mapper.Map<IReadOnlyList<DepartamentoSimpleDto>>(departamentos);
+        }
+
+        public async Task<IReadOnlyList<DepartamentoSimpleDto>> SimpleListByIdsAsync(DepartamentoSimpleFilterDto request)
+        {
+            Expression<Func<Departamento, bool>>? predicate = x => (!request.IdGerencia.HasValue || x.IdGerencia == request.IdGerencia)
+                                                                && (!request.IdDivision.HasValue || x.IdDivision == request.IdDivision);
+
+            IReadOnlyList<Departamento> claseOcupacionales = await _departamentoRepository.FindAllAsync(predicate: predicate);
+
+            return _mapper.Map<IReadOnlyList<DepartamentoSimpleDto>>(claseOcupacionales);
         }
 
         private NotFoundCoreException DepartamentoNotFound(int id)

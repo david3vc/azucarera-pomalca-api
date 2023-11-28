@@ -1,19 +1,13 @@
 ﻿using AutoMapper;
 using AzucareraPomalca.Application.Cores.Dtos;
 using AzucareraPomalca.Application.Cores.Exceptions;
-using AzucareraPomalca.Application.Dtos.Profesiones;
 using AzucareraPomalca.Application.Dtos.Usuarios;
 using AzucareraPomalca.Core.Securities.Services;
 using AzucareraPomalca.Domain.Cores.Models;
 using AzucareraPomalca.Domain.Models;
 using AzucareraPomalca.Domain.Repositories;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AzucareraPomalca.Application.Services.Implementations
 {

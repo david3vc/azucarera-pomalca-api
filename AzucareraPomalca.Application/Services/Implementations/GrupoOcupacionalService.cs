@@ -33,6 +33,13 @@ namespace AzucareraPomalca.Application.Services.Implementations
             return _mapper.Map<GrupoOcupacionalDto>(grupoOcupacional);
         }
 
+        public async Task<IReadOnlyList<GrupoOcupacionalSimpleDto>> SimpleListAsync()
+        {
+            IReadOnlyList<GrupoOcupacional> grupoOcupacionales = await _grupoOcupacionalRepository.FindAllAsync();
+
+            return _mapper.Map<IReadOnlyList<GrupoOcupacionalSimpleDto>>(grupoOcupacionales);
+        }
+
         private NotFoundCoreException TipoProfesionNotFound(int id)
         {
             return new NotFoundCoreException("Grupo ocupacional no encontrado para el id: " + id);

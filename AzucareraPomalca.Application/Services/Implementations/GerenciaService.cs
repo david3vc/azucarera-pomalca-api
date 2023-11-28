@@ -33,6 +33,13 @@ namespace AzucareraPomalca.Application.Services.Implementations
             return _mapper.Map<GerenciaDto>(gerencia);
         }
 
+        public async Task<IReadOnlyList<GerenciaSimpleDto>> SimpleListAsync()
+        {
+            IReadOnlyList<Gerencia> gerencias = await _gerenciaRepository.FindAllAsync();
+
+            return _mapper.Map<IReadOnlyList<GerenciaSimpleDto>>(gerencias);
+        }
+
         private NotFoundCoreException GerenciaNotFound(int id)
         {
             return new NotFoundCoreException("Gerencia no encontrada para el id: " + id);

@@ -19,7 +19,7 @@ namespace AzucareraPomalca.Infrastructure.Persistences
         {
             return await _dbContext.Set<Puesto>()
                 .Include(t => t.PuestoSupervisor)
-                .Include(t => t.ClaseOcupacional)
+                .Include(t => t.ClaseOcupacional).ThenInclude(t => t.GrupoOcupacional)
                 .Include(t => t.Gerencia)
                 .Include(t => t.Division)
                 .Include(t => t.Departamento)
@@ -39,7 +39,7 @@ namespace AzucareraPomalca.Infrastructure.Persistences
         {
             return await _dbContext.Set<Puesto>()
                 .Include(t => t.PuestoSupervisor)
-                .Include(t => t.ClaseOcupacional)
+                .Include(t => t.ClaseOcupacional).ThenInclude(t => t.GrupoOcupacional)
                 .Include(t => t.Gerencia)
                 .Include(t => t.Division)
                 .Include(t => t.Departamento)

@@ -3,6 +3,7 @@ using AzucareraPomalca.Application.Cores.Exceptions;
 using AzucareraPomalca.Application.Dtos.Divisiones;
 using AzucareraPomalca.Domain.Models;
 using AzucareraPomalca.Domain.Repositories;
+using System.Linq.Expressions;
 
 namespace AzucareraPomalca.Application.Services.Implementations
 {
@@ -31,6 +32,22 @@ namespace AzucareraPomalca.Application.Services.Implementations
             if (division is null) throw DivisionNotFound(id);
 
             return _mapper.Map<DivisionDto>(division);
+        }
+
+        public async Task<IReadOnlyList<DivisionSimpleDto>> SimpleListAsync()
+        {
+            IReadOnlyList<Division> divisiones = await _divisionRepository.FindAllAsync();
+
+            return _mapper.Map<IReadOnlyList<DivisionSimpleDto>>(divisiones);
+        }
+
+        public async Task<IReadOnlyList<DivisionSimpleDto>> SimpleListByIdGerenciaAsync(int id)
+        {
+            Expression<Func<Division, bool>>? predicate = x => x.IdGerencia == id;
+
+            IReadOnlyList<Division> claseOcupacionales = await _divisionRepository.FindAllAsync(predicate: predicate);
+
+            return _mapper.Map<IReadOnlyList<DivisionSimpleDto>>(claseOcupacionales);
         }
 
         private NotFoundCoreException DivisionNotFound(int id)

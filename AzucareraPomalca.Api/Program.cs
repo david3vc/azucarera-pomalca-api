@@ -3,17 +3,17 @@ using Autofac.Extensions.DependencyInjection;
 using AzucareraPomalca.Api.Filters;
 using AzucareraPomalca.Api.Middlewares;
 using AzucareraPomalca.Application.Cores.Contexts;
-using AzucareraPomalca.Core.Securities.Services.Implementations;
 using AzucareraPomalca.Core.Securities.Services;
+using AzucareraPomalca.Core.Securities.Services.Implementations;
 using AzucareraPomalca.Infrastructure.Cores.Contexts;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
