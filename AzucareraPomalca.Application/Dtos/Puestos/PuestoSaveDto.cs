@@ -1,4 +1,6 @@
-﻿namespace AzucareraPomalca.Application.Dtos.Puestos
+﻿using AzucareraPomalca.Application.Dtos.Misiones;
+
+namespace AzucareraPomalca.Application.Dtos.Puestos
 {
     public class PuestoSaveDto
     {
@@ -15,5 +17,7 @@
         public int? IdDivision { get; set; }
         public int? IdDepartamento { get; set; }
         public int? IdSeccion { get; set; }
+
+        public List<MisionSaveDto>? MisionesSave { get; set; }
     }
 }

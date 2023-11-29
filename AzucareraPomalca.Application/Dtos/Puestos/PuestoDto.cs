@@ -2,6 +2,7 @@
 using AzucareraPomalca.Application.Dtos.Departamentos;
 using AzucareraPomalca.Application.Dtos.Divisiones;
 using AzucareraPomalca.Application.Dtos.Gerencias;
+using AzucareraPomalca.Application.Dtos.Misiones;
 using AzucareraPomalca.Application.Dtos.Secciones;
 
 namespace AzucareraPomalca.Application.Dtos.Puestos
@@ -26,5 +27,7 @@ namespace AzucareraPomalca.Application.Dtos.Puestos
         public DivisionSimpleDto? Division { get; set; }
         public DepartamentoSimpleDto? Departamento { get; set; }
         public SeccionSimpleDto? Seccion { get; set; }
+        
+        public List<MisionDto> Misiones { get; set; }
     }
 }

@@ -9,12 +9,14 @@ namespace AzucareraPomalca.Application.Services.Implementations
     public class PuestoService : IPuestoService
     {
         private readonly IPuestoRepository _puestoRepository;
+        private readonly IMisionService _misionService;
         private readonly IMapper _mapper;
 
-        public PuestoService(IPuestoRepository puestoRepository, IMapper mapper)
+        public PuestoService(IPuestoRepository puestoRepository, IMapper mapper, IMisionService misionService)
         {
             _puestoRepository = puestoRepository;
             _mapper = mapper;
+            _misionService = misionService;
         }
 
         public async Task<PuestoDto> CreateAsync(PuestoSaveDto saveDto)
@@ -24,6 +26,16 @@ namespace AzucareraPomalca.Application.Services.Implementations
             puesto.State = true;
 
             await _puestoRepository.SaveAsync(puesto);
+
+            #region MISION
+            if(saveDto.MisionesSave != null && saveDto.MisionesSave.Count > 0)
+            {
+                foreach(var mision in saveDto.MisionesSave)
+                {
+                    await _misionService.CreateAsync(mision);
+                }
+            }
+            #endregion
 
             return _mapper.Map<PuestoDto>(puesto);
         }
@@ -52,6 +64,25 @@ namespace AzucareraPomalca.Application.Services.Implementations
             puesto.UpdatedAt = DateTime.UtcNow;
 
             await _puestoRepository.SaveAsync(puesto);
+
+            #region MISION
+            if (saveDto.MisionesSave != null && saveDto.MisionesSave.Count > 0)
+            {
+                foreach (var mision in saveDto.MisionesSave)
+                {
+                    if(mision.Id != null && mision.Id != 0)
+                    {
+                        mision.IdPuesto = puesto.Id;
+                        await _misionService.EditAsync((int)mision.Id, mision);
+                    }
+                    else
+                    {
+                        mision.IdPuesto = puesto.Id;
+                        await _misionService.CreateAsync(mision);
+                    }
+                }
+            }
+            #endregion
 
             return _mapper.Map<PuestoDto>(puesto);
         }

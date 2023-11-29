@@ -27,5 +27,6 @@ namespace AzucareraPomalca.Domain.Models
 
         public virtual ICollection<Puesto>? PuestosSubalternos { get; set; }
         public virtual ICollection<Empleado> Empleados { get; set; }
+        public virtual ICollection<Mision> Misiones { get; set; }
     }
 }
