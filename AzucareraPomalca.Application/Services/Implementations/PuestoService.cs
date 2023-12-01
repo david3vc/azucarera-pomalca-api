@@ -10,13 +10,15 @@ namespace AzucareraPomalca.Application.Services.Implementations
     {
         private readonly IPuestoRepository _puestoRepository;
         private readonly IMisionService _misionService;
+        private readonly IFuncionEspecificaService _funcionEspecificaService;
         private readonly IMapper _mapper;
 
-        public PuestoService(IPuestoRepository puestoRepository, IMapper mapper, IMisionService misionService)
+        public PuestoService(IPuestoRepository puestoRepository, IMapper mapper, IMisionService misionService, IFuncionEspecificaService funcionEspecificaService)
         {
             _puestoRepository = puestoRepository;
             _mapper = mapper;
             _misionService = misionService;
+            _funcionEspecificaService = funcionEspecificaService;
         }
 
         public async Task<PuestoDto> CreateAsync(PuestoSaveDto saveDto)
@@ -28,10 +30,11 @@ namespace AzucareraPomalca.Application.Services.Implementations
             await _puestoRepository.SaveAsync(puesto);
 
             #region MISION
-            if(saveDto.MisionesSave != null && saveDto.MisionesSave.Count > 0)
+            if (saveDto.MisionesSave != null && saveDto.MisionesSave.Count > 0)
             {
-                foreach(var mision in saveDto.MisionesSave)
+                foreach (var mision in saveDto.MisionesSave)
                 {
+                    mision.IdPuesto = puesto.Id;
                     await _misionService.CreateAsync(mision);
                 }
             }
@@ -70,7 +73,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
             {
                 foreach (var mision in saveDto.MisionesSave)
                 {
-                    if(mision.Id != null && mision.Id != 0)
+                    if (mision.Id != null && mision.Id != 0)
                     {
                         mision.IdPuesto = puesto.Id;
                         await _misionService.EditAsync((int)mision.Id, mision);
@@ -79,6 +82,25 @@ namespace AzucareraPomalca.Application.Services.Implementations
                     {
                         mision.IdPuesto = puesto.Id;
                         await _misionService.CreateAsync(mision);
+                    }
+                }
+            }
+            #endregion
+
+            #region FUNCION ESPECIFICA
+            if (saveDto.FuncionesEspecificasSave != null && saveDto.FuncionesEspecificasSave.Count > 0)
+            {
+                foreach (var funcionEspecifica in saveDto.FuncionesEspecificasSave)
+                {
+                    if (funcionEspecifica.Id != null && funcionEspecifica.Id != 0)
+                    {
+                        funcionEspecifica.IdPuesto = puesto.Id;
+                        await _funcionEspecificaService.EditAsync((int)funcionEspecifica.Id, funcionEspecifica);
+                    }
+                    else
+                    {
+                        funcionEspecifica.IdPuesto = puesto.Id;
+                        await _funcionEspecificaService.CreateAsync(funcionEspecifica);
                     }
                 }
             }

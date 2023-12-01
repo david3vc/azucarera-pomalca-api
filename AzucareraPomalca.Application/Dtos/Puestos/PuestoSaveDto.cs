@@ -1,4 +1,5 @@
-﻿using AzucareraPomalca.Application.Dtos.Misiones;
+﻿using AzucareraPomalca.Application.Dtos.FuncionesEspecificas;
+using AzucareraPomalca.Application.Dtos.Misiones;
 
 namespace AzucareraPomalca.Application.Dtos.Puestos
 {
@@ -19,5 +20,6 @@ namespace AzucareraPomalca.Application.Dtos.Puestos
         public int? IdSeccion { get; set; }
 
         public List<MisionSaveDto>? MisionesSave { get; set; }
+        public List<FuncionEspecificaSaveDto>? FuncionesEspecificasSave { get; set; }
     }
 }

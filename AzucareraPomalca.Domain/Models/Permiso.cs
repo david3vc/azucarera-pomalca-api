@@ -3,7 +3,7 @@
 namespace AzucareraPomalca.Domain.Models
 {
     public class Permiso : CoreModel<int>
-    { 
+    {
         public int IdMenu { get; set; }
         public int IdRol { get; set; }
 

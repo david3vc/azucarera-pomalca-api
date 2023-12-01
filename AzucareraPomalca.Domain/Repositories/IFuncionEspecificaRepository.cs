@@ -3,7 +3,7 @@ using AzucareraPomalca.Domain.Models;
 
 namespace AzucareraPomalca.Domain.Repositories
 {
-    public interface IMisionRepository : ICrudRepository<Mision, int>
+    public interface IFuncionEspecificaRepository : ICrudRepository<FuncionEspecifica, int>
     {
     }
 }

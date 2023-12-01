@@ -2,7 +2,7 @@
 
 namespace AzucareraPomalca.Domain.Models
 {
-    public class Mision : CoreModel<int>
+    public class FuncionEspecifica : CoreModel<int>
     {
         public string Descripcion { get; set; }
         public int IdPuesto { get; set; }

@@ -1,7 +1,5 @@
 ﻿using AzucareraPomalca.Application.Dtos.Misiones;
-using AzucareraPomalca.Application.Dtos.Profesiones;
 using AzucareraPomalca.Application.Services;
-using AzucareraPomalca.Application.Services.Implementations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AzucareraPomalca.Api.Controllers

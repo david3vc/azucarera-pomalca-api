@@ -1,6 +1,6 @@
-﻿namespace AzucareraPomalca.Application.Dtos.Misiones
+﻿namespace AzucareraPomalca.Application.Dtos.FuncionesEspecificas
 {
-    public class MisionDto
+    public class FuncionEspecificaDto
     {
         public int Id { get; set; }
         public int IdPuesto { get; set; }

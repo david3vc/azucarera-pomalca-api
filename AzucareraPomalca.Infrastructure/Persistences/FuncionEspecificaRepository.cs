@@ -5,9 +5,9 @@ using AzucareraPomalca.Infrastructure.Cores.Persistences;
 
 namespace AzucareraPomalca.Infrastructure.Persistences
 {
-    public class MisionRepository : CrudRepository<Mision, int>, IMisionRepository
+    public class FuncionEspecificaRepository : CrudRepository<FuncionEspecifica, int>, IFuncionEspecificaRepository
     {
-        public MisionRepository(ApplicationDbContext dbContext) : base(dbContext)
+        public FuncionEspecificaRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
     }
