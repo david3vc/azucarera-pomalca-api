@@ -1,4 +1,5 @@
 ﻿using AzucareraPomalca.Application.Dtos.ClaseOcupacionales;
+using AzucareraPomalca.Application.Dtos.Coordinaciones;
 using AzucareraPomalca.Application.Dtos.Departamentos;
 using AzucareraPomalca.Application.Dtos.Divisiones;
 using AzucareraPomalca.Application.Dtos.FuncionesEspecificas;
@@ -31,5 +32,8 @@ namespace AzucareraPomalca.Application.Dtos.Puestos
 
         public List<MisionDto> Misiones { get; set; }
         public List<FuncionEspecificaDto> FuncionesEspecificas { get; set; }
+        public List<CoordinacionDto> CoordinacionesMismaGerencia { get; set; }
+        public List<CoordinacionDto> CoordinacionesOtraGerencia { get; set; }
+        public List<CoordinacionDto> CoordinacionesExternas { get; set; }
     }
 }

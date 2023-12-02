@@ -1,4 +1,5 @@
 ﻿using AzucareraPomalca.Api.Exceptions;
+using AzucareraPomalca.Application.Cores.Dtos;
 using AzucareraPomalca.Application.Dtos.Puestos;
 using AzucareraPomalca.Application.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -58,6 +59,12 @@ namespace AzucareraPomalca.Api.Controllers
         public async Task<PuestoDto> Delete(int id)
         {
             return await _puestoService.DisabledAsync(id);
+        }
+
+        [HttpGet("PaginatedSearch")]
+        public async Task<PageResponse<PuestoDto>> PaginatedSearch([FromQuery] PageRequest<PuestoFilterDto> request)
+        {
+            return await _puestoService.FindAllPaginatedAsync(request);
         }
     }
 }
