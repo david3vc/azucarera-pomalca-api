@@ -48,6 +48,8 @@ namespace AzucareraPomalca.Infrastructure.Persistences
                 .Include(t => t.FuncionesEspecificas.Where(t => t.State == true))
                 .Include(t => t.CoordinacionesPuestoCoordinador.Where(t => t.State == true))
                 .Include(t => t.CoordinacionesPuestoCoordinado.Where(t => t.State == true))
+                .Include(t => t.PuestosProfesiones.Where(t => t.State == true)).ThenInclude(t => t.GradoAcademico)
+                .Include(t => t.PuestosProfesiones.Where(t => t.State == true)).ThenInclude(t => t.Profesion)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
 

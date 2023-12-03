@@ -16,12 +16,14 @@ namespace AzucareraPomalca.Application.Services.Implementations
         private readonly IMisionService _misionService;
         private readonly IFuncionEspecificaService _funcionEspecificaService;
         private readonly ICoordinacionService _coordinacionService;
+        private readonly IPuestoProfesionService _puestoProfesionService;
         private readonly IMapper _mapper;
 
         public PuestoService(IPuestoRepository puestoRepository,
                              IMapper mapper, IMisionService misionService,
                              IFuncionEspecificaService funcionEspecificaService,
-                             ICoordinacionService coordinacionService
+                             ICoordinacionService coordinacionService,
+                             IPuestoProfesionService puestoProfesionService
                             )
         {
             _puestoRepository = puestoRepository;
@@ -29,6 +31,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
             _misionService = misionService;
             _funcionEspecificaService = funcionEspecificaService;
             _coordinacionService = coordinacionService;
+            _puestoProfesionService = puestoProfesionService;
         }
 
         public async Task<PuestoDto> CreateAsync(PuestoSaveDto saveDto)
@@ -160,6 +163,25 @@ namespace AzucareraPomalca.Application.Services.Implementations
                 }
             }
 
+            #endregion
+
+            #region PROFESION
+            if(saveDto.PuestosProfesionesSave != null && saveDto.PuestosProfesionesSave.Count > 0)
+            {
+                foreach (var puestoProfesion in saveDto.PuestosProfesionesSave)
+                {
+                    if (puestoProfesion.Id != null && puestoProfesion.Id != 0)
+                    {
+                        puestoProfesion.IdPuesto = puesto.Id;
+                        await _puestoProfesionService.EditAsync((int)puestoProfesion.Id, puestoProfesion);
+                    }
+                    else
+                    {
+                        puestoProfesion.IdPuesto = puesto.Id;
+                        await _puestoProfesionService.CreateAsync(puestoProfesion);
+                    }
+                }
+            }
             #endregion
 
             return _mapper.Map<PuestoDto>(puesto);
