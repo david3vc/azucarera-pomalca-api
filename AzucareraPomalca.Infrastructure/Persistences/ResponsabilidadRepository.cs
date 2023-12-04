@@ -5,9 +5,9 @@ using AzucareraPomalca.Infrastructure.Cores.Persistences;
 
 namespace AzucareraPomalca.Infrastructure.Persistences
 {
-    public class PuestoProfesionRepository : CrudRepository<PuestoProfesion, int>, IPuestoProfesionRepository
+    public class ResponsabilidadRepository : CrudRepository<Responsabilidad, int>, IResponsabilidadRepository
     {
-        public PuestoProfesionRepository(ApplicationDbContext dbContext) : base(dbContext)
+        public ResponsabilidadRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
     }

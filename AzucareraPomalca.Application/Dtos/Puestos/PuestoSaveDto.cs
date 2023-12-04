@@ -2,6 +2,7 @@
 using AzucareraPomalca.Application.Dtos.FuncionesEspecificas;
 using AzucareraPomalca.Application.Dtos.Misiones;
 using AzucareraPomalca.Application.Dtos.PuestosProfesiones;
+using AzucareraPomalca.Application.Dtos.ResponsabilidadesPuestos;
 
 namespace AzucareraPomalca.Application.Dtos.Puestos
 {
@@ -27,5 +28,6 @@ namespace AzucareraPomalca.Application.Dtos.Puestos
         public List<CoordinacionSaveDto>? CoordinacionesOtraGerenciaSave { get; set; }
         public List<CoordinacionSaveDto>? CoordinacionesExternasSave { get; set; }
         public List<PuestoProfesionSaveDto>? PuestosProfesionesSave { get; set; }
+        public List<ResponsabilidadPuestoSaveDto>? ResponsabilidadesPuestosSave { get; set; }
     }
 }

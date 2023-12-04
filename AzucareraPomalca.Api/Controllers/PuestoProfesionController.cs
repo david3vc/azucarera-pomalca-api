@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace AzucareraPomalca.Api.Controllers
 {
     [Route("api/[controller]")]
-    public class PuestoProfesionController: Controller
+    public class PuestoProfesionController : Controller
     {
         private readonly IPuestoProfesionService _puestoProfesionService;
 

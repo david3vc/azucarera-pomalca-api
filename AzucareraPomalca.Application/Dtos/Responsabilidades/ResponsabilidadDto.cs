@@ -1,6 +1,6 @@
-﻿namespace AzucareraPomalca.Application.Dtos.GradosAcademicos
+﻿namespace AzucareraPomalca.Application.Dtos.Responsabilidades
 {
-    public class GradoAcademicoDto
+    public class ResponsabilidadDto
     {
         public int Id { get; set; }
         public string Descripcion { get; set; }

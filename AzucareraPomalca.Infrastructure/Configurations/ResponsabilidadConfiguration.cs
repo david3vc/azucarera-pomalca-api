@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AzucareraPomalca.Infrastructure.Configurations
 {
-    public class GradoAcademicoConfiguration : IEntityTypeConfiguration<GradoAcademico>
+    public class ResponsabilidadConfiguration : IEntityTypeConfiguration<Responsabilidad>
     {
-        public void Configure(EntityTypeBuilder<GradoAcademico> builder)
+        public void Configure(EntityTypeBuilder<Responsabilidad> builder)
         {
-            builder.ToTable("grado_academico");
+            builder.ToTable("responsabilidad");
             builder.HasKey(t => t.Id);
-            builder.Property(t => t.Id).HasColumnName("id_grado_academico");
+            builder.Property(t => t.Id).HasColumnName("id_responsabilidad");
             builder.Property(t => t.Descripcion).HasColumnName("descripcion");
             builder.Property(t => t.CreatedAt).HasColumnName("created_at");
             builder.Property(t => t.UpdatedAt).HasColumnName("updated_at");

@@ -17,13 +17,15 @@ namespace AzucareraPomalca.Application.Services.Implementations
         private readonly IFuncionEspecificaService _funcionEspecificaService;
         private readonly ICoordinacionService _coordinacionService;
         private readonly IPuestoProfesionService _puestoProfesionService;
+        private readonly IResponsabilidadPuestoService _responsabilidadPuestoService;
         private readonly IMapper _mapper;
 
         public PuestoService(IPuestoRepository puestoRepository,
                              IMapper mapper, IMisionService misionService,
                              IFuncionEspecificaService funcionEspecificaService,
                              ICoordinacionService coordinacionService,
-                             IPuestoProfesionService puestoProfesionService
+                             IPuestoProfesionService puestoProfesionService,
+                             IResponsabilidadPuestoService responsabilidadPuestoService
                             )
         {
             _puestoRepository = puestoRepository;
@@ -32,6 +34,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
             _funcionEspecificaService = funcionEspecificaService;
             _coordinacionService = coordinacionService;
             _puestoProfesionService = puestoProfesionService;
+            _responsabilidadPuestoService = responsabilidadPuestoService;
         }
 
         public async Task<PuestoDto> CreateAsync(PuestoSaveDto saveDto)
@@ -166,7 +169,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
             #endregion
 
             #region PROFESION
-            if(saveDto.PuestosProfesionesSave != null && saveDto.PuestosProfesionesSave.Count > 0)
+            if (saveDto.PuestosProfesionesSave != null && saveDto.PuestosProfesionesSave.Count > 0)
             {
                 foreach (var puestoProfesion in saveDto.PuestosProfesionesSave)
                 {
@@ -179,6 +182,25 @@ namespace AzucareraPomalca.Application.Services.Implementations
                     {
                         puestoProfesion.IdPuesto = puesto.Id;
                         await _puestoProfesionService.CreateAsync(puestoProfesion);
+                    }
+                }
+            }
+            #endregion
+
+            #region RESPONSABILIDADES
+            if (saveDto.ResponsabilidadesPuestosSave != null && saveDto.ResponsabilidadesPuestosSave.Count > 0)
+            {
+                foreach (var responsabilidadPuesto in saveDto.ResponsabilidadesPuestosSave)
+                {
+                    if (responsabilidadPuesto.Id != null && responsabilidadPuesto.Id != 0)
+                    {
+                        responsabilidadPuesto.IdPuesto = puesto.Id;
+                        await _responsabilidadPuestoService.EditAsync((int)responsabilidadPuesto.Id, responsabilidadPuesto);
+                    }
+                    else
+                    {
+                        responsabilidadPuesto.IdPuesto = puesto.Id;
+                        await _responsabilidadPuestoService.CreateAsync(responsabilidadPuesto);
                     }
                 }
             }

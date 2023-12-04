@@ -3,11 +3,6 @@ using AzucareraPomalca.Application.Cores.Exceptions;
 using AzucareraPomalca.Application.Dtos.PuestosProfesiones;
 using AzucareraPomalca.Domain.Models;
 using AzucareraPomalca.Domain.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AzucareraPomalca.Application.Services.Implementations
 {
