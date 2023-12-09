@@ -3,9 +3,11 @@ using AzucareraPomalca.Application.Cores.Dtos;
 using AzucareraPomalca.Application.Cores.Exceptions;
 using AzucareraPomalca.Application.Dtos.Coordinaciones;
 using AzucareraPomalca.Application.Dtos.Puestos;
+using AzucareraPomalca.Application.Dtos.PuestosCursos;
 using AzucareraPomalca.Domain.Cores.Models;
 using AzucareraPomalca.Domain.Models;
 using AzucareraPomalca.Domain.Repositories;
+using AzucareraPomalca.Utils.Constants;
 using System.Linq.Expressions;
 
 namespace AzucareraPomalca.Application.Services.Implementations
@@ -18,6 +20,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
         private readonly ICoordinacionService _coordinacionService;
         private readonly IPuestoProfesionService _puestoProfesionService;
         private readonly IResponsabilidadPuestoService _responsabilidadPuestoService;
+        private readonly IPuestoCursoService _puestoCursoService;
         private readonly IMapper _mapper;
 
         public PuestoService(IPuestoRepository puestoRepository,
@@ -25,7 +28,8 @@ namespace AzucareraPomalca.Application.Services.Implementations
                              IFuncionEspecificaService funcionEspecificaService,
                              ICoordinacionService coordinacionService,
                              IPuestoProfesionService puestoProfesionService,
-                             IResponsabilidadPuestoService responsabilidadPuestoService
+                             IResponsabilidadPuestoService responsabilidadPuestoService,
+                             IPuestoCursoService puestoCursoService
                             )
         {
             _puestoRepository = puestoRepository;
@@ -35,6 +39,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
             _coordinacionService = coordinacionService;
             _puestoProfesionService = puestoProfesionService;
             _responsabilidadPuestoService = responsabilidadPuestoService;
+            _puestoCursoService = puestoCursoService;
         }
 
         public async Task<PuestoDto> CreateAsync(PuestoSaveDto saveDto)
@@ -206,6 +211,73 @@ namespace AzucareraPomalca.Application.Services.Implementations
             }
             #endregion
 
+            #region CURSOS
+            if (saveDto.PuestosCursosEspecificosSave != null && saveDto.PuestosCursosEspecificosSave.Count > 0)
+            {
+                foreach (var puestoCurso in saveDto.PuestosCursosEspecificosSave)
+                {
+                    if (puestoCurso.Id != null && puestoCurso.Id != 0)
+                    {
+                        puestoCurso.IdPuesto = puesto.Id;
+                        await _puestoCursoService.EditAsync((int)puestoCurso.Id, puestoCurso);
+                    }
+                    else
+                    {
+                        puestoCurso.IdPuesto = puesto.Id;
+                        await _puestoCursoService.CreateAsync(puestoCurso);
+                    }
+                }
+            }
+            if (saveDto.PuestosCursosHabilidadesBlandasSave != null && saveDto.PuestosCursosHabilidadesBlandasSave.Count > 0)
+            {
+                foreach (var puestoCurso in saveDto.PuestosCursosHabilidadesBlandasSave)
+                {
+                    if (puestoCurso.Id != null && puestoCurso.Id != 0)
+                    {
+                        puestoCurso.IdPuesto = puesto.Id;
+                        await _puestoCursoService.EditAsync((int)puestoCurso.Id, puestoCurso);
+                    }
+                    else
+                    {
+                        puestoCurso.IdPuesto = puesto.Id;
+                        await _puestoCursoService.CreateAsync(puestoCurso);
+                    }
+                }
+            }
+            if (saveDto.PuestosCursosRSESave != null && saveDto.PuestosCursosRSESave.Count > 0)
+            {
+                foreach (var puestoCurso in saveDto.PuestosCursosRSESave)
+                {
+                    if (puestoCurso.Id != null && puestoCurso.Id != 0)
+                    {
+                        puestoCurso.IdPuesto = puesto.Id;
+                        await _puestoCursoService.EditAsync((int)puestoCurso.Id, puestoCurso);
+                    }
+                    else
+                    {
+                        puestoCurso.IdPuesto = puesto.Id;
+                        await _puestoCursoService.CreateAsync(puestoCurso);
+                    }
+                }
+            }
+            if (saveDto.PuestosCursosSSOMMASave != null && saveDto.PuestosCursosSSOMMASave.Count > 0)
+            {
+                foreach (var puestoCurso in saveDto.PuestosCursosSSOMMASave)
+                {
+                    if (puestoCurso.Id != null && puestoCurso.Id != 0)
+                    {
+                        puestoCurso.IdPuesto = puesto.Id;
+                        await _puestoCursoService.EditAsync((int)puestoCurso.Id, puestoCurso);
+                    }
+                    else
+                    {
+                        puestoCurso.IdPuesto = puesto.Id;
+                        await _puestoCursoService.CreateAsync(puestoCurso);
+                    }
+                }
+            }
+            #endregion
+
             return _mapper.Map<PuestoDto>(puesto);
         }
 
@@ -267,6 +339,38 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
                 response.CoordinacionesMismaGerencia = mismaGerencia;
                 response.CoordinacionesOtraGerencia = otraGerencia;
+            }
+
+            if (puesto.PuestosCursos != null && puesto.PuestosCursos.Count() > 0)
+            {
+                List<PuestoCursoDto> PuestosCursosEspecificos = new List<PuestoCursoDto>();
+                List<PuestoCursoDto> PuestosCursosSSOMMA = new List<PuestoCursoDto>();
+                List<PuestoCursoDto> PuestosCursosHabilidadesBlandas = new List<PuestoCursoDto>();
+                List<PuestoCursoDto> PuestosCursosRSE = new List<PuestoCursoDto>();
+
+                foreach (var puestoCurso in puesto.PuestosCursos)
+                {
+                    switch (puestoCurso.Curso.TipoCurso.Descripcion)
+                    {
+                        case TiposCursos.ESPECIFICO:
+                            PuestosCursosEspecificos.Add(_mapper.Map<PuestoCursoDto>(puestoCurso));
+                            break;
+                        case TiposCursos.SSOMMA:
+                            PuestosCursosSSOMMA.Add(_mapper.Map<PuestoCursoDto>(puestoCurso));
+                            break;
+                        case TiposCursos.HABILIDADES_BLANDAS:
+                            PuestosCursosHabilidadesBlandas.Add(_mapper.Map<PuestoCursoDto>(puestoCurso));
+                            break;
+                        case TiposCursos.RSE:
+                            PuestosCursosRSE.Add(_mapper.Map<PuestoCursoDto>(puestoCurso));
+                            break;
+                    }
+                }
+
+                response.PuestosCursosEspecificos = PuestosCursosEspecificos;
+                response.PuestosCursosSSOMMA = PuestosCursosSSOMMA;
+                response.PuestosCursosHabilidadesBlandas = PuestosCursosHabilidadesBlandas;
+                response.PuestosCursosRSE = PuestosCursosRSE;
             }
 
             return response;

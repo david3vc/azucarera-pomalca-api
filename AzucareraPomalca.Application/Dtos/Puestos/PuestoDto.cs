@@ -5,6 +5,7 @@ using AzucareraPomalca.Application.Dtos.Divisiones;
 using AzucareraPomalca.Application.Dtos.FuncionesEspecificas;
 using AzucareraPomalca.Application.Dtos.Gerencias;
 using AzucareraPomalca.Application.Dtos.Misiones;
+using AzucareraPomalca.Application.Dtos.PuestosCursos;
 using AzucareraPomalca.Application.Dtos.PuestosProfesiones;
 using AzucareraPomalca.Application.Dtos.ResponsabilidadesPuestos;
 using AzucareraPomalca.Application.Dtos.Secciones;
@@ -39,5 +40,9 @@ namespace AzucareraPomalca.Application.Dtos.Puestos
         public List<CoordinacionDto> CoordinacionesExternas { get; set; }
         public List<PuestoProfesionDto> PuestosProfesiones { get; set; }
         public List<ResponsabilidadPuestoDto> ResponsabilidadesPuestos { get; set; }
+        public List<PuestoCursoDto> PuestosCursosEspecificos { get; set; }
+        public List<PuestoCursoDto> PuestosCursosHabilidadesBlandas { get; set; }
+        public List<PuestoCursoDto> PuestosCursosSSOMMA { get; set; }
+        public List<PuestoCursoDto> PuestosCursosRSE { get; set; }
     }
 }

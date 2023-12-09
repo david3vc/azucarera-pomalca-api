@@ -33,5 +33,6 @@ namespace AzucareraPomalca.Domain.Models
         public virtual ICollection<Coordinacion> CoordinacionesPuestoCoordinado { get; set; }
         public virtual ICollection<PuestoProfesion> PuestosProfesiones { get; set; }
         public virtual ICollection<ResponsabilidadPuesto> ResponsabilidadesPuestos { get; set; }
+        public virtual ICollection<PuestoCurso> PuestosCursos { get; set; }
     }
 }
