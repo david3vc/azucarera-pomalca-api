@@ -21,6 +21,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
         private readonly IPuestoProfesionService _puestoProfesionService;
         private readonly IResponsabilidadPuestoService _responsabilidadPuestoService;
         private readonly IPuestoCursoService _puestoCursoService;
+        private readonly ICondicionTrabajoPuestoService _condicionTrabajoPuestoService;
         private readonly IMapper _mapper;
 
         public PuestoService(IPuestoRepository puestoRepository,
@@ -29,7 +30,8 @@ namespace AzucareraPomalca.Application.Services.Implementations
                              ICoordinacionService coordinacionService,
                              IPuestoProfesionService puestoProfesionService,
                              IResponsabilidadPuestoService responsabilidadPuestoService,
-                             IPuestoCursoService puestoCursoService
+                             IPuestoCursoService puestoCursoService,
+                             ICondicionTrabajoPuestoService condicionTrabajoPuestoService
                             )
         {
             _puestoRepository = puestoRepository;
@@ -40,6 +42,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
             _puestoProfesionService = puestoProfesionService;
             _responsabilidadPuestoService = responsabilidadPuestoService;
             _puestoCursoService = puestoCursoService;
+            _condicionTrabajoPuestoService = condicionTrabajoPuestoService;
         }
 
         public async Task<PuestoDto> CreateAsync(PuestoSaveDto saveDto)
@@ -273,6 +276,25 @@ namespace AzucareraPomalca.Application.Services.Implementations
                     {
                         puestoCurso.IdPuesto = puesto.Id;
                         await _puestoCursoService.CreateAsync(puestoCurso);
+                    }
+                }
+            }
+            #endregion
+
+            #region CONDICIONES DE TRABAJO
+            if (saveDto.CondicionTrabajoPuestosSave != null && saveDto.CondicionTrabajoPuestosSave.Count > 0)
+            {
+                foreach (var condicionTrabajoPuesto in saveDto.CondicionTrabajoPuestosSave)
+                {
+                    if (condicionTrabajoPuesto.Id != null && condicionTrabajoPuesto.Id != 0)
+                    {
+                        condicionTrabajoPuesto.IdPuesto = puesto.Id;
+                        await _condicionTrabajoPuestoService.EditAsync((int)condicionTrabajoPuesto.Id, condicionTrabajoPuesto);
+                    }
+                    else
+                    {
+                        condicionTrabajoPuesto.IdPuesto = puesto.Id;
+                        await _condicionTrabajoPuestoService.CreateAsync(condicionTrabajoPuesto);
                     }
                 }
             }

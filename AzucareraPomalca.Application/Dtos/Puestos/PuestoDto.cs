@@ -1,4 +1,5 @@
 ﻿using AzucareraPomalca.Application.Dtos.ClaseOcupacionales;
+using AzucareraPomalca.Application.Dtos.CondicionTrabajoPuestos;
 using AzucareraPomalca.Application.Dtos.Coordinaciones;
 using AzucareraPomalca.Application.Dtos.Departamentos;
 using AzucareraPomalca.Application.Dtos.Divisiones;
@@ -44,5 +45,6 @@ namespace AzucareraPomalca.Application.Dtos.Puestos
         public List<PuestoCursoDto> PuestosCursosHabilidadesBlandas { get; set; }
         public List<PuestoCursoDto> PuestosCursosSSOMMA { get; set; }
         public List<PuestoCursoDto> PuestosCursosRSE { get; set; }
+        public List<CondicionTrabajoPuestoDto> CondicionTrabajoPuestos { get; set; }
     }
 }
