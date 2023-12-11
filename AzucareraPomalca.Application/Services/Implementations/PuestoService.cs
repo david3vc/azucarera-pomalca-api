@@ -23,6 +23,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
         private readonly IPuestoCursoService _puestoCursoService;
         private readonly ICondicionTrabajoPuestoService _condicionTrabajoPuestoService;
         private readonly ITomaDecisionPuestoService _tomaDecisionPuestoService;
+        private readonly IEsfuerzoRequeridoPuestoService _esfuerzoRequeridoPuestoService;
         private readonly IMapper _mapper;
 
         public PuestoService(IPuestoRepository puestoRepository,
@@ -33,7 +34,8 @@ namespace AzucareraPomalca.Application.Services.Implementations
                              IResponsabilidadPuestoService responsabilidadPuestoService,
                              IPuestoCursoService puestoCursoService,
                              ICondicionTrabajoPuestoService condicionTrabajoPuestoService,
-                             ITomaDecisionPuestoService tomaDecisionPuestoService
+                             ITomaDecisionPuestoService tomaDecisionPuestoService,
+                             IEsfuerzoRequeridoPuestoService esfuerzoRequeridoPuestoService
                             )
         {
             _puestoRepository = puestoRepository;
@@ -46,6 +48,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
             _puestoCursoService = puestoCursoService;
             _condicionTrabajoPuestoService = condicionTrabajoPuestoService;
             _tomaDecisionPuestoService = tomaDecisionPuestoService;
+            _esfuerzoRequeridoPuestoService = esfuerzoRequeridoPuestoService;
         }
 
         public async Task<PuestoDto> CreateAsync(PuestoSaveDto saveDto)
@@ -317,6 +320,25 @@ namespace AzucareraPomalca.Application.Services.Implementations
                     {
                         tomaDecisionPuesto.IdPuesto = puesto.Id;
                         await _tomaDecisionPuestoService.CreateAsync(tomaDecisionPuesto);
+                    }
+                }
+            }
+            #endregion
+
+            #region ESFUERZO REQUERIDO
+            if (saveDto.EsfuerzoRequeridoPuestosSave != null && saveDto.EsfuerzoRequeridoPuestosSave.Count > 0)
+            {
+                foreach (var esfuerzoRequeridoPuesto in saveDto.EsfuerzoRequeridoPuestosSave)
+                {
+                    if (esfuerzoRequeridoPuesto.Id != null && esfuerzoRequeridoPuesto.Id != 0)
+                    {
+                        esfuerzoRequeridoPuesto.IdPuesto = puesto.Id;
+                        await _esfuerzoRequeridoPuestoService.EditAsync((int)esfuerzoRequeridoPuesto.Id, esfuerzoRequeridoPuesto);
+                    }
+                    else
+                    {
+                        esfuerzoRequeridoPuesto.IdPuesto = puesto.Id;
+                        await _esfuerzoRequeridoPuestoService.CreateAsync(esfuerzoRequeridoPuesto);
                     }
                 }
             }

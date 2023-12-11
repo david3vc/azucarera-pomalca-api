@@ -3,6 +3,7 @@ using AzucareraPomalca.Application.Dtos.CondicionTrabajoPuestos;
 using AzucareraPomalca.Application.Dtos.Coordinaciones;
 using AzucareraPomalca.Application.Dtos.Departamentos;
 using AzucareraPomalca.Application.Dtos.Divisiones;
+using AzucareraPomalca.Application.Dtos.EsfuerzoRequeridoPuestos;
 using AzucareraPomalca.Application.Dtos.FuncionesEspecificas;
 using AzucareraPomalca.Application.Dtos.Gerencias;
 using AzucareraPomalca.Application.Dtos.Misiones;
@@ -48,5 +49,6 @@ namespace AzucareraPomalca.Application.Dtos.Puestos
         public List<PuestoCursoDto> PuestosCursosRSE { get; set; }
         public List<CondicionTrabajoPuestoDto> CondicionTrabajoPuestos { get; set; }
         public List<TomaDecisionPuestoDto> TomaDecisionPuestos { get; set; }
+        public List<EsfuerzoRequeridoPuestoDto> EsfuerzoRequeridoPuestos { get; set; }
     }
 }
