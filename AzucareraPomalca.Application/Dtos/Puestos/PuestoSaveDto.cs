@@ -5,6 +5,7 @@ using AzucareraPomalca.Application.Dtos.Misiones;
 using AzucareraPomalca.Application.Dtos.PuestosCursos;
 using AzucareraPomalca.Application.Dtos.PuestosProfesiones;
 using AzucareraPomalca.Application.Dtos.ResponsabilidadesPuestos;
+using AzucareraPomalca.Application.Dtos.TomaDecisionPuestos;
 
 namespace AzucareraPomalca.Application.Dtos.Puestos
 {
@@ -36,5 +37,6 @@ namespace AzucareraPomalca.Application.Dtos.Puestos
         public List<PuestoCursoSaveDto>? PuestosCursosSSOMMASave { get; set; }
         public List<PuestoCursoSaveDto>? PuestosCursosRSESave { get; set; }
         public List<CondicionTrabajoPuestoSaveDto>? CondicionTrabajoPuestosSave { get; set; }
+        public List<TomaDecisionPuestoSaveDto>? TomaDecisionPuestosSave { get; set; }
     }
 }

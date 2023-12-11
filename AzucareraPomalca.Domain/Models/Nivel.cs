@@ -7,5 +7,6 @@ namespace AzucareraPomalca.Domain.Models
         public string Descripcion { get; set; }
 
         public virtual ICollection<ResponsabilidadPuesto>? ResponsabilidadesPuestos { get; set; }
+        public virtual ICollection<TomaDecisionPuesto>? TomaDecisionPuestos { get; set; }
     }
 }

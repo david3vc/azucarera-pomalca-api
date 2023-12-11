@@ -22,6 +22,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
         private readonly IResponsabilidadPuestoService _responsabilidadPuestoService;
         private readonly IPuestoCursoService _puestoCursoService;
         private readonly ICondicionTrabajoPuestoService _condicionTrabajoPuestoService;
+        private readonly ITomaDecisionPuestoService _tomaDecisionPuestoService;
         private readonly IMapper _mapper;
 
         public PuestoService(IPuestoRepository puestoRepository,
@@ -31,7 +32,8 @@ namespace AzucareraPomalca.Application.Services.Implementations
                              IPuestoProfesionService puestoProfesionService,
                              IResponsabilidadPuestoService responsabilidadPuestoService,
                              IPuestoCursoService puestoCursoService,
-                             ICondicionTrabajoPuestoService condicionTrabajoPuestoService
+                             ICondicionTrabajoPuestoService condicionTrabajoPuestoService,
+                             ITomaDecisionPuestoService tomaDecisionPuestoService
                             )
         {
             _puestoRepository = puestoRepository;
@@ -43,6 +45,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
             _responsabilidadPuestoService = responsabilidadPuestoService;
             _puestoCursoService = puestoCursoService;
             _condicionTrabajoPuestoService = condicionTrabajoPuestoService;
+            _tomaDecisionPuestoService = tomaDecisionPuestoService;
         }
 
         public async Task<PuestoDto> CreateAsync(PuestoSaveDto saveDto)
@@ -295,6 +298,25 @@ namespace AzucareraPomalca.Application.Services.Implementations
                     {
                         condicionTrabajoPuesto.IdPuesto = puesto.Id;
                         await _condicionTrabajoPuestoService.CreateAsync(condicionTrabajoPuesto);
+                    }
+                }
+            }
+            #endregion
+
+            #region TOMA DE DECISION
+            if (saveDto.TomaDecisionPuestosSave != null && saveDto.TomaDecisionPuestosSave.Count > 0)
+            {
+                foreach (var tomaDecisionPuesto in saveDto.TomaDecisionPuestosSave)
+                {
+                    if (tomaDecisionPuesto.Id != null && tomaDecisionPuesto.Id != 0)
+                    {
+                        tomaDecisionPuesto.IdPuesto = puesto.Id;
+                        await _tomaDecisionPuestoService.EditAsync((int)tomaDecisionPuesto.Id, tomaDecisionPuesto);
+                    }
+                    else
+                    {
+                        tomaDecisionPuesto.IdPuesto = puesto.Id;
+                        await _tomaDecisionPuestoService.CreateAsync(tomaDecisionPuesto);
                     }
                 }
             }
