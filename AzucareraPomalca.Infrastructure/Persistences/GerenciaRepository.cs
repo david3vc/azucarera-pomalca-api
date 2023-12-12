@@ -18,7 +18,7 @@ namespace AzucareraPomalca.Infrastructure.Persistences
         public async Task<Gerencia?> FindByNombreAsync(string nombre)
         {
             return await _dbContext.Set<Gerencia>()
-                .Include(t => t.Puestos)
+                .Include(t => t.Puestos.Where(t => t.State == true))
                 .FirstOrDefaultAsync(t => t.Nombre.ToUpper().Contains(nombre.ToUpper()));
         }
 
