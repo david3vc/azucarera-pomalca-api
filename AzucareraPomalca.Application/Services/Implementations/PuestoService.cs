@@ -24,6 +24,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
         private readonly ICondicionTrabajoPuestoService _condicionTrabajoPuestoService;
         private readonly ITomaDecisionPuestoService _tomaDecisionPuestoService;
         private readonly IEsfuerzoRequeridoPuestoService _esfuerzoRequeridoPuestoService;
+        private readonly IPerfilCompetenciaService _perfilCompetenciaService;
         private readonly IMapper _mapper;
 
         public PuestoService(IPuestoRepository puestoRepository,
@@ -35,7 +36,8 @@ namespace AzucareraPomalca.Application.Services.Implementations
                              IPuestoCursoService puestoCursoService,
                              ICondicionTrabajoPuestoService condicionTrabajoPuestoService,
                              ITomaDecisionPuestoService tomaDecisionPuestoService,
-                             IEsfuerzoRequeridoPuestoService esfuerzoRequeridoPuestoService
+                             IEsfuerzoRequeridoPuestoService esfuerzoRequeridoPuestoService,
+                             IPerfilCompetenciaService perfilCompetenciaService
                             )
         {
             _puestoRepository = puestoRepository;
@@ -49,6 +51,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
             _condicionTrabajoPuestoService = condicionTrabajoPuestoService;
             _tomaDecisionPuestoService = tomaDecisionPuestoService;
             _esfuerzoRequeridoPuestoService = esfuerzoRequeridoPuestoService;
+            _perfilCompetenciaService = perfilCompetenciaService;
         }
 
         public async Task<PuestoDto> CreateAsync(PuestoSaveDto saveDto)
@@ -339,6 +342,25 @@ namespace AzucareraPomalca.Application.Services.Implementations
                     {
                         esfuerzoRequeridoPuesto.IdPuesto = puesto.Id;
                         await _esfuerzoRequeridoPuestoService.CreateAsync(esfuerzoRequeridoPuesto);
+                    }
+                }
+            }
+            #endregion
+
+            #region PERFIL COMPETENCIAS
+            if (saveDto.PerfilCompetenciasSave != null && saveDto.PerfilCompetenciasSave.Count > 0)
+            {
+                foreach (var perfilCompetencia in saveDto.PerfilCompetenciasSave)
+                {
+                    if (perfilCompetencia.Id != null && perfilCompetencia.Id != 0)
+                    {
+                        perfilCompetencia.IdPuesto = puesto.Id;
+                        await _perfilCompetenciaService.EditAsync((int)perfilCompetencia.Id, perfilCompetencia);
+                    }
+                    else
+                    {
+                        perfilCompetencia.IdPuesto = puesto.Id;
+                        await _perfilCompetenciaService.CreateAsync(perfilCompetencia);
                     }
                 }
             }

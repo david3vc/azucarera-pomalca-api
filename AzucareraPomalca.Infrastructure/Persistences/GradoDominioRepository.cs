@@ -1,0 +1,14 @@
+﻿using AzucareraPomalca.Domain.Models;
+using AzucareraPomalca.Domain.Repositories;
+using AzucareraPomalca.Infrastructure.Cores.Contexts;
+using AzucareraPomalca.Infrastructure.Cores.Persistences;
+
+namespace AzucareraPomalca.Infrastructure.Persistences
+{
+    public class GradoDominioRepository : CrudRepository<GradoDominio, int>, IGradoDominioRepository
+    {
+        public GradoDominioRepository(ApplicationDbContext dbContext) : base(dbContext)
+        {
+        }
+    }
+}

@@ -58,6 +58,7 @@ namespace AzucareraPomalca.Infrastructure.Persistences
                 .Include(t => t.TomaDecisionPuestos.Where(t => t.State == true)).ThenInclude(t => t.Nivel)
                 .Include(t => t.EsfuerzoRequeridoPuestos.Where(t => t.State == true)).ThenInclude(t => t.EsfuerzoRequerido).ThenInclude(t => t.TipoEsfuerzoRequerido)
                 .Include(t => t.EsfuerzoRequeridoPuestos.Where(t => t.State == true)).ThenInclude(t => t.Nivel)
+                .Include(t => t.PerfilCompetencias.Where(t => t.State == true)).ThenInclude(t => t.GradoDominio).ThenInclude(t => t.CompetenciaSimple).ThenInclude(t => t.TipoCompetencia)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
 

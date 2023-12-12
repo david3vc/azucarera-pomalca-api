@@ -1,0 +1,66 @@
+﻿using AutoMapper;
+using AzucareraPomalca.Application.Cores.Exceptions;
+using AzucareraPomalca.Application.Dtos.PerfilCompetencias;
+using AzucareraPomalca.Domain.Models;
+using AzucareraPomalca.Domain.Repositories;
+
+namespace AzucareraPomalca.Application.Services.Implementations
+{
+    public class PerfilCompetenciaService : IPerfilCompetenciaService
+    {
+        private readonly IPerfilCompetenciaRepository _perfilCompetenciaRepository;
+        private readonly IMapper _mapper;
+
+        public PerfilCompetenciaService(IPerfilCompetenciaRepository perfilCompetenciaRepository, IMapper mapper)
+        {
+            _perfilCompetenciaRepository = perfilCompetenciaRepository;
+            _mapper = mapper;
+        }
+
+        public async Task<PerfilCompetenciaDto> CreateAsync(PerfilCompetenciaSaveDto saveDto)
+        {
+            PerfilCompetencia perfilCompetencia = _mapper.Map<PerfilCompetencia>(saveDto);
+            perfilCompetencia.CreatedAt = DateTime.UtcNow;
+            perfilCompetencia.State = true;
+
+            await _perfilCompetenciaRepository.SaveAsync(perfilCompetencia);
+
+            return _mapper.Map<PerfilCompetenciaDto>(perfilCompetencia);
+        }
+
+        public Task<PerfilCompetenciaDto> DisabledAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<PerfilCompetenciaDto> EditAsync(int id, PerfilCompetenciaSaveDto saveDto)
+        {
+            PerfilCompetencia? perfilCompetencia = await _perfilCompetenciaRepository.FindByIdAsync(id);
+
+            if (perfilCompetencia is null) throw PerfilCompetenciaNotFound(id);
+
+            _mapper.Map<PerfilCompetenciaSaveDto, PerfilCompetencia>(saveDto, perfilCompetencia);
+
+            perfilCompetencia.UpdatedAt = DateTime.UtcNow;
+
+            await _perfilCompetenciaRepository.SaveAsync(perfilCompetencia);
+
+            return _mapper.Map<PerfilCompetenciaDto>(perfilCompetencia);
+        }
+
+        public Task<IReadOnlyList<PerfilCompetenciaDto>> FindAllAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<PerfilCompetenciaDto> FindByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        private NotFoundCoreException PerfilCompetenciaNotFound(int id)
+        {
+            return new NotFoundCoreException("PerfilCompetencia no encontrado para el id: " + id);
+        }
+    }
+}
