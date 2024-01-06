@@ -19,7 +19,7 @@ namespace AzucareraPomalca.Infrastructure.Persistences
 
         public async Task<List<PuestoCurso>> GetPuestoCursosByIdPuesto(int idPuesto)
         {
-            List<PuestoCurso> data = null;
+            List<PuestoCurso> data = new List<PuestoCurso>();
 
             var sql = "sp_cursosDelPuestoByIdPuesto";
 
@@ -52,7 +52,7 @@ namespace AzucareraPomalca.Infrastructure.Persistences
                     State = !reader.IsDBNull(reader.GetOrdinal("state")) ? reader.GetBoolean(reader.GetOrdinal("state")) : false,
                     Curso = new Curso
                     {
-                        Id = !reader.IsDBNull(reader.GetOrdinal("id_grado_academico")) ? reader.GetInt32(reader.GetOrdinal("id_grado_academico")) : 0,
+                        Id = !reader.IsDBNull(reader.GetOrdinal("id_curso")) ? reader.GetInt32(reader.GetOrdinal("id_curso")) : 0,
                         Codigo = !reader.IsDBNull(reader.GetOrdinal("codigo")) ? reader.GetString(reader.GetOrdinal("codigo")) : "",
                         Descripcion = !reader.IsDBNull(reader.GetOrdinal("descripcion")) ? reader.GetString(reader.GetOrdinal("descripcion")) : "",
                         IdTipoCurso = !reader.IsDBNull(reader.GetOrdinal("id_tipo_curso")) ? reader.GetInt32(reader.GetOrdinal("id_tipo_curso")) : 0,
@@ -63,7 +63,7 @@ namespace AzucareraPomalca.Infrastructure.Persistences
                         TipoCurso = new TipoCurso
                         {
                             Id = !reader.IsDBNull(reader.GetOrdinal("id_tipo_curso")) ? reader.GetInt32(reader.GetOrdinal("id_tipo_curso")) : 0,
-                            Descripcion = !reader.IsDBNull(reader.GetOrdinal("descripcion")) ? reader.GetString(reader.GetOrdinal("descripcion")) : "",
+                            Descripcion = !reader.IsDBNull(reader.GetOrdinal("descripcion_tipo_curso")) ? reader.GetString(reader.GetOrdinal("descripcion_tipo_curso")) : "",
                             CreatedAt = !reader.IsDBNull(reader.GetOrdinal("created_at")) ? reader.GetDateTime(reader.GetOrdinal("created_at")) : DateTime.UtcNow,
                             UpdatedAt = !reader.IsDBNull(reader.GetOrdinal("updated_at")) ? reader.GetDateTime(reader.GetOrdinal("updated_at")) : null,
                             State = !reader.IsDBNull(reader.GetOrdinal("state")) ? reader.GetBoolean(reader.GetOrdinal("state")) : false,

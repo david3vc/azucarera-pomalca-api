@@ -25,7 +25,7 @@ namespace AzucareraPomalca.Api.Controllers
 
         // GET: api/values/2
         [HttpGet("{idPuesto}")]
-        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(PuestoProfesionDto))]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<PuestoProfesionDto>))]
         [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorModel))]
         public async Task<Results<NotFound, Ok<List<PuestoProfesionDto>>>> Get(int idPuesto)
         {

@@ -19,7 +19,7 @@ namespace AzucareraPomalca.Infrastructure.Persistences
 
         public async Task<List<CondicionTrabajoPuesto>> GetCondicionTrabajoPuestosByIdPuesto(int idPuesto)
         {
-            List<CondicionTrabajoPuesto> data = null;
+            List<CondicionTrabajoPuesto> data = new List<CondicionTrabajoPuesto>();
 
             var sql = "sp_condicionesTrabajoDelPuestoByIdPuesto";
 
@@ -53,7 +53,7 @@ namespace AzucareraPomalca.Infrastructure.Persistences
                     State = !reader.IsDBNull(reader.GetOrdinal("state")) ? reader.GetBoolean(reader.GetOrdinal("state")) : false,
                     CondicionTrabajo = new CondicionTrabajo
                     {
-                        Id = !reader.IsDBNull(reader.GetOrdinal("id_responsabilidad")) ? reader.GetInt32(reader.GetOrdinal("id_responsabilidad")) : 0,
+                        Id = !reader.IsDBNull(reader.GetOrdinal("id_condicion_trabajo")) ? reader.GetInt32(reader.GetOrdinal("id_condicion_trabajo")) : 0,
                         Descripcion = !reader.IsDBNull(reader.GetOrdinal("descripcion")) ? reader.GetString(reader.GetOrdinal("descripcion")) : "",
                         IdTipoCondicionTrabajo = !reader.IsDBNull(reader.GetOrdinal("id_tipo_condicion_trabajo")) ? reader.GetInt32(reader.GetOrdinal("id_tipo_condicion_trabajo")) : 0,
                         CreatedAt = !reader.IsDBNull(reader.GetOrdinal("created_at")) ? reader.GetDateTime(reader.GetOrdinal("created_at")) : DateTime.UtcNow,
@@ -62,7 +62,7 @@ namespace AzucareraPomalca.Infrastructure.Persistences
                         TipoCondicionTrabajo = new TipoCondicionTrabajo
                         {
                             Id = !reader.IsDBNull(reader.GetOrdinal("id_tipo_condicion_trabajo")) ? reader.GetInt32(reader.GetOrdinal("id_tipo_condicion_trabajo")) : 0,
-                            Descripcion = !reader.IsDBNull(reader.GetOrdinal("descripcion")) ? reader.GetString(reader.GetOrdinal("descripcion")) : "",
+                            Descripcion = !reader.IsDBNull(reader.GetOrdinal("descripcion_tipo_condicion_trabajo")) ? reader.GetString(reader.GetOrdinal("descripcion_tipo_condicion_trabajo")) : "",
                             CreatedAt = !reader.IsDBNull(reader.GetOrdinal("created_at")) ? reader.GetDateTime(reader.GetOrdinal("created_at")) : DateTime.UtcNow,
                             UpdatedAt = !reader.IsDBNull(reader.GetOrdinal("updated_at")) ? reader.GetDateTime(reader.GetOrdinal("updated_at")) : null,
                             State = !reader.IsDBNull(reader.GetOrdinal("state")) ? reader.GetBoolean(reader.GetOrdinal("state")) : false,

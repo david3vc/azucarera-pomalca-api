@@ -19,7 +19,7 @@ namespace AzucareraPomalca.Infrastructure.Persistences
 
         public async Task<List<ResponsabilidadPuesto>> GetResponsabilidadPuestosByIdPuesto(int idPuesto)
         {
-            List<ResponsabilidadPuesto> data = null;
+            List<ResponsabilidadPuesto> data = new List<ResponsabilidadPuesto>();
 
             var sql = "sp_responsabilidadesDelPuestoByIdPuesto";
 
@@ -53,19 +53,19 @@ namespace AzucareraPomalca.Infrastructure.Persistences
                     State = !reader.IsDBNull(reader.GetOrdinal("state")) ? reader.GetBoolean(reader.GetOrdinal("state")) : false,
                     Responsabilidad = new Responsabilidad
                     {
-                        Id = !reader.IsDBNull(reader.GetOrdinal("id_responsabilidad")) ? reader.GetInt32(reader.GetOrdinal("id_responsabilidad")) : 0,
-                        Descripcion = !reader.IsDBNull(reader.GetOrdinal("descripcion")) ? reader.GetString(reader.GetOrdinal("descripcion")) : "",
-                        CreatedAt = !reader.IsDBNull(reader.GetOrdinal("created_at")) ? reader.GetDateTime(reader.GetOrdinal("created_at")) : DateTime.UtcNow,
-                        UpdatedAt = !reader.IsDBNull(reader.GetOrdinal("updated_at")) ? reader.GetDateTime(reader.GetOrdinal("updated_at")) : null,
-                        State = !reader.IsDBNull(reader.GetOrdinal("state")) ? reader.GetBoolean(reader.GetOrdinal("state")) : false,
+                        Id = !reader.IsDBNull(reader.GetOrdinal("r_id_responsabilidad")) ? reader.GetInt32(reader.GetOrdinal("r_id_responsabilidad")) : 0,
+                        Descripcion = !reader.IsDBNull(reader.GetOrdinal("r_descripcion")) ? reader.GetString(reader.GetOrdinal("r_descripcion")) : "",
+                        CreatedAt = !reader.IsDBNull(reader.GetOrdinal("r_created_at")) ? reader.GetDateTime(reader.GetOrdinal("r_created_at")) : DateTime.UtcNow,
+                        UpdatedAt = !reader.IsDBNull(reader.GetOrdinal("r_updated_at")) ? reader.GetDateTime(reader.GetOrdinal("r_updated_at")) : null,
+                        State = !reader.IsDBNull(reader.GetOrdinal("r_state")) ? reader.GetBoolean(reader.GetOrdinal("r_state")) : false,
                     },
                     Nivel = new Nivel
                     {
-                        Id = !reader.IsDBNull(reader.GetOrdinal("id_nivel")) ? reader.GetInt32(reader.GetOrdinal("id_nivel")) : 0,
-                        Descripcion = !reader.IsDBNull(reader.GetOrdinal("descripcion")) ? reader.GetString(reader.GetOrdinal("descripcion")) : "",
-                        CreatedAt = !reader.IsDBNull(reader.GetOrdinal("created_at")) ? reader.GetDateTime(reader.GetOrdinal("created_at")) : DateTime.UtcNow,
-                        UpdatedAt = !reader.IsDBNull(reader.GetOrdinal("updated_at")) ? reader.GetDateTime(reader.GetOrdinal("updated_at")) : null,
-                        State = !reader.IsDBNull(reader.GetOrdinal("state")) ? reader.GetBoolean(reader.GetOrdinal("state")) : false,
+                        Id = !reader.IsDBNull(reader.GetOrdinal("n_id_nivel")) ? reader.GetInt32(reader.GetOrdinal("n_id_nivel")) : 0,
+                        Descripcion = !reader.IsDBNull(reader.GetOrdinal("n_descripcion")) ? reader.GetString(reader.GetOrdinal("n_descripcion")) : "",
+                        CreatedAt = !reader.IsDBNull(reader.GetOrdinal("n_created_at")) ? reader.GetDateTime(reader.GetOrdinal("n_created_at")) : DateTime.UtcNow,
+                        UpdatedAt = !reader.IsDBNull(reader.GetOrdinal("n_updated_at")) ? reader.GetDateTime(reader.GetOrdinal("n_updated_at")) : null,
+                        State = !reader.IsDBNull(reader.GetOrdinal("n_state")) ? reader.GetBoolean(reader.GetOrdinal("n_state")) : false,
                     }
                 };
 
