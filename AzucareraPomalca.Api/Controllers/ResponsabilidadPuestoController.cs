@@ -1,5 +1,7 @@
-﻿using AzucareraPomalca.Application.Dtos.ResponsabilidadesPuestos;
+﻿using AzucareraPomalca.Api.Exceptions;
+using AzucareraPomalca.Application.Dtos.ResponsabilidadesPuestos;
 using AzucareraPomalca.Application.Services;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AzucareraPomalca.Api.Controllers
@@ -19,6 +21,17 @@ namespace AzucareraPomalca.Api.Controllers
         public async Task<ResponsabilidadPuestoDto> Delete(int id)
         {
             return await _responsabilidadPuestoService.DisabledAsync(id);
+        }
+
+        // GET: api/values/2
+        [HttpGet("{idPuesto}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(ResponsabilidadPuestoDto))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorModel))]
+        public async Task<Results<NotFound, Ok<List<ResponsabilidadPuestoDto>>>> Get(int idPuesto)
+        {
+            var response = await _responsabilidadPuestoService.GetResponsabilidadPuestosByIdPuesto(idPuesto);
+
+            return TypedResults.Ok(response);
         }
     }
 }

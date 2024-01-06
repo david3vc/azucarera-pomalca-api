@@ -5,5 +5,6 @@ namespace AzucareraPomalca.Domain.Repositories
 {
     public interface ICondicionTrabajoPuestoRepository : ICrudRepository<CondicionTrabajoPuesto, int>
     {
+        Task<List<CondicionTrabajoPuesto>> GetCondicionTrabajoPuestosByIdPuesto(int idPuesto);
     }
 }

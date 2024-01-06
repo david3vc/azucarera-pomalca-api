@@ -58,6 +58,15 @@ namespace AzucareraPomalca.Application.Services.Implementations
             throw new NotImplementedException();
         }
 
+        public async Task<List<EsfuerzoRequeridoPuestoDto>> GetEsfuerzoRequeridoPuestosByIdPuesto(int idPuesto)
+        {
+            List<EsfuerzoRequeridoPuesto> esfuerzoRequeridoPuestos = await _esfuerzoRequeridoPuestoRepository.GetEsfuerzoRequeridoPuestosByIdPuesto(idPuesto);
+
+            if (esfuerzoRequeridoPuestos is null) throw EsfuerzoRequeridoPuestoNotFound(idPuesto);
+
+            return _mapper.Map<List<EsfuerzoRequeridoPuestoDto>>(esfuerzoRequeridoPuestos);
+        }
+
         private NotFoundCoreException EsfuerzoRequeridoPuestoNotFound(int id)
         {
             return new NotFoundCoreException("Toma Decision Puesto Puesto no encontrado para el id: " + id);

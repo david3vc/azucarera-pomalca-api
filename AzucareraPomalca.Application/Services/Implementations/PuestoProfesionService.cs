@@ -66,6 +66,15 @@ namespace AzucareraPomalca.Application.Services.Implementations
             throw new NotImplementedException();
         }
 
+        public async Task<List<PuestoProfesionDto>> ProfesionesPuestoByIdPuesto(int idPuesto)
+        {
+            List<PuestoProfesion> puestoProfesiones = await _puestoProfesionRepository.ProfesionesPuestoByIdPuesto(idPuesto);
+
+            if (puestoProfesiones is null) throw PuestoProfesionNotFound(idPuesto);
+
+            return _mapper.Map<List<PuestoProfesionDto>>(puestoProfesiones);
+        }
+
         private NotFoundCoreException PuestoProfesionNotFound(int id)
         {
             return new NotFoundCoreException("PuestoProfesion no encontrado para el id: " + id);

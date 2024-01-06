@@ -66,6 +66,15 @@ namespace AzucareraPomalca.Application.Services.Implementations
             throw new NotImplementedException();
         }
 
+        public async Task<List<CondicionTrabajoPuestoDto>> GetCondicionTrabajoPuestosByIdPuesto(int idPuesto)
+        {
+            List<CondicionTrabajoPuesto> condicionTrabajoPuestos = await _condicionTrabajoPuestoRepository.GetCondicionTrabajoPuestosByIdPuesto(idPuesto);
+
+            if (condicionTrabajoPuestos is null) throw CondicionTrabajoPuestoNotFound(idPuesto);
+
+            return _mapper.Map<List<CondicionTrabajoPuestoDto>>(condicionTrabajoPuestos);
+        }
+
         private NotFoundCoreException CondicionTrabajoPuestoNotFound(int id)
         {
             return new NotFoundCoreException("Condicion Trabajo Puesto no encontrado para el id: " + id);

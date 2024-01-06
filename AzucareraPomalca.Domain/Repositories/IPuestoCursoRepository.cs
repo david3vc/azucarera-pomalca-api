@@ -5,5 +5,6 @@ namespace AzucareraPomalca.Domain.Repositories
 {
     public interface IPuestoCursoRepository : ICrudRepository<PuestoCurso, int>
     {
+        Task<List<PuestoCurso>> GetPuestoCursosByIdPuesto(int idPuesto);
     }
 }

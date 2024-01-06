@@ -5,5 +5,6 @@ namespace AzucareraPomalca.Application.Services
 {
     public interface ITomaDecisionPuestoService : ICrudService<TomaDecisionPuestoDto, TomaDecisionPuestoSaveDto, int>
     {
+        Task<List<TomaDecisionPuestoDto>> GetTomaDecisionPuestosByIdPuesto(int idPuesto);
     }
 }

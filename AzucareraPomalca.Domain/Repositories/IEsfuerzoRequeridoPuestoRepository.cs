@@ -5,5 +5,6 @@ namespace AzucareraPomalca.Domain.Repositories
 {
     public interface IEsfuerzoRequeridoPuestoRepository : ICrudRepository<EsfuerzoRequeridoPuesto, int>
     {
+        Task<List<EsfuerzoRequeridoPuesto>> GetEsfuerzoRequeridoPuestosByIdPuesto(int idPuesto);
     }
 }

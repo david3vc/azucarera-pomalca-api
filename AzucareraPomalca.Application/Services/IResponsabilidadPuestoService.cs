@@ -5,5 +5,6 @@ namespace AzucareraPomalca.Application.Services
 {
     public interface IResponsabilidadPuestoService : ICrudService<ResponsabilidadPuestoDto, ResponsabilidadPuestoSaveDto, int>
     {
+        Task<List<ResponsabilidadPuestoDto>> GetResponsabilidadPuestosByIdPuesto(int idPuesto);
     }
 }

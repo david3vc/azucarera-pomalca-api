@@ -66,6 +66,15 @@ namespace AzucareraPomalca.Application.Services.Implementations
             throw new NotImplementedException();
         }
 
+        public async Task<List<ResponsabilidadPuestoDto>> GetResponsabilidadPuestosByIdPuesto(int idPuesto)
+        {
+            List<ResponsabilidadPuesto> responsabilidadPuestos = await _responsabilidadPuestoRepository.GetResponsabilidadPuestosByIdPuesto(idPuesto);
+
+            if (responsabilidadPuestos is null) throw ResponsabilidadPuestoNotFound(idPuesto);
+
+            return _mapper.Map<List<ResponsabilidadPuestoDto>>(responsabilidadPuestos);
+        }
+
         private NotFoundCoreException ResponsabilidadPuestoNotFound(int id)
         {
             return new NotFoundCoreException("Responsabilidad Puesto no encontrado para el id: " + id);

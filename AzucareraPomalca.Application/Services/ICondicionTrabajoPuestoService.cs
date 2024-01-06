@@ -5,5 +5,6 @@ namespace AzucareraPomalca.Application.Services
 {
     public interface ICondicionTrabajoPuestoService : ICrudService<CondicionTrabajoPuestoDto, CondicionTrabajoPuestoSaveDto, int>
     {
+        Task<List<CondicionTrabajoPuestoDto>> GetCondicionTrabajoPuestosByIdPuesto(int idPuesto);
     }
 }
