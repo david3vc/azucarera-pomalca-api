@@ -382,12 +382,15 @@ namespace AzucareraPomalca.Application.Services.Implementations
             var paging = new Paging() { PageNumber = request.Page, PageSize = request.PerPage };
 
             Expression<Func<Puesto, bool>> predicate = x =>
-                (string.IsNullOrWhiteSpace(filter.Nombre) || x.Nombre.ToUpper().Contains(filter.Nombre.ToUpper()))
+                (string.IsNullOrWhiteSpace(filter.Codigo) || x.Codigo.ToUpper().Contains(filter.Codigo.ToUpper()))
+                && (string.IsNullOrWhiteSpace(filter.Nombre) || x.Nombre.ToUpper().Contains(filter.Nombre.ToUpper()))
+                && (!filter.IdClaseOcupacional.HasValue || x.IdClaseOcupacional == filter.IdClaseOcupacional)
                 && (!filter.IdGerencia.HasValue || x.IdGerencia == filter.IdGerencia);
 
             List<Expression<Func<Puesto, object>>> includes = new List<Expression<Func<Puesto, object>>>()
             {
-                t => t.Gerencia
+                t => t.Gerencia,
+                t => t.ClaseOcupacional.GrupoOcupacional
             };
 
             var response = await _puestoRepository.FindAllPaginatedAsync(paging: paging, predicate: predicate, includes: includes);
