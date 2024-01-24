@@ -70,6 +70,7 @@ namespace AzucareraPomalca.Infrastructure.Persistences
                     && (t.IdDivision == request.IdDivision)
                     && (t.IdDepartamento == request.IdDepartamento)
                     && (t.IdSeccion == request.IdSeccion)
+                    && (t.State == true)
                 )
                 .ToListAsync();
         }

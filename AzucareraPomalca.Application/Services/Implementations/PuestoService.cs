@@ -82,7 +82,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
             if (puesto is null) throw PuestoNotFound(id);
 
-            puesto.State = false;
+            puesto.State = !puesto.State;
 
             await _puestoRepository.SaveAsync(puesto);
 
@@ -385,7 +385,8 @@ namespace AzucareraPomalca.Application.Services.Implementations
                 (string.IsNullOrWhiteSpace(filter.Codigo) || x.Codigo.ToUpper().Contains(filter.Codigo.ToUpper()))
                 && (string.IsNullOrWhiteSpace(filter.Nombre) || x.Nombre.ToUpper().Contains(filter.Nombre.ToUpper()))
                 && (!filter.IdClaseOcupacional.HasValue || x.IdClaseOcupacional == filter.IdClaseOcupacional)
-                && (!filter.IdGerencia.HasValue || x.IdGerencia == filter.IdGerencia);
+                && (!filter.IdGerencia.HasValue || x.IdGerencia == filter.IdGerencia)
+                && (!filter.State.HasValue || x.State == filter.State);
 
             List<Expression<Func<Puesto, object>>> includes = new List<Expression<Func<Puesto, object>>>()
             {
