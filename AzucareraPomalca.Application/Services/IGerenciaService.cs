@@ -3,7 +3,7 @@ using AzucareraPomalca.Application.Dtos.Gerencias;
 
 namespace AzucareraPomalca.Application.Services
 {
-    public interface IGerenciaService : IQueryService<GerenciaDto, int>, IListService<GerenciaSimpleDto>
+    public interface IGerenciaService : ICrudService<GerenciaDto, GerenciaSaveDto, int>, IListService<GerenciaSimpleDto>, IPageService<GerenciaDto, GerenciaFilterDto>
     {
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AzucareraPomalca.Api.Exceptions;
+using AzucareraPomalca.Application.Cores.Dtos;
 using AzucareraPomalca.Application.Dtos.Gerencias;
 using AzucareraPomalca.Application.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -23,6 +24,31 @@ namespace AzucareraPomalca.Api.Controllers
             return await _gerenciaService.FindAllAsync();
         }
 
+        // POST api/values
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created, Type = typeof(GerenciaDto))]
+        [ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorResponse))]
+        public async Task<Results<BadRequest, CreatedAtRoute<GerenciaDto>>> Post([FromBody] GerenciaSaveDto saveDto)
+        {
+            var response = await _gerenciaService.CreateAsync(saveDto);
+
+            return TypedResults.CreatedAtRoute(response);
+        }
+
+        // PUT api/values/5
+        [HttpPut("{id}")]
+        public async Task<GerenciaDto> Put(int id, [FromBody] GerenciaSaveDto saveDto)
+        {
+            return await _gerenciaService.EditAsync(id, saveDto);
+        }
+
+        // DELETE api/values/5
+        [HttpDelete("{id}")]
+        public async Task<GerenciaDto> Delete(int id)
+        {
+            return await _gerenciaService.DisabledAsync(id);
+        }
+
         // GET: api/listsimple
         [HttpGet("listasimple")]
         public async Task<IEnumerable<GerenciaSimpleDto>> GetSimple()
@@ -39,6 +65,12 @@ namespace AzucareraPomalca.Api.Controllers
             var response = await _gerenciaService.FindByIdAsync(id);
 
             return TypedResults.Ok(response);
+        }
+
+        [HttpGet("PaginatedSearch")]
+        public async Task<PageResponse<GerenciaDto>> PaginatedSearch([FromQuery] PageRequest<GerenciaFilterDto> request)
+        {
+            return await _gerenciaService.FindAllPaginatedAsync(request);
         }
     }
 }
