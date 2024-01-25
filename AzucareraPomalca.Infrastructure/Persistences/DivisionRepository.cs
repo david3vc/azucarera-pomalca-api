@@ -33,7 +33,7 @@ namespace AzucareraPomalca.Infrastructure.Persistences
         public async Task<List<Division>> FindByIdGerenciaAsync(int id)
         {
             return await _dbContext.Set<Division>()
-                .Where(t => t.IdGerencia == id)
+                .Where(t => t.IdGerencia == id && t.State == true)
                 .ToListAsync();
         }
     }
