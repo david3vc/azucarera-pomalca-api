@@ -11,6 +11,7 @@ namespace AzucareraPomalca.Application.Dtos.Gerencias.Profiles
         {
             CreateMap<Gerencia, GerenciaDto>();
             CreateMap<Gerencia, GerenciaSimpleDto>();
+            CreateMap<Gerencia, GerenciaSaveDto>().ReverseMap();
             CreateMap<Gerencia, GerenciaFilterDto>().ReverseMap();
             CreateMap<PagedResult<Gerencia>, PageResponse<GerenciaDto>>();
         }
