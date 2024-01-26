@@ -35,7 +35,7 @@ namespace AzucareraPomalca.Infrastructure.Persistences
         public async Task<List<Departamento>> FindByIdDivisionAsync(int id)
         {
             return await _dbContext.Set<Departamento>()
-                .Where(t => t.IdDivision == id)
+                .Where(t => t.IdDivision == id && t.State == true)
                 .ToListAsync();
         }
 
@@ -52,6 +52,7 @@ namespace AzucareraPomalca.Infrastructure.Persistences
                 .Where(t =>
                     (t.IdGerencia == request.IdGerencia)
                     && (t.IdDivision == request.IdDivision)
+                    && (t.State == true)
                 )
                 .ToListAsync();
         }
