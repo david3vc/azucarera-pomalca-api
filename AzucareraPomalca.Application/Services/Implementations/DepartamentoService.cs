@@ -107,8 +107,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
         public async Task<IReadOnlyList<DepartamentoSimpleDto>> SimpleListByIdsAsync(DepartamentoSimpleFilterDto request)
         {
-            Expression<Func<Departamento, bool>>? predicate = x => (!request.IdGerencia.HasValue || x.IdGerencia == request.IdGerencia)
-                                                                && (!request.IdDivision.HasValue || x.IdDivision == request.IdDivision);
+            Expression<Func<Departamento, bool>>? predicate = x => (x.IdGerencia == request.IdGerencia && x.IdDivision == request.IdDivision);
 
             IReadOnlyList<Departamento> claseOcupacionales = await _departamentoRepository.FindAllAsync(predicate: predicate);
 
