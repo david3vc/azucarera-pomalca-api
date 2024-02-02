@@ -1,11 +1,9 @@
-﻿using AzucareraPomalca.Domain.Cores.Models;
-
-namespace AzucareraPomalca.Domain.Models
+﻿namespace AzucareraPomalca.Application.Dtos.Empleados
 {
-    public class Empleado : CoreModel<int>
+    public class EmpleadoSaveDto
     {
         public string Nombres { get; set; }
-        public string? Dni { get; set; }
+        public string Dni { get; set; }
         public string AppellidoPaterno { get; set; }
         public string AppellidoMaterno { get; set; }
         public DateTime? InicioPeriodo { get; set; }
@@ -13,8 +11,5 @@ namespace AzucareraPomalca.Domain.Models
         public string? CodigoCardo { get; set; }
         public string? CodigoArea { get; set; }
         public int IdPuesto { get; set; }
-
-        public virtual Puesto Puesto { get; set; }
-        public virtual CondicionEmpleado CondicionEmpleado { get; set; }
     }
 }

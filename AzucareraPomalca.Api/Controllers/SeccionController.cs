@@ -1,9 +1,7 @@
 ﻿using AzucareraPomalca.Api.Exceptions;
 using AzucareraPomalca.Application.Cores.Dtos;
-using AzucareraPomalca.Application.Dtos.Departamentos;
 using AzucareraPomalca.Application.Dtos.Secciones;
 using AzucareraPomalca.Application.Services;
-using AzucareraPomalca.Application.Services.Implementations;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 

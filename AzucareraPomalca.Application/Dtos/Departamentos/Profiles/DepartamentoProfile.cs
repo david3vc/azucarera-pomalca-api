@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using AzucareraPomalca.Application.Cores.Dtos;
-using AzucareraPomalca.Application.Dtos.Divisiones;
 using AzucareraPomalca.Domain.Cores.Models;
 using AzucareraPomalca.Domain.Models;
 
