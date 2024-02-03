@@ -3,6 +3,7 @@ using AzucareraPomalca.Application.Cores.Exceptions;
 using AzucareraPomalca.Application.Dtos.PuestosProfesiones;
 using AzucareraPomalca.Domain.Models;
 using AzucareraPomalca.Domain.Repositories;
+using System.Linq.Expressions;
 
 namespace AzucareraPomalca.Application.Services.Implementations
 {
@@ -23,9 +24,24 @@ namespace AzucareraPomalca.Application.Services.Implementations
             puestoProfesion.CreatedAt = DateTime.UtcNow;
             puestoProfesion.State = true;
 
-            await _puestoProfesionRepository.SaveAsync(puestoProfesion);
+            Expression<Func<PuestoProfesion, bool>> predicate = x => x.IdProfesion == saveDto.IdProfesion && x.IdPuesto == saveDto.IdPuesto;
 
-            return _mapper.Map<PuestoProfesionDto>(puestoProfesion);
+            var validar = await _puestoProfesionRepository.FindByIdAsync(predicate);
+
+            if (validar != null)
+            {
+                if (validar.State == false)
+                {
+                    var save = _mapper.Map<PuestoProfesionSaveDto>(validar);
+                    return await EditAsync(validar.Id, save);
+                }
+                else throw new BadRequestCoreException("Ya se registó la misma carrera con el mismo grado académico.");
+            }
+            else
+            {
+                await _puestoProfesionRepository.SaveAsync(puestoProfesion);
+                return _mapper.Map<PuestoProfesionDto>(puestoProfesion);
+            }
         }
 
         public async Task<PuestoProfesionDto> DisabledAsync(int id)
@@ -34,7 +50,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
             if (puestoProfesion is null) throw PuestoProfesionNotFound(id);
 
-            puestoProfesion.State = !puestoProfesion.State;
+            puestoProfesion.State = false;
 
             await _puestoProfesionRepository.SaveAsync(puestoProfesion);
 
@@ -50,8 +66,21 @@ namespace AzucareraPomalca.Application.Services.Implementations
             _mapper.Map<PuestoProfesionSaveDto, PuestoProfesion>(saveDto, puestoProfesion);
 
             puestoProfesion.UpdatedAt = DateTime.UtcNow;
+            puestoProfesion.State = true;
 
-            await _puestoProfesionRepository.SaveAsync(puestoProfesion);
+            Expression<Func<PuestoProfesion, bool>> predicate = x => x.IdProfesion == saveDto.IdProfesion && x.IdPuesto == saveDto.IdPuesto;
+
+            var validar = await _puestoProfesionRepository.FindByIdAsync(predicate);
+
+            if (validar != null)
+            {
+                if (validar.State == true && validar.Id != puestoProfesion.Id) throw new BadRequestCoreException("Ya se registó la misma carrera con el mismo grado académico.");
+                else if(validar.Id == puestoProfesion.Id) await _puestoProfesionRepository.SaveAsync(puestoProfesion);
+            }
+            else
+            {
+                await _puestoProfesionRepository.SaveAsync(puestoProfesion);
+            }
 
             return _mapper.Map<PuestoProfesionDto>(puestoProfesion);
         }

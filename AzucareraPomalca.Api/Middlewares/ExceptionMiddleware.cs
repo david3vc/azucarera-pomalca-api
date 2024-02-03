@@ -33,6 +33,11 @@ namespace AzucareraPomalca.Api.Middlewares
                         statusCode = HttpStatusCode.NotFound;
                         errorResult.Message = e.Message;
                         break;
+                    case BadRequestCoreException e:
+                        _logger.LogWarning("BadRequestCoreException:: {exception}", exception.Message);
+                        statusCode = HttpStatusCode.BadRequest;
+                        errorResult.Message = e.Message;
+                        break;
 
                     default:
                         _logger.LogError("Exception:: {exception}", exception.Message);
