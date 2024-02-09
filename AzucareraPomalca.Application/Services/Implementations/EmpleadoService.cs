@@ -12,12 +12,16 @@ namespace AzucareraPomalca.Application.Services.Implementations
     public class EmpleadoService : IEmpleadoService
     {
         private readonly IEmpleadoRepository _empleadoRepository;
+        private readonly IEmpleadoProfesionService _empleadoProfesionService;
         private readonly IMapper _mapper;
 
-        public EmpleadoService(IEmpleadoRepository empleadoRepository, IMapper mapper)
+        public EmpleadoService(IEmpleadoRepository empleadoRepository,
+                               IMapper mapper,
+                               IEmpleadoProfesionService empleadoProfesionService)
         {
             _empleadoRepository = empleadoRepository;
             _mapper = mapper;
+            _empleadoProfesionService = empleadoProfesionService;
         }
 
         public async Task<EmpleadoDto> CreateAsync(EmpleadoSaveDto saveDto)
@@ -58,6 +62,25 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
             await _empleadoRepository.SaveAsync(empleado);
 
+            #region PROFESIONES
+            if (saveDto.EmpleadoProfesionesSave != null && saveDto.EmpleadoProfesionesSave.Count > 0)
+            {
+                foreach (var empleadoProfesion in saveDto.EmpleadoProfesionesSave)
+                {
+                    if (empleadoProfesion.Id != null && empleadoProfesion.Id != 0)
+                    {
+                        empleadoProfesion.IdEmpleado = empleado.Id;
+                        await _empleadoProfesionService.EditAsync((int)empleadoProfesion.Id, empleadoProfesion);
+                    }
+                    else
+                    {
+                        empleadoProfesion.IdEmpleado = empleado.Id;
+                        await _empleadoProfesionService.CreateAsync(empleadoProfesion);
+                    }
+                }
+            }
+            #endregion
+
             return _mapper.Map<EmpleadoDto>(empleado);
         }
 
@@ -96,19 +119,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
         public async Task<EmpleadoDto> FindByIdAsync(int id)
         {
-            Expression<Func<Empleado, bool>> predicate = x => x.Id == id;
-
-            List<Expression<Func<Empleado, object>>>? includes = new List<Expression<Func<Empleado, object>>>()
-            {
-                t => t.CondicionEmpleado,
-                t => t.Puesto.ClaseOcupacional.GrupoOcupacional,
-                t => t.Puesto.Gerencia,
-                t => t.Puesto.Division,
-                t => t.Puesto.Departamento,
-                t => t.Puesto.Seccion
-            };
-
-            Empleado? empleado = await _empleadoRepository.FindByIdAsync(predicate, includes);
+            Empleado? empleado = await _empleadoRepository.FindByIdAsync(id);
 
             if (empleado is null) throw EmpleadoNotFound(id);
 

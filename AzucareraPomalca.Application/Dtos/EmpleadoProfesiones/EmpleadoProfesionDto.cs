@@ -1,11 +1,5 @@
-﻿using AzucareraPomalca.Application.Dtos.Empleados;
-using AzucareraPomalca.Application.Dtos.GradosAcademicos;
+﻿using AzucareraPomalca.Application.Dtos.GradosAcademicos;
 using AzucareraPomalca.Application.Dtos.Profesiones;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AzucareraPomalca.Application.Dtos.EmpleadoProfesiones
 {
@@ -18,7 +12,7 @@ namespace AzucareraPomalca.Application.Dtos.EmpleadoProfesiones
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public bool State { get; set; }
-        public EmpleadoDto Empleado { get; set; }
+        //public EmpleadoDto Empleado { get; set; }
         public ProfesionDto Profesion { get; set; }
         public GradoAcademicoSimpleDto? GradoAcademico { get; set; }
     }

@@ -1,4 +1,5 @@
 ﻿using AzucareraPomalca.Application.Dtos.CondicionEmpleados;
+using AzucareraPomalca.Application.Dtos.EmpleadoProfesiones;
 using AzucareraPomalca.Application.Dtos.Puestos;
 
 namespace AzucareraPomalca.Application.Dtos.Empleados
@@ -18,7 +19,10 @@ namespace AzucareraPomalca.Application.Dtos.Empleados
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public bool State { get; set; }
+
         public PuestoDto Puesto { get; set; }
         public CondicionEmpleadoDto CondicionEmpleado { get; set; }
+
+        public List<EmpleadoProfesionDto> EmpleadoProfesiones { get; set; }
     }
 }

@@ -21,5 +21,20 @@ namespace AzucareraPomalca.Infrastructure.Persistences
                 .Where(t => t.IdPuesto == id)
                 .ToListAsync();
         }
+
+        public override async Task<Empleado?> FindByIdAsync(int id)
+        {
+            return await _dbContext.Set<Empleado>()
+                .Include(t => t.CondicionEmpleado)
+                .Include(t => t.Puesto).ThenInclude(t => t.ClaseOcupacional).ThenInclude(t => t.GrupoOcupacional)
+                .Include(t => t.Puesto).ThenInclude(t => t.Gerencia)
+                .Include(t => t.Puesto).ThenInclude(t => t.Division)
+                .Include(t => t.Puesto).ThenInclude(t => t.Departamento)
+                .Include(t => t.Puesto).ThenInclude(t => t.Seccion)
+                .Include(t => t.EmpleadoProfesiones).ThenInclude(t => t.Profesion)
+                .Include(t => t.EmpleadoProfesiones).ThenInclude(t => t.GradoAcademico)
+                .Include(t => t.CondicionEmpleado)
+                .FirstOrDefaultAsync(t => t.Id == id);
+        }
     }
 }

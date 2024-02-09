@@ -1,15 +1,9 @@
 ﻿using AutoMapper;
 using AzucareraPomalca.Application.Cores.Exceptions;
 using AzucareraPomalca.Application.Dtos.EmpleadoProfesiones;
-using AzucareraPomalca.Application.Dtos.PuestosProfesiones;
 using AzucareraPomalca.Domain.Models;
 using AzucareraPomalca.Domain.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AzucareraPomalca.Application.Services.Implementations
 {
@@ -38,10 +32,8 @@ namespace AzucareraPomalca.Application.Services.Implementations
             {
                 if (validar.State == false)
                 {
-                    validar.State = true;
-                    validar.UpdatedAt = DateTime.UtcNow;
-                    await _empleadoProfesionRepository.SaveAsync(validar);
-                    return _mapper.Map<EmpleadoProfesionDto>(validar);
+                    var save = _mapper.Map<EmpleadoProfesionSaveDto>(validar);
+                    return await EditAsync(validar.Id, save);
                 }
                 else throw new BadRequestCoreException("Ya se registó la misma carrera con el mismo grado académico.");
             }
@@ -74,6 +66,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
             _mapper.Map<EmpleadoProfesionSaveDto, EmpleadoProfesion>(saveDto, empleadoProfesion);
 
             empleadoProfesion.UpdatedAt = DateTime.UtcNow;
+            empleadoProfesion.State = true;
 
             Expression<Func<EmpleadoProfesion, bool>> predicate = x => x.IdProfesion == saveDto.IdProfesion && x.IdProfesion == saveDto.IdProfesion;
 

@@ -1,4 +1,6 @@
-﻿namespace AzucareraPomalca.Application.Dtos.Empleados
+﻿using AzucareraPomalca.Application.Dtos.EmpleadoProfesiones;
+
+namespace AzucareraPomalca.Application.Dtos.Empleados
 {
     public class EmpleadoSaveDto
     {
@@ -11,5 +13,7 @@
         public string? CodigoCardo { get; set; }
         public string? CodigoArea { get; set; }
         public int IdPuesto { get; set; }
+
+        public List<EmpleadoProfesionSaveDto>? EmpleadoProfesionesSave { get; set; }
     }
 }

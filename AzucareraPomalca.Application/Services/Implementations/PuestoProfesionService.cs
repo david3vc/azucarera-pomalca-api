@@ -75,7 +75,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
             if (validar != null)
             {
                 if (validar.State == true && validar.Id != puestoProfesion.Id) throw new BadRequestCoreException("Ya se registó la misma carrera con el mismo grado académico.");
-                else if(validar.Id == puestoProfesion.Id) await _puestoProfesionRepository.SaveAsync(puestoProfesion);
+                else if (validar.Id == puestoProfesion.Id) await _puestoProfesionRepository.SaveAsync(puestoProfesion);
             }
             else
             {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AzucareraPomalca.Application.Dtos.EmpleadoProfesiones
+﻿namespace AzucareraPomalca.Application.Dtos.EmpleadoProfesiones
 {
     public class EmpleadoProfesionSaveDto
     {
