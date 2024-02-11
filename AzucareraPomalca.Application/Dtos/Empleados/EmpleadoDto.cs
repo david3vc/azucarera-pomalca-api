@@ -1,5 +1,6 @@
 ﻿using AzucareraPomalca.Application.Dtos.CondicionEmpleados;
 using AzucareraPomalca.Application.Dtos.EmpleadoProfesiones;
+using AzucareraPomalca.Application.Dtos.ExperienciaLaborales;
 using AzucareraPomalca.Application.Dtos.Puestos;
 
 namespace AzucareraPomalca.Application.Dtos.Empleados
@@ -24,5 +25,6 @@ namespace AzucareraPomalca.Application.Dtos.Empleados
         public CondicionEmpleadoDto CondicionEmpleado { get; set; }
 
         public List<EmpleadoProfesionDto> EmpleadoProfesiones { get; set; }
+        public List<ExperienciaLaboralDto> ExperienciaLaborales { get; set; }
     }
 }

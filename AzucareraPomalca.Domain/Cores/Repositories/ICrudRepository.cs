@@ -4,10 +4,6 @@ namespace AzucareraPomalca.Domain.Cores.Repositories
 {
     public interface ICrudRepository<T, ID> : IPageRepository<T>
     {
-        //Task<IReadOnlyList<T>> FindAllAsync();
-        //Task<T?> FindByIdAsync(ID id);
-        //Task<T> SaveAsync(T entity);
-
         Task<IReadOnlyList<T>> FindAllAsync();
         Task<T?> FindByIdAsync(ID id);
         Task<T> SaveAsync(T entity);

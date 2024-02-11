@@ -1,4 +1,5 @@
 ﻿using AzucareraPomalca.Application.Dtos.EmpleadoProfesiones;
+using AzucareraPomalca.Application.Dtos.ExperienciaLaborales;
 
 namespace AzucareraPomalca.Application.Dtos.Empleados
 {
@@ -15,5 +16,6 @@ namespace AzucareraPomalca.Application.Dtos.Empleados
         public int IdPuesto { get; set; }
 
         public List<EmpleadoProfesionSaveDto>? EmpleadoProfesionesSave { get; set; }
+        public List<ExperienciaLaboralSaveDto>? ExperienciaLaboralesSave { get; set; }
     }
 }

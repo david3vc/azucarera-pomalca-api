@@ -34,7 +34,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
             if (mision is null) throw MisionNotFound(id);
 
-            mision.State = !mision.State;
+            mision.State = false;
 
             await _misionRepository.SaveAsync(mision);
 

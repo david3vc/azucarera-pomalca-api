@@ -11,17 +11,20 @@ namespace AzucareraPomalca.Application.Services.Implementations
 {
     public class EmpleadoService : IEmpleadoService
     {
+        private readonly IMapper _mapper;
         private readonly IEmpleadoRepository _empleadoRepository;
         private readonly IEmpleadoProfesionService _empleadoProfesionService;
-        private readonly IMapper _mapper;
+        private readonly IExperienciaLaboralService _experienciaLaboralService;
 
-        public EmpleadoService(IEmpleadoRepository empleadoRepository,
-                               IMapper mapper,
-                               IEmpleadoProfesionService empleadoProfesionService)
+        public EmpleadoService(IMapper mapper, 
+                               IEmpleadoRepository empleadoRepository,
+                               IEmpleadoProfesionService empleadoProfesionService,
+                               IExperienciaLaboralService experienciaLaboralService)
         {
             _empleadoRepository = empleadoRepository;
             _mapper = mapper;
             _empleadoProfesionService = empleadoProfesionService;
+            _experienciaLaboralService = experienciaLaboralService;
         }
 
         public async Task<EmpleadoDto> CreateAsync(EmpleadoSaveDto saveDto)
@@ -76,6 +79,25 @@ namespace AzucareraPomalca.Application.Services.Implementations
                     {
                         empleadoProfesion.IdEmpleado = empleado.Id;
                         await _empleadoProfesionService.CreateAsync(empleadoProfesion);
+                    }
+                }
+            }
+            #endregion
+
+            #region EXPERIENCIA LABORAL
+            if (saveDto.ExperienciaLaboralesSave != null && saveDto.ExperienciaLaboralesSave.Count > 0)
+            {
+                foreach (var experienciaLaboral in saveDto.ExperienciaLaboralesSave)
+                {
+                    if (experienciaLaboral.Id != null && experienciaLaboral.Id != 0)
+                    {
+                        experienciaLaboral.IdEmpleado = empleado.Id;
+                        await _experienciaLaboralService.EditAsync((int)experienciaLaboral.Id, experienciaLaboral);
+                    }
+                    else
+                    {
+                        experienciaLaboral.IdEmpleado = empleado.Id;
+                        await _experienciaLaboralService.CreateAsync(experienciaLaboral);
                     }
                 }
             }
