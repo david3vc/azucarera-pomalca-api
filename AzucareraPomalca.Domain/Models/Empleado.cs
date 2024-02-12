@@ -19,5 +19,6 @@ namespace AzucareraPomalca.Domain.Models
 
         public virtual ICollection<EmpleadoProfesion> EmpleadoProfesiones { get; set; }
         public virtual ICollection<ExperienciaLaboral> ExperienciaLaborales { get; set; }
+        public virtual ICollection<EmpleadoCurso> EmpleadoCursos { get; set; }
     }
 }

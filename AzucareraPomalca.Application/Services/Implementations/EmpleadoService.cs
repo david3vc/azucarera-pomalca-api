@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using AzucareraPomalca.Application.Cores.Dtos;
 using AzucareraPomalca.Application.Cores.Exceptions;
+using AzucareraPomalca.Application.Dtos.EmpleadoCursos;
 using AzucareraPomalca.Application.Dtos.Empleados;
+using AzucareraPomalca.Application.Dtos.PuestosCursos;
 using AzucareraPomalca.Domain.Cores.Models;
 using AzucareraPomalca.Domain.Models;
 using AzucareraPomalca.Domain.Repositories;
+using AzucareraPomalca.Utils.Constants;
 using System.Linq.Expressions;
 
 namespace AzucareraPomalca.Application.Services.Implementations
@@ -15,16 +18,19 @@ namespace AzucareraPomalca.Application.Services.Implementations
         private readonly IEmpleadoRepository _empleadoRepository;
         private readonly IEmpleadoProfesionService _empleadoProfesionService;
         private readonly IExperienciaLaboralService _experienciaLaboralService;
+        private readonly IEmpleadoCursoService _empleadoCursoService;
 
         public EmpleadoService(IMapper mapper, 
                                IEmpleadoRepository empleadoRepository,
                                IEmpleadoProfesionService empleadoProfesionService,
-                               IExperienciaLaboralService experienciaLaboralService)
+                               IExperienciaLaboralService experienciaLaboralService,
+                               IEmpleadoCursoService empleadoCursoService)
         {
-            _empleadoRepository = empleadoRepository;
             _mapper = mapper;
+            _empleadoRepository = empleadoRepository;
             _empleadoProfesionService = empleadoProfesionService;
             _experienciaLaboralService = experienciaLaboralService;
+            _empleadoCursoService = empleadoCursoService;
         }
 
         public async Task<EmpleadoDto> CreateAsync(EmpleadoSaveDto saveDto)
@@ -103,6 +109,73 @@ namespace AzucareraPomalca.Application.Services.Implementations
             }
             #endregion
 
+            #region CAPACITACIÓN
+            if (saveDto.EmpleadoCursosEspecificosSave != null && saveDto.EmpleadoCursosEspecificosSave.Count > 0)
+            {
+                foreach (var puestoCurso in saveDto.EmpleadoCursosEspecificosSave)
+                {
+                    if (puestoCurso.Id != null && puestoCurso.Id != 0)
+                    {
+                        puestoCurso.IdEmpleado = empleado.Id;
+                        await _empleadoCursoService.EditAsync((int)puestoCurso.Id, puestoCurso);
+                    }
+                    else
+                    {
+                        puestoCurso.IdEmpleado = empleado.Id;
+                        await _empleadoCursoService.CreateAsync(puestoCurso);
+                    }
+                }
+            }
+            if (saveDto.EmpleadoCursosHabilidadesBlandasSave != null && saveDto.EmpleadoCursosHabilidadesBlandasSave.Count > 0)
+            {
+                foreach (var puestoCurso in saveDto.EmpleadoCursosHabilidadesBlandasSave)
+                {
+                    if (puestoCurso.Id != null && puestoCurso.Id != 0)
+                    {
+                        puestoCurso.IdEmpleado = empleado.Id;
+                        await _empleadoCursoService.EditAsync((int)puestoCurso.Id, puestoCurso);
+                    }
+                    else
+                    {
+                        puestoCurso.IdEmpleado = empleado.Id;
+                        await _empleadoCursoService.CreateAsync(puestoCurso);
+                    }
+                }
+            }
+            if (saveDto.EmpleadoCursosSSOMMASave != null && saveDto.EmpleadoCursosSSOMMASave.Count > 0)
+            {
+                foreach (var puestoCurso in saveDto.EmpleadoCursosSSOMMASave)
+                {
+                    if (puestoCurso.Id != null && puestoCurso.Id != 0)
+                    {
+                        puestoCurso.IdEmpleado = empleado.Id;
+                        await _empleadoCursoService.EditAsync((int)puestoCurso.Id, puestoCurso);
+                    }
+                    else
+                    {
+                        puestoCurso.IdEmpleado = empleado.Id;
+                        await _empleadoCursoService.CreateAsync(puestoCurso);
+                    }
+                }
+            }
+            if (saveDto.EmpleadoCursosRSESave != null && saveDto.EmpleadoCursosRSESave.Count > 0)
+            {
+                foreach (var puestoCurso in saveDto.EmpleadoCursosRSESave)
+                {
+                    if (puestoCurso.Id != null && puestoCurso.Id != 0)
+                    {
+                        puestoCurso.IdEmpleado = empleado.Id;
+                        await _empleadoCursoService.EditAsync((int)puestoCurso.Id, puestoCurso);
+                    }
+                    else
+                    {
+                        puestoCurso.IdEmpleado = empleado.Id;
+                        await _empleadoCursoService.CreateAsync(puestoCurso);
+                    }
+                }
+            }
+            #endregion
+
             return _mapper.Map<EmpleadoDto>(empleado);
         }
 
@@ -145,7 +218,41 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
             if (empleado is null) throw EmpleadoNotFound(id);
 
-            return _mapper.Map<EmpleadoDto>(empleado);
+            var response = _mapper.Map<EmpleadoDto>(empleado);
+
+            if (empleado.EmpleadoCursos != null && empleado.EmpleadoCursos.Count() > 0)
+            {
+                List<EmpleadoCursoDto> EmpleadoCursosEspecificos = new List<EmpleadoCursoDto>();
+                List<EmpleadoCursoDto> EmpleadoCursosSSOMMA = new List<EmpleadoCursoDto>();
+                List<EmpleadoCursoDto> EmpleadoCursosHabilidadesBlandas = new List<EmpleadoCursoDto>();
+                List<EmpleadoCursoDto> EmpleadoCursosRSE = new List<EmpleadoCursoDto>();
+
+                foreach (var puestoCurso in empleado.EmpleadoCursos)
+                {
+                    switch (puestoCurso.Curso.TipoCurso.Descripcion)
+                    {
+                        case TiposCursos.ESPECIFICO:
+                            EmpleadoCursosEspecificos.Add(_mapper.Map<EmpleadoCursoDto>(puestoCurso));
+                            break;
+                        case TiposCursos.SSOMMA:
+                            EmpleadoCursosSSOMMA.Add(_mapper.Map<EmpleadoCursoDto>(puestoCurso));
+                            break;
+                        case TiposCursos.HABILIDADES_BLANDAS:
+                            EmpleadoCursosHabilidadesBlandas.Add(_mapper.Map<EmpleadoCursoDto>(puestoCurso));
+                            break;
+                        case TiposCursos.RSE:
+                            EmpleadoCursosRSE.Add(_mapper.Map<EmpleadoCursoDto>(puestoCurso));
+                            break;
+                    }
+                }
+
+                response.EmpleadoCursosEspecificos = EmpleadoCursosEspecificos;
+                response.EmpleadoCursosSSOMMA = EmpleadoCursosSSOMMA;
+                response.EmpleadoCursosHabilidadesBlandas = EmpleadoCursosHabilidadesBlandas;
+                response.EmpleadoCursosRSE = EmpleadoCursosRSE;
+            }
+
+            return response;
         }
 
         private NotFoundCoreException EmpleadoNotFound(int id)

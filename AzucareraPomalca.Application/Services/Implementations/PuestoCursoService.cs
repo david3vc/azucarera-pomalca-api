@@ -34,7 +34,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
             if (puestoCurso is null) throw PuestoCursoNotFound(id);
 
-            puestoCurso.State = !puestoCurso.State;
+            puestoCurso.State = false;
 
             await _puestoCursoRepository.SaveAsync(puestoCurso);
 
