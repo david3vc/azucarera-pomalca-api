@@ -3,7 +3,7 @@ using AzucareraPomalca.Domain.Models;
 
 namespace AzucareraPomalca.Domain.Repositories
 {
-    public interface IEmpleadoCursoRepository : ICrudRepository<EmpleadoCurso, int>
+    public interface IPerfilCompetenciaEmpleadoRepository : ICrudRepository<PerfilCompetenciaEmpleado, int>
     {
     }
 }

@@ -2,12 +2,12 @@
 
 namespace AzucareraPomalca.Domain.Models
 {
-    public class EmpleadoCurso : CoreModel<int>
+    public class PerfilCompetenciaEmpleado : CoreModel<int>
     {
-        public int IdCurso { get; set; }
+        public int? IdGradoDominio { get; set; }
         public int IdEmpleado { get; set; }
 
-        public virtual Curso Curso { get; set; }
+        public virtual GradoDominio? GradoDominio { get; set; }
         public virtual Empleado Empleado { get; set; }
     }
 }

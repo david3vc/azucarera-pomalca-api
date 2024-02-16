@@ -1,7 +1,7 @@
 ﻿using AzucareraPomalca.Application.Dtos.EmpleadoCursos;
 using AzucareraPomalca.Application.Dtos.EmpleadoProfesiones;
 using AzucareraPomalca.Application.Dtos.ExperienciaLaborales;
-using AzucareraPomalca.Application.Dtos.PuestosCursos;
+using AzucareraPomalca.Application.Dtos.PerfilCompetenciaEmpleados;
 
 namespace AzucareraPomalca.Application.Dtos.Empleados
 {
@@ -23,5 +23,6 @@ namespace AzucareraPomalca.Application.Dtos.Empleados
         public List<EmpleadoCursoSaveDto>? EmpleadoCursosHabilidadesBlandasSave { get; set; }
         public List<EmpleadoCursoSaveDto>? EmpleadoCursosSSOMMASave { get; set; }
         public List<EmpleadoCursoSaveDto>? EmpleadoCursosRSESave { get; set; }
+        public List<PerfilCompetenciaEmpleadoSaveDto>? PerfilCompetenciaEmpleadosSave { get; set; }
     }
 }

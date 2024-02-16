@@ -3,7 +3,6 @@ using AzucareraPomalca.Application.Cores.Dtos;
 using AzucareraPomalca.Application.Cores.Exceptions;
 using AzucareraPomalca.Application.Dtos.EmpleadoCursos;
 using AzucareraPomalca.Application.Dtos.Empleados;
-using AzucareraPomalca.Application.Dtos.PuestosCursos;
 using AzucareraPomalca.Domain.Cores.Models;
 using AzucareraPomalca.Domain.Models;
 using AzucareraPomalca.Domain.Repositories;
@@ -19,18 +18,21 @@ namespace AzucareraPomalca.Application.Services.Implementations
         private readonly IEmpleadoProfesionService _empleadoProfesionService;
         private readonly IExperienciaLaboralService _experienciaLaboralService;
         private readonly IEmpleadoCursoService _empleadoCursoService;
+        private readonly IPerfilCompetenciaEmpleadoService _perfilCompetenciaEmpleadoService;
 
-        public EmpleadoService(IMapper mapper, 
+        public EmpleadoService(IMapper mapper,
                                IEmpleadoRepository empleadoRepository,
                                IEmpleadoProfesionService empleadoProfesionService,
                                IExperienciaLaboralService experienciaLaboralService,
-                               IEmpleadoCursoService empleadoCursoService)
+                               IEmpleadoCursoService empleadoCursoService,
+                               IPerfilCompetenciaEmpleadoService perfilCompetenciaEmpleadoService)
         {
             _mapper = mapper;
             _empleadoRepository = empleadoRepository;
             _empleadoProfesionService = empleadoProfesionService;
             _experienciaLaboralService = experienciaLaboralService;
             _empleadoCursoService = empleadoCursoService;
+            _perfilCompetenciaEmpleadoService = perfilCompetenciaEmpleadoService;
         }
 
         public async Task<EmpleadoDto> CreateAsync(EmpleadoSaveDto saveDto)
@@ -171,6 +173,25 @@ namespace AzucareraPomalca.Application.Services.Implementations
                     {
                         puestoCurso.IdEmpleado = empleado.Id;
                         await _empleadoCursoService.CreateAsync(puestoCurso);
+                    }
+                }
+            }
+            #endregion
+
+            #region PERFIL COMPETENCIAS
+            if (saveDto.PerfilCompetenciaEmpleadosSave != null && saveDto.PerfilCompetenciaEmpleadosSave.Count > 0)
+            {
+                foreach (var perfilCompetenciaEmpleado in saveDto.PerfilCompetenciaEmpleadosSave)
+                {
+                    if (perfilCompetenciaEmpleado.Id != null && perfilCompetenciaEmpleado.Id != 0)
+                    {
+                        perfilCompetenciaEmpleado.IdEmpleado = empleado.Id;
+                        await _perfilCompetenciaEmpleadoService.EditAsync((int)perfilCompetenciaEmpleado.Id, perfilCompetenciaEmpleado);
+                    }
+                    else
+                    {
+                        perfilCompetenciaEmpleado.IdEmpleado = empleado.Id;
+                        await _perfilCompetenciaEmpleadoService.CreateAsync(perfilCompetenciaEmpleado);
                     }
                 }
             }

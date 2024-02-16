@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using AzucareraPomalca.Application.Cores.Dtos;
 using AzucareraPomalca.Application.Cores.Exceptions;
 using AzucareraPomalca.Application.Dtos.PerfilCompetencias;
+using AzucareraPomalca.Domain.Cores.Models;
 using AzucareraPomalca.Domain.Models;
 using AzucareraPomalca.Domain.Repositories;
+using System.Linq.Expressions;
 
 namespace AzucareraPomalca.Application.Services.Implementations
 {
@@ -51,6 +54,25 @@ namespace AzucareraPomalca.Application.Services.Implementations
         public Task<IReadOnlyList<PerfilCompetenciaDto>> FindAllAsync()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<PageResponse<PerfilCompetenciaDto>> FindAllPaginatedAsync(PageRequest<PerfilCompetenciaFilterDto> request)
+        {
+            var filter = request.Filter ?? new PerfilCompetenciaFilterDto();
+            var paging = new Paging() { PageNumber = request.Page, PageSize = request.PerPage };
+
+            Expression<Func<PerfilCompetencia, bool>> predicate = x =>
+                (!filter.IdPuesto.HasValue || x.IdPuesto == filter.IdPuesto)
+                && (x.State == true);
+
+            List<Expression<Func<PerfilCompetencia, object>>> includes = new List<Expression<Func<PerfilCompetencia, object>>>()
+            {
+                t => t.GradoDominio.CompetenciaSimple.TipoCompetencia
+            };
+
+            var response = await _perfilCompetenciaRepository.FindAllPaginatedAsync(paging: paging, predicate: predicate, includes: includes);
+
+            return _mapper.Map<PageResponse<PerfilCompetenciaDto>>(response);
         }
 
         public Task<PerfilCompetenciaDto> FindByIdAsync(int id)

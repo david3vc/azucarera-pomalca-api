@@ -3,7 +3,7 @@ using AzucareraPomalca.Application.Dtos.PerfilCompetencias;
 
 namespace AzucareraPomalca.Application.Services
 {
-    public interface IPerfilCompetenciaService : ICrudService<PerfilCompetenciaDto, PerfilCompetenciaSaveDto, int>
+    public interface IPerfilCompetenciaService : ICrudService<PerfilCompetenciaDto, PerfilCompetenciaSaveDto, int>, IPageService<PerfilCompetenciaDto, PerfilCompetenciaFilterDto>
     {
     }
 }

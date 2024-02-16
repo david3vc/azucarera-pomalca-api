@@ -1,7 +1,5 @@
 ﻿using AzucareraPomalca.Application.Dtos.EmpleadoCursos;
-using AzucareraPomalca.Application.Dtos.PuestosCursos;
 using AzucareraPomalca.Application.Services;
-using AzucareraPomalca.Application.Services.Implementations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AzucareraPomalca.Api.Controllers

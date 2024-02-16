@@ -5,9 +5,9 @@ using AzucareraPomalca.Infrastructure.Cores.Persistences;
 
 namespace AzucareraPomalca.Infrastructure.Persistences
 {
-    public class ExperienciaLaboralRepository : CrudRepository<ExperienciaLaboral, int>, IExperienciaLaboralRepository
+    public class PerfilCompetenciaEmpleadoRepository : CrudRepository<PerfilCompetenciaEmpleado, int>, IPerfilCompetenciaEmpleadoRepository
     {
-        public ExperienciaLaboralRepository(ApplicationDbContext dbContext) : base(dbContext)
+        public PerfilCompetenciaEmpleadoRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
     }

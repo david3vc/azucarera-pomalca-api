@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using AzucareraPomalca.Application.Cores.Dtos;
+using AzucareraPomalca.Domain.Cores.Models;
 using AzucareraPomalca.Domain.Models;
 
 namespace AzucareraPomalca.Application.Dtos.PerfilCompetencias.Profiles
@@ -9,6 +11,8 @@ namespace AzucareraPomalca.Application.Dtos.PerfilCompetencias.Profiles
         {
             CreateMap<PerfilCompetencia, PerfilCompetenciaDto>();
             CreateMap<PerfilCompetencia, PerfilCompetenciaSaveDto>().ReverseMap();
+            CreateMap<PerfilCompetencia, PerfilCompetenciaFilterDto>().ReverseMap();
+            CreateMap<PagedResult<PerfilCompetencia>, PageResponse<PerfilCompetenciaDto>>();
         }
     }
 }
