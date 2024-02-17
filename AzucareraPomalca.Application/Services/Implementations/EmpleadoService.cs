@@ -3,6 +3,7 @@ using AzucareraPomalca.Application.Cores.Dtos;
 using AzucareraPomalca.Application.Cores.Exceptions;
 using AzucareraPomalca.Application.Dtos.EmpleadoCursos;
 using AzucareraPomalca.Application.Dtos.Empleados;
+using AzucareraPomalca.Application.Dtos.PuestosCursos;
 using AzucareraPomalca.Domain.Cores.Models;
 using AzucareraPomalca.Domain.Models;
 using AzucareraPomalca.Domain.Repositories;
@@ -271,6 +272,38 @@ namespace AzucareraPomalca.Application.Services.Implementations
                 response.EmpleadoCursosSSOMMA = EmpleadoCursosSSOMMA;
                 response.EmpleadoCursosHabilidadesBlandas = EmpleadoCursosHabilidadesBlandas;
                 response.EmpleadoCursosRSE = EmpleadoCursosRSE;
+            }
+
+            if (empleado.Puesto.PuestosCursos != null && empleado.Puesto.PuestosCursos.Count() > 0)
+            {
+                List<PuestoCursoDto> PuestosCursosEspecificos = new List<PuestoCursoDto>();
+                List<PuestoCursoDto> PuestosCursosSSOMMA = new List<PuestoCursoDto>();
+                List<PuestoCursoDto> PuestosCursosHabilidadesBlandas = new List<PuestoCursoDto>();
+                List<PuestoCursoDto> PuestosCursosRSE = new List<PuestoCursoDto>();
+
+                foreach (var puestoCurso in empleado.Puesto.PuestosCursos)
+                {
+                    switch (puestoCurso.Curso.TipoCurso.Descripcion)
+                    {
+                        case TiposCursos.ESPECIFICO:
+                            PuestosCursosEspecificos.Add(_mapper.Map<PuestoCursoDto>(puestoCurso));
+                            break;
+                        case TiposCursos.SSOMMA:
+                            PuestosCursosSSOMMA.Add(_mapper.Map<PuestoCursoDto>(puestoCurso));
+                            break;
+                        case TiposCursos.HABILIDADES_BLANDAS:
+                            PuestosCursosHabilidadesBlandas.Add(_mapper.Map<PuestoCursoDto>(puestoCurso));
+                            break;
+                        case TiposCursos.RSE:
+                            PuestosCursosRSE.Add(_mapper.Map<PuestoCursoDto>(puestoCurso));
+                            break;
+                    }
+                }
+
+                response.Puesto.PuestosCursosEspecificos = PuestosCursosEspecificos;
+                response.Puesto.PuestosCursosSSOMMA = PuestosCursosSSOMMA;
+                response.Puesto.PuestosCursosHabilidadesBlandas = PuestosCursosHabilidadesBlandas;
+                response.Puesto.PuestosCursosRSE = PuestosCursosRSE;
             }
 
             return response;
