@@ -20,13 +20,15 @@ namespace AzucareraPomalca.Application.Services.Implementations
         private readonly IExperienciaLaboralService _experienciaLaboralService;
         private readonly IEmpleadoCursoService _empleadoCursoService;
         private readonly IPerfilCompetenciaEmpleadoService _perfilCompetenciaEmpleadoService;
+        private readonly IPuestoService _puestoService;
 
         public EmpleadoService(IMapper mapper,
                                IEmpleadoRepository empleadoRepository,
                                IEmpleadoProfesionService empleadoProfesionService,
                                IExperienciaLaboralService experienciaLaboralService,
                                IEmpleadoCursoService empleadoCursoService,
-                               IPerfilCompetenciaEmpleadoService perfilCompetenciaEmpleadoService)
+                               IPerfilCompetenciaEmpleadoService perfilCompetenciaEmpleadoService,
+                               IPuestoService puestoService)
         {
             _mapper = mapper;
             _empleadoRepository = empleadoRepository;
@@ -34,6 +36,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
             _experienciaLaboralService = experienciaLaboralService;
             _empleadoCursoService = empleadoCursoService;
             _perfilCompetenciaEmpleadoService = perfilCompetenciaEmpleadoService;
+            _puestoService = puestoService;
         }
 
         public async Task<EmpleadoDto> CreateAsync(EmpleadoSaveDto saveDto)
@@ -47,6 +50,17 @@ namespace AzucareraPomalca.Application.Services.Implementations
             var result = await FindByIdAsync(response.Id);
 
             return _mapper.Map<EmpleadoDto>(result);
+        }
+
+        public Task<RespuestaSimpleDto> CreateMassiveAsync(List<EmpleadoSaveDto> listSaveDto)
+        {
+            var empleado = _mapper.Map<List<DtEmpleado>>(listSaveDto);
+            _empleadoRepository.GuardarMasivoAsync(empleado);
+
+            return Task.FromResult(new RespuestaSimpleDto()
+            {
+                Mensaje = "Se guardó éxito."
+            });
         }
 
         public async Task<EmpleadoDto> DisabledAsync(int id)
@@ -65,6 +79,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
         public async Task<EmpleadoDto> EditAsync(int id, EmpleadoSaveDto saveDto)
         {
             Empleado? empleado = await _empleadoRepository.FindByIdAsync(id);
+            //var validarEmpleado = await _empleadoRepository.FindByNumeroDocumentoAsync(saveDto.NumeroDocumento);
 
             if (empleado is null) throw EmpleadoNotFound(id);
 
@@ -198,6 +213,15 @@ namespace AzucareraPomalca.Application.Services.Implementations
             }
             #endregion
 
+            return _mapper.Map<EmpleadoDto>(empleado);
+        }
+
+        public async Task<EmpleadoDto> EditByDocumentoAsync(Empleado empleado, EmpleadoSaveDto saveDto)
+        {
+            _mapper.Map<EmpleadoSaveDto, Empleado>(saveDto, empleado);
+            empleado.UpdatedAt = DateTime.UtcNow;
+
+            await _empleadoRepository.SaveAsync(empleado);
             return _mapper.Map<EmpleadoDto>(empleado);
         }
 

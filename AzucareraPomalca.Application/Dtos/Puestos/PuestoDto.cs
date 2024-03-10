@@ -26,6 +26,8 @@ namespace AzucareraPomalca.Application.Dtos.Puestos
         public int? ExperienciaGeneralPreferencia { get; set; }
         public int? ExperienciaPuestoMinima { get; set; }
         public int? ExperienciaPuestoPreferencia { get; set; }
+        public string? CodigoCargo { get; set; }
+        public string? CodigoArea { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public bool State { get; set; }

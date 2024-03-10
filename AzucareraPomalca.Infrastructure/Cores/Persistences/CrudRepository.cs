@@ -10,7 +10,7 @@ namespace AzucareraPomalca.Infrastructure.Cores.Persistences
     {
         private readonly ApplicationDbContext _dbContext;
 
-        protected CrudRepository(ApplicationDbContext dbContext)
+        public CrudRepository(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }

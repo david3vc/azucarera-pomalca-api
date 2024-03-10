@@ -26,6 +26,8 @@ namespace AzucareraPomalca.Application.Dtos.Puestos
         public int? IdDivision { get; set; }
         public int? IdDepartamento { get; set; }
         public int? IdSeccion { get; set; }
+        public string? CodigoCargo { get; set; }
+        public string? CodigoArea { get; set; }
 
         public List<MisionSaveDto>? MisionesSave { get; set; }
         public List<FuncionEspecificaSaveDto>? FuncionesEspecificasSave { get; set; }

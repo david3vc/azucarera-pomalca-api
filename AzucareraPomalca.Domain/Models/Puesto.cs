@@ -17,6 +17,8 @@ namespace AzucareraPomalca.Domain.Models
         public int? IdDivision { get; set; }
         public int? IdDepartamento { get; set; }
         public int? IdSeccion { get; set; }
+        public string? CodigoCargo { get; set; }
+        public string? CodigoArea { get; set; }
 
         public virtual Puesto? PuestoSupervisor { get; set; }
         public virtual ClaseOcupacional? ClaseOcupacional { get; set; }

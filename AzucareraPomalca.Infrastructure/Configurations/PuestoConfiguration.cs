@@ -24,6 +24,8 @@ namespace AzucareraPomalca.Infrastructure.Configurations
             builder.Property(t => t.IdDivision).HasColumnName("id_division");
             builder.Property(t => t.IdDepartamento).HasColumnName("id_departamento");
             builder.Property(t => t.IdSeccion).HasColumnName("id_seccion");
+            builder.Property(t => t.CodigoCargo).HasColumnName("codigo_cargo");
+            builder.Property(t => t.CodigoArea).HasColumnName("codigo_area");
             builder.Property(t => t.CreatedAt).HasColumnName("created_at");
             builder.Property(t => t.UpdatedAt).HasColumnName("updated_at");
             builder.Property(t => t.State).HasColumnName("state");

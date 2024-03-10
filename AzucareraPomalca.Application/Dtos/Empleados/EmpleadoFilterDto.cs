@@ -3,7 +3,7 @@
     public class EmpleadoFilterDto
     {
         public string? Nombres { get; set; }
-        public string? Dni { get; set; }
+        public string? NumeroDocumento { get; set; }
         public string? AppellidoPaterno { get; set; }
         public string? AppellidoMaterno { get; set; }
         public DateTime? InicioPeriodo { get; set; }

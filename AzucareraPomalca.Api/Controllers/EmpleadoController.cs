@@ -35,6 +35,24 @@ namespace AzucareraPomalca.Api.Controllers
             return TypedResults.CreatedAtRoute(response);
         }
 
+        // POST api/values
+        [HttpPost("registromasivo")]
+        //[ProducesResponseType(StatusCodes.Status201Created, Type = typeof(EmpleadoDto))]
+        //[ProducesResponseType(StatusCodes.Status400BadRequest, Type = typeof(ErrorResponse))]
+        public Task<RespuestaSimpleDto> Masivo([FromBody] List<EmpleadoSaveDto> listSaveDto)
+        {
+            var response = _empleadoService.CreateMassiveAsync(listSaveDto);
+
+            return response;
+
+            //return TypedResults.CreatedAtRoute(response);
+
+            //foreach (var saveDto in listSaveDto)
+            //{
+            //    await _empleadoService.CreateAsync(saveDto);
+            //}
+        }
+
         // PUT api/values/5
         [HttpPut("{id}")]
         public async Task<EmpleadoDto> Put(int id, [FromBody] EmpleadoSaveDto saveDto)
