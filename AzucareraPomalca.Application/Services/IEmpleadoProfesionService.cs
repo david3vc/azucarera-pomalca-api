@@ -5,5 +5,6 @@ namespace AzucareraPomalca.Application.Services
 {
     public interface IEmpleadoProfesionService : ICrudService<EmpleadoProfesionDto, EmpleadoProfesionSaveDto, int>
     {
+        Task<List<EmpleadoProfesionDto>> ProfesionesEmpleadoByIdEmpleado(int idEmpleado);
     }
 }

@@ -5,5 +5,6 @@ namespace AzucareraPomalca.Domain.Repositories
 {
     public interface IEmpleadoProfesionRepository : ICrudRepository<EmpleadoProfesion, int>
     {
+        Task<List<EmpleadoProfesion>> ProfesionesEmpleadoByIdEmpleado(int idEmpleado);
     }
 }

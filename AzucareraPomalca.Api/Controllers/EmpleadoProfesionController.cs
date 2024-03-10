@@ -1,5 +1,7 @@
-﻿using AzucareraPomalca.Application.Dtos.EmpleadoProfesiones;
+﻿using AzucareraPomalca.Api.Exceptions;
+using AzucareraPomalca.Application.Dtos.EmpleadoProfesiones;
 using AzucareraPomalca.Application.Services;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AzucareraPomalca.Api.Controllers
@@ -19,6 +21,17 @@ namespace AzucareraPomalca.Api.Controllers
         public async Task<EmpleadoProfesionDto> Delete(int id)
         {
             return await _empleadoProfesionService.DisabledAsync(id);
+        }
+
+        // GET: api/values/2
+        [HttpGet("{idEmpleado}")]
+        [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(List<EmpleadoProfesionDto>))]
+        [ProducesResponseType(StatusCodes.Status404NotFound, Type = typeof(ErrorModel))]
+        public async Task<Results<NotFound, Ok<List<EmpleadoProfesionDto>>>> Get(int idEmpleado)
+        {
+            var response = await _empleadoProfesionService.ProfesionesEmpleadoByIdEmpleado(idEmpleado);
+
+            return TypedResults.Ok(response);
         }
     }
 }
