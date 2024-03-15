@@ -28,6 +28,15 @@ namespace AzucareraPomalca.Application.Services.Implementations
             return _mapper.Map<EmpleadoCursoDto>(empleadoCurso);
         }
 
+        public async Task<List<EmpleadoCursoDto>> CursosEmpleadoByIdEmpleado(int idEmpleado)
+        {
+            List<EmpleadoCurso> empleadoProfesiones = await _empleadoCursoRepository.CursosEmpleadoByIdEmpleado(idEmpleado);
+
+            if (empleadoProfesiones is null) throw EmpleadoCursoNotFound(idEmpleado);
+
+            return _mapper.Map<List<EmpleadoCursoDto>>(empleadoProfesiones);
+        }
+
         public async Task<EmpleadoCursoDto> DisabledAsync(int id)
         {
             EmpleadoCurso? empleadoCurso = await _empleadoCursoRepository.FindByIdAsync(id);
