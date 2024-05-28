@@ -3,6 +3,7 @@ using AzucareraPomalca.Application.Cores.Exceptions;
 using AzucareraPomalca.Application.Dtos.ExperienciaLaborales;
 using AzucareraPomalca.Domain.Models;
 using AzucareraPomalca.Domain.Repositories;
+using System.Linq.Expressions;
 
 namespace AzucareraPomalca.Application.Services.Implementations
 {
@@ -54,6 +55,14 @@ namespace AzucareraPomalca.Application.Services.Implementations
             await _experienciaLaboralRepository.SaveAsync(experienciaLaboral);
 
             return _mapper.Map<ExperienciaLaboralDto>(experienciaLaboral);
+        }
+
+        public async Task<List<ExperienciaLaboralDto>> ExperienciaLaboralByIdEmpleado(int idEmpleado)
+        {
+            Expression<Func<ExperienciaLaboral, bool>> predicate = x => x.IdEmpleado == idEmpleado && x.State == true;
+            var experiencia = await _experienciaLaboralRepository.FindAllAsync(predicate);
+
+            return _mapper.Map<List<ExperienciaLaboralDto>>(experiencia);
         }
 
         public Task<IReadOnlyList<ExperienciaLaboralDto>> FindAllAsync()

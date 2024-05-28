@@ -60,14 +60,14 @@ namespace AzucareraPomalca.Infrastructure.Persistences
                         UpdatedAt = !reader.IsDBNull(reader.GetOrdinal("updated_at")) ? reader.GetDateTime(reader.GetOrdinal("updated_at")) : null,
                         State = !reader.IsDBNull(reader.GetOrdinal("state")) ? reader.GetBoolean(reader.GetOrdinal("state")) : false,
                     },
-                    GradoAcademico = new GradoAcademico
+                    GradoAcademico = !reader.IsDBNull(reader.GetOrdinal("id_grado_academico")) ? new GradoAcademico
                     {
                         Id = !reader.IsDBNull(reader.GetOrdinal("id_grado_academico")) ? reader.GetInt32(reader.GetOrdinal("id_grado_academico")) : 0,
                         Descripcion = !reader.IsDBNull(reader.GetOrdinal("descripcion")) ? reader.GetString(reader.GetOrdinal("descripcion")) : "",
                         CreatedAt = !reader.IsDBNull(reader.GetOrdinal("created_at")) ? reader.GetDateTime(reader.GetOrdinal("created_at")) : DateTime.UtcNow,
                         UpdatedAt = !reader.IsDBNull(reader.GetOrdinal("updated_at")) ? reader.GetDateTime(reader.GetOrdinal("updated_at")) : null,
                         State = !reader.IsDBNull(reader.GetOrdinal("state")) ? reader.GetBoolean(reader.GetOrdinal("state")) : false,
-                    }
+                    } : null
                 };
 
                 data.Add(item);

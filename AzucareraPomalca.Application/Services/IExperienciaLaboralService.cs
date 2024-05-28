@@ -5,5 +5,6 @@ namespace AzucareraPomalca.Application.Services
 {
     public interface IExperienciaLaboralService : ICrudService<ExperienciaLaboralDto, ExperienciaLaboralSaveDto, int>
     {
+        Task<List<ExperienciaLaboralDto>> ExperienciaLaboralByIdEmpleado(int idEmpleado);
     }
 }
