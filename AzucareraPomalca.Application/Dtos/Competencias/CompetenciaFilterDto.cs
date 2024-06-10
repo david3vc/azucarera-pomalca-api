@@ -6,5 +6,6 @@
         public string? Nombre { get; set; }
         public string? Descripcion { get; set; }
         public int? IdTipoCompetencia { get; set; }
+        public bool? State { get; set; }
     }
 }

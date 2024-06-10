@@ -31,9 +31,17 @@ namespace AzucareraPomalca.Application.Services.Implementations
             return _mapper.Map<PerfilCompetenciaDto>(perfilCompetencia);
         }
 
-        public Task<PerfilCompetenciaDto> DisabledAsync(int id)
+        public async Task<PerfilCompetenciaDto> DisabledAsync(int id)
         {
-            throw new NotImplementedException();
+            PerfilCompetencia? perfilCompetencia = await _perfilCompetenciaRepository.FindByIdAsync(id);
+
+            if (perfilCompetencia is null) throw PerfilCompetenciaNotFound(id);
+
+            perfilCompetencia.State = !perfilCompetencia.State;
+
+            await _perfilCompetenciaRepository.SaveAsync(perfilCompetencia);
+
+            return _mapper.Map<PerfilCompetenciaDto>(perfilCompetencia);
         }
 
         public async Task<PerfilCompetenciaDto> EditAsync(int id, PerfilCompetenciaSaveDto saveDto)
@@ -75,9 +83,13 @@ namespace AzucareraPomalca.Application.Services.Implementations
             return _mapper.Map<PageResponse<PerfilCompetenciaDto>>(response);
         }
 
-        public Task<PerfilCompetenciaDto> FindByIdAsync(int id)
+        public async Task<PerfilCompetenciaDto> FindByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            PerfilCompetencia? PerfilCompetencia = await _perfilCompetenciaRepository.FindByIdAsync(id);
+
+            if (PerfilCompetencia is null) throw PerfilCompetenciaNotFound(id);
+
+            return _mapper.Map<PerfilCompetenciaDto>(PerfilCompetencia);
         }
 
         private NotFoundCoreException PerfilCompetenciaNotFound(int id)
