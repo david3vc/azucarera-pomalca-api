@@ -1,4 +1,5 @@
-﻿using AzucareraPomalca.Domain.Models;
+﻿using AzucareraPomalca.Domain.Cores.Models;
+using AzucareraPomalca.Domain.Models;
 using AzucareraPomalca.Domain.Repositories;
 using AzucareraPomalca.Infrastructure.Cores.Contexts;
 using AzucareraPomalca.Infrastructure.Cores.Persistences;
@@ -6,6 +7,7 @@ using Dapper;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.Data.Common;
 
 namespace AzucareraPomalca.Infrastructure.Persistences
 {
@@ -233,6 +235,89 @@ namespace AzucareraPomalca.Infrastructure.Persistences
                 // Cierra la conexión
                 await connection.CloseAsync();
             }
+        }
+
+        public async Task<PagedResult<EmpleadoSugerido>> ListarEmpleadosSugeridosAsync(Paging pagin, EmpleadoSugerido request)
+        {
+            List<EmpleadoSugerido> data = new List<EmpleadoSugerido>();
+
+            var sql = "sp_listarEmpleadosSugeridos";
+
+            DbConnection connection = _dbContext.Database.GetDbConnection();
+
+            DbCommand command = connection.CreateCommand();
+            command.CommandText = sql;
+            command.CommandType = CommandType.StoredProcedure;
+
+            #region "Parameters"
+            var p_nombre = command.CreateParameter();
+            p_nombre.ParameterName = "@nombre";
+            p_nombre.Value = request.Nombre;
+            command.Parameters.Add(p_nombre);
+
+            var p_id_puesto = command.CreateParameter();
+            p_id_puesto.ParameterName = "@id_puesto";
+            p_id_puesto.Value = request.IdPuesto;
+            command.Parameters.Add(p_id_puesto);
+
+            var p_id_gerencia = command.CreateParameter();
+            p_id_gerencia.ParameterName = "@id_gerencia";
+            p_id_gerencia.Value = request.IdGerencia;
+            command.Parameters.Add(p_id_gerencia);
+
+            var p_id_division = command.CreateParameter();
+            p_id_division.ParameterName = "@id_division";
+            p_id_division.Value = request.IdDivision;
+            command.Parameters.Add(p_id_division);
+
+            var p_id_departamento = command.CreateParameter();
+            p_id_departamento.ParameterName = "@id_departamento";
+            p_id_departamento.Value = request.IdDepartamento;
+            command.Parameters.Add(p_id_departamento);
+
+            var p_id_seccion = command.CreateParameter();
+            p_id_seccion.ParameterName = "@id_seccion";
+            p_id_seccion.Value = request.IdSeccion;
+            command.Parameters.Add(p_id_seccion);
+            #endregion
+
+            await connection.OpenAsync();
+
+            using IDataReader reader = await command.ExecuteReaderAsync();
+
+            while (reader.Read())
+            {
+                var item = new EmpleadoSugerido()
+                {
+                    IdEmpleado = !reader.IsDBNull(reader.GetOrdinal("id_empleado")) ? reader.GetInt32(reader.GetOrdinal("id_empleado")) : null,
+                    Nombre = !reader.IsDBNull(reader.GetOrdinal("nombres")) ? reader.GetString(reader.GetOrdinal("nombres")) : null,
+                    ApellidoPaterno = !reader.IsDBNull(reader.GetOrdinal("apellido_paterno")) ? reader.GetString(reader.GetOrdinal("apellido_paterno")) : null,
+                    ApellidoMaterno = !reader.IsDBNull(reader.GetOrdinal("apellido_materno")) ? reader.GetString(reader.GetOrdinal("apellido_materno")) : null,
+                    Puesto = !reader.IsDBNull(reader.GetOrdinal("puesto")) ? reader.GetString(reader.GetOrdinal("puesto")) : null,
+                    Gerencia = !reader.IsDBNull(reader.GetOrdinal("gerencia")) ? reader.GetString(reader.GetOrdinal("gerencia")) : null,
+                    Division = !reader.IsDBNull(reader.GetOrdinal("division")) ? reader.GetString(reader.GetOrdinal("division")) : null,
+                    Departamento = !reader.IsDBNull(reader.GetOrdinal("departamento")) ? reader.GetString(reader.GetOrdinal("departamento")) : null,
+                    Seccion = !reader.IsDBNull(reader.GetOrdinal("seccion")) ? reader.GetString(reader.GetOrdinal("seccion")) : null,
+                    CursosFaltantes = !reader.IsDBNull(reader.GetOrdinal("cursos_faltantes")) ? reader.GetInt32(reader.GetOrdinal("cursos_faltantes")) : null
+                };
+
+                data.Add(item);
+            }
+
+            await connection.CloseAsync();
+
+            return GetPagedResultCursoDuroSugerido(data, pagin);
+        }
+
+        private PagedResult<EmpleadoSugerido> GetPagedResultCursoDuroSugerido(List<EmpleadoSugerido> data, Paging pagin)
+        {
+            var totalElements = data.Count;
+            var skip = (pagin.PageNumber - 1) * pagin.PageSize;
+            var paginatedItems = data.Skip(skip)
+                .Take(pagin.PageSize)
+                .ToList();
+
+            return new PagedResult<EmpleadoSugerido>(paginatedItems, pagin, totalElements);
         }
     }
 }

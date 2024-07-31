@@ -337,5 +337,17 @@ namespace AzucareraPomalca.Application.Services.Implementations
         {
             return new NotFoundCoreException("Empleado no encontrada para el id: " + id);
         }
+
+        public async Task<PageResponse<EmpleadoSugeridoDto>> EmpleadosSugeridosPaginatedAsync(PageRequest<EmpleadoSugeridoFilterDto> request)
+        {
+            var filter = request.Filter != null ? _mapper.Map<EmpleadoSugerido>(request.Filter) : new EmpleadoSugerido();
+            var paging = new Paging() { PageNumber = request.Page, PageSize = request.PerPage };
+
+            var response = await _empleadoRepository.ListarEmpleadosSugeridosAsync(paging: paging, filter);
+
+            var res = _mapper.Map<PageResponse<EmpleadoSugeridoDto>>(response);
+
+            return res;
+        }
     }
 }

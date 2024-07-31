@@ -9,5 +9,6 @@ namespace AzucareraPomalca.Application.Services
     {
         Task<RespuestaSimpleDto> CreateMassiveAsync(List<EmpleadoSaveDto> listSaveDto);
         Task<EmpleadoDto> EditByDocumentoAsync(Empleado empleado, EmpleadoSaveDto saveDto);
+        Task<PageResponse<EmpleadoSugeridoDto>> EmpleadosSugeridosPaginatedAsync(PageRequest<EmpleadoSugeridoFilterDto> request);
     }
 }

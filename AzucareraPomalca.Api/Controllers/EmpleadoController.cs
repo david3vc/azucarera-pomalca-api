@@ -83,5 +83,11 @@ namespace AzucareraPomalca.Api.Controllers
         {
             return await _empleadoService.FindAllPaginatedAsync(request);
         }
+
+        [HttpGet("PaginatedSearch/EmpleadosSugeridos")]
+        public async Task<PageResponse<EmpleadoSugeridoDto>> PaginatedSearchCursosDurosSugeridos([FromQuery] PageRequest<EmpleadoSugeridoFilterDto> request)
+        {
+            return await _empleadoService.EmpleadosSugeridosPaginatedAsync(request);
+        }
     }
 }
