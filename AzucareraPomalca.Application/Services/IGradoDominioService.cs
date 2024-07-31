@@ -1,5 +1,4 @@
 ﻿using AzucareraPomalca.Application.Cores.Services;
-using AzucareraPomalca.Application.Dtos.Cursos;
 using AzucareraPomalca.Application.Dtos.GradoDominios;
 
 namespace AzucareraPomalca.Application.Services

@@ -65,5 +65,11 @@ namespace AzucareraPomalca.Api.Contcursolers
         {
             return await _cursoService.FindAllPaginatedAsync(request);
         }
+
+        [HttpGet("PaginatedSearch/CursosDurosSugeridos")]
+        public async Task<PageResponse<CursoDuroSugeridoDto>> PaginatedSearchCursosDurosSugeridos([FromQuery] PageRequest<CursoDuroSugeridoFilterDto> request)
+        {
+            return await _cursoService.CursosDurosSugeridosPaginatedAsync(request);
+        }
     }
 }

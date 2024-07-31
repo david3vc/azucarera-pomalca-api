@@ -10,10 +10,13 @@ namespace AzucareraPomalca.Application.Dtos.Cursos.Profiles
         public CursoProfile()
         {
             CreateMap<Curso, CursoDto>();
+            CreateMap<CursoDuroSugerido, CursoDuroSugeridoDto>();
             CreateMap<Curso, CursoSaveDto>().ReverseMap();
             CreateMap<Curso, CursoFilterDto>().ReverseMap();
+            CreateMap<CursoDuroSugerido, CursoDuroSugeridoFilterDto>().ReverseMap();
 
             CreateMap<PagedResult<Curso>, PageResponse<CursoDto>>();
+            CreateMap<PagedResult<CursoDuroSugerido>, PageResponse<CursoDuroSugeridoDto>>();
         }
     }
 }

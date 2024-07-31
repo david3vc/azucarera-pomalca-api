@@ -107,5 +107,15 @@ namespace AzucareraPomalca.Application.Services.Implementations
         {
             return new NotFoundCoreException("Curso no encontrado para el id: " + id);
         }
+
+        public async Task<PageResponse<CursoDuroSugeridoDto>> CursosDurosSugeridosPaginatedAsync(PageRequest<CursoDuroSugeridoFilterDto> request)
+        {
+            var filter = request.Filter != null ? _mapper.Map<CursoDuroSugerido>(request.Filter) : new CursoDuroSugerido();
+            var paging = new Paging() { PageNumber = request.Page, PageSize = request.PerPage };
+
+            var response = await _cursoRepository.ListarCursosDurosSugeridosAsync(paging: paging, filter);
+
+            return _mapper.Map<PageResponse<CursoDuroSugeridoDto>>(response);
+        }
     }
 }

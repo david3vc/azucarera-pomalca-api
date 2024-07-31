@@ -2,7 +2,6 @@
 using AzucareraPomalca.Application.Cores.Dtos;
 using AzucareraPomalca.Application.Cores.Exceptions;
 using AzucareraPomalca.Application.Dtos.Competencias;
-using AzucareraPomalca.Application.Dtos.Cursos;
 using AzucareraPomalca.Domain.Cores.Models;
 using AzucareraPomalca.Domain.Models;
 using AzucareraPomalca.Domain.Repositories;
@@ -31,7 +30,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
             await _competenciaRepository.SaveAsync(competencia);
 
-            foreach(var gradoDominio in saveDto.GradosDominioSave)
+            foreach (var gradoDominio in saveDto.GradosDominioSave)
             {
                 gradoDominio.IdCompetencia = competencia.Id;
                 await _gradoDominioService.CreateAsync(gradoDominio);
@@ -68,7 +67,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
             foreach (var gradoDominio in saveDto.GradosDominioSave)
             {
                 gradoDominio.IdCompetencia = competencia.Id;
-                if(gradoDominio.Id != 0 && gradoDominio.Id != null)
+                if (gradoDominio.Id != 0 && gradoDominio.Id != null)
                     await _gradoDominioService.EditAsync(gradoDominio.Id ?? 0, gradoDominio);
                 else
                     await _gradoDominioService.CreateAsync(gradoDominio);
