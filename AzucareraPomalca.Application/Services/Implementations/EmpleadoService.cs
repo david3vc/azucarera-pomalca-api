@@ -345,9 +345,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
             var response = await _empleadoRepository.ListarEmpleadosSugeridosAsync(paging: paging, filter);
 
-            var res = _mapper.Map<PageResponse<EmpleadoSugeridoDto>>(response);
-
-            return res;
+            return _mapper.Map<PageResponse<EmpleadoSugeridoDto>>(response);
         }
     }
 }

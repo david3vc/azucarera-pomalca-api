@@ -10,13 +10,10 @@ namespace AzucareraPomalca.Application.Dtos.Empleados.Profiles
         public EmpleadoProfile()
         {
             CreateMap<Empleado, EmpleadoDto>();
-            //CreateMap<EmpleadoSugerido, EmpleadoSugeridoDto>();
             CreateMap<Empleado, EmpleadoSaveDto>().ReverseMap();
             CreateMap<Empleado, EmpleadoFilterDto>().ReverseMap();
-            //CreateMap<EmpleadoSugerido, EmpleadoSugeridoFilterDto>().ReverseMap();
             CreateMap<DtEmpleado, EmpleadoSaveDto>().ReverseMap();
             CreateMap<PagedResult<Empleado>, PageResponse<EmpleadoDto>>();
-            //CreateMap<PagedResult<EmpleadoSugerido>, PageResponse<EmpleadoSugeridoDto>>();
         }
     }
 }
