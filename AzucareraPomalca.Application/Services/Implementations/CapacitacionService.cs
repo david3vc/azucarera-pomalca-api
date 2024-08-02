@@ -32,15 +32,17 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
         public async Task<CapacitacionDto> FindByIdAsync(int id)
         {
-            List<Expression<Func<Capacitacion, object>>>? includes = new List<Expression<Func<Capacitacion, object>>>()
-            {
-                t => t.Modalidad,
-                t => t.TipoFacilitador,
-                t => t.Curso.TipoCurso,
-            };
-            Expression<Func<Capacitacion, bool>> predicate = x => x.Id == id;
+            //List<Expression<Func<Capacitacion, object>>>? includes = new List<Expression<Func<Capacitacion, object>>>()
+            //{
+            //    t => t.Modalidad,
+            //    t => t.TipoFacilitador,
+            //    t => t.Curso.TipoCurso,
+            //    t => t.CapacitacionEmpleados
+            //};
+            //Expression<Func<Capacitacion, bool>> predicate = x => x.Id == id;
 
-            Capacitacion? capacitacion = await _capacitacionRepository.FindByIdAsync(predicate: predicate, includes: includes);
+            //Capacitacion? capacitacion = await _capacitacionRepository.FindByIdAsync(predicate: predicate, includes: includes);
+            Capacitacion? capacitacion = await _capacitacionRepository.FindByIdAsync(id);
 
             if (capacitacion is null) throw CapacitacionNotFound(id);
 
@@ -178,13 +180,14 @@ namespace AzucareraPomalca.Application.Services.Implementations
                 && (!filter.CostoXHorasHombre.HasValue || x.CostoXHorasHombre == filter.CostoXHorasHombre)
                 && (!filter.IdCurso.HasValue || x.IdCurso == filter.IdCurso)
                 && (!filter.IdTipoFacilitador.HasValue || x.IdTipoFacilitador == filter.IdTipoFacilitador)
-                && (!filter.IdModalidad.HasValue || x.IdModalidad == filter.IdModalidad);
+                && (!filter.IdModalidad.HasValue || x.IdModalidad == filter.IdModalidad)
+                && (!filter.Evaluado.HasValue || x.Evaluado == filter.Evaluado);
 
             List<Expression<Func<Capacitacion, object>>>? includes = new List<Expression<Func<Capacitacion, object>>>()
             {
                 t => t.Modalidad,
                 t => t.TipoFacilitador,
-                t => t.Curso
+                t => t.Curso.TipoCurso
             };
 
             var response = await _capacitacionRepository.FindAllPaginatedAsync(paging: paging, predicate: predicate, includes: includes);

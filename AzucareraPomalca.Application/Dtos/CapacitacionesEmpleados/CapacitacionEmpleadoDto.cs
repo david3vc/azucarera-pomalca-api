@@ -1,4 +1,6 @@
-﻿namespace AzucareraPomalca.Application.Dtos.CapacitacionesEmpleados
+﻿using AzucareraPomalca.Application.Dtos.Empleados;
+
+namespace AzucareraPomalca.Application.Dtos.CapacitacionesEmpleados
 {
     public class CapacitacionEmpleadoDto
     {
@@ -9,5 +11,7 @@
         public DateTime? UpdatedAt { get; set; }
         public bool State { get; set; }
         public bool? Aprobado { get; set; }
+
+        public EmpleadoDto Empleado { get; set; }
     }
 }

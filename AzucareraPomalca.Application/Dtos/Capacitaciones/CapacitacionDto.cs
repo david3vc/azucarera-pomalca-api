@@ -1,4 +1,5 @@
-﻿using AzucareraPomalca.Application.Dtos.Cursos;
+﻿using AzucareraPomalca.Application.Dtos.CapacitacionesEmpleados;
+using AzucareraPomalca.Application.Dtos.Cursos;
 using AzucareraPomalca.Application.Dtos.TablaComunes;
 
 namespace AzucareraPomalca.Application.Dtos.Capacitaciones
@@ -24,5 +25,6 @@ namespace AzucareraPomalca.Application.Dtos.Capacitaciones
         public CursoDto Curso { get; set; }
         public TablaComunDto TipoFacilitador { get; set; }
         public TablaComunDto Modalidad { get; set; }
+        public List<CapacitacionEmpleadoDto> CapacitacionEmpleados { get; set; }
     }
 }
