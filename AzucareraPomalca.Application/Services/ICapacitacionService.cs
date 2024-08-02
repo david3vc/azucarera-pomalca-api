@@ -5,5 +5,6 @@ namespace AzucareraPomalca.Application.Services
 {
     public interface ICapacitacionService : ICrudService<CapacitacionDto, CapacitacionSaveDto, int>, IPageService<CapacitacionDto, CapacitacionFilterDto>
     {
+        Task<CapacitacionDto> EvaluarAsync(int id, CapacitacionSaveDto saveDto);
     }
 }

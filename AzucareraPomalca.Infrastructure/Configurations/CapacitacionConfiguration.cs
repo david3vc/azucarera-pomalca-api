@@ -24,6 +24,7 @@ namespace AzucareraPomalca.Infrastructure.Configurations
             builder.Property(t => t.CreatedAt).HasColumnName("created_at");
             builder.Property(t => t.UpdatedAt).HasColumnName("updated_at");
             builder.Property(t => t.State).HasColumnName("state");
+            builder.Property(t => t.Evaluado).HasColumnName("evaluado");
 
             builder.HasOne(one => one.Curso).WithMany(many => many.Capacitaciones).HasForeignKey(fk => fk.IdCurso);
             builder.HasOne(one => one.TipoFacilitador).WithMany(many => many.CapacitacionesTipoFacilitador).HasForeignKey(fk => fk.IdTipoFacilitador);

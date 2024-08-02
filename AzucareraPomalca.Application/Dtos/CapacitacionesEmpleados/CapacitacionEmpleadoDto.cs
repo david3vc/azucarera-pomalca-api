@@ -8,5 +8,6 @@
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public bool State { get; set; }
+        public bool? Aprobado { get; set; }
     }
 }

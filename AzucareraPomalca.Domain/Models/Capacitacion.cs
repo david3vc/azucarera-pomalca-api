@@ -14,6 +14,7 @@ namespace AzucareraPomalca.Domain.Models
         public int IdCurso { get; set; }
         public int IdTipoFacilitador { get; set; }
         public int IdModalidad { get; set; }
+        public bool Evaluado { get; set; }
 
         public virtual Curso Curso { get; set; }
         public virtual TablaComun TipoFacilitador { get; set; }

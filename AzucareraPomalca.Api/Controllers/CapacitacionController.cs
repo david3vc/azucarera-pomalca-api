@@ -46,6 +46,13 @@ namespace AzucareraPomalca.Api.Controllers
             return await _capacitacionService.EditAsync(id, saveDto);
         }
 
+        // EVLUAR api/values/5
+        [HttpPut("Evaluar/{id}")]
+        public async Task<CapacitacionDto> Evaluar(int id, [FromBody] CapacitacionSaveDto saveDto)
+        {
+            return await _capacitacionService.EvaluarAsync(id, saveDto);
+        }
+
         // DELETE api/values/5
         [HttpDelete("{id}")]
         public async Task<CapacitacionDto> Delete(int id)

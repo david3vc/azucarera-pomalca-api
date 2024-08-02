@@ -2,6 +2,7 @@
 using AzucareraPomalca.Application.Cores.Dtos;
 using AzucareraPomalca.Application.Cores.Exceptions;
 using AzucareraPomalca.Application.Dtos.Capacitaciones;
+using AzucareraPomalca.Application.Dtos.EmpleadoCursos;
 using AzucareraPomalca.Domain.Cores.Models;
 using AzucareraPomalca.Domain.Models;
 using AzucareraPomalca.Domain.Repositories;
@@ -13,13 +14,15 @@ namespace AzucareraPomalca.Application.Services.Implementations
     {
         private readonly ICapacitacionRepository _capacitacionRepository;
         private readonly ICapacitacionEmpleadoService _capacitacionEmpleadoService;
+        private readonly IEmpleadoCursoService _empleadoCursoService;
         private readonly IMapper _mapper;
 
-        public CapacitacionService(ICapacitacionRepository capacitacionRepository, IMapper mapper, ICapacitacionEmpleadoService capacitacionEmpleadoService)
+        public CapacitacionService(ICapacitacionRepository capacitacionRepository, IMapper mapper, ICapacitacionEmpleadoService capacitacionEmpleadoService, IEmpleadoCursoService empleadoCursoService)
         {
             _capacitacionRepository = capacitacionRepository;
             _mapper = mapper;
             _capacitacionEmpleadoService = capacitacionEmpleadoService;
+            _empleadoCursoService = empleadoCursoService;
         }
 
         public Task<IReadOnlyList<CapacitacionDto>> FindAllAsync()
@@ -49,6 +52,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
             Capacitacion capacitacion = _mapper.Map<Capacitacion>(saveDto);
             capacitacion.CreatedAt = DateTime.UtcNow;
             capacitacion.State = true;
+            capacitacion.Evaluado = false;
 
             await _capacitacionRepository.SaveAsync(capacitacion);
 
@@ -83,6 +87,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
             _mapper.Map<CapacitacionSaveDto, Capacitacion>(saveDto, capacitacion);
 
             capacitacion.UpdatedAt = DateTime.UtcNow;
+            capacitacion.Evaluado = false;
 
             await _capacitacionRepository.SaveAsync(capacitacion);
 
@@ -101,6 +106,43 @@ namespace AzucareraPomalca.Application.Services.Implementations
                         capacitacionEmpleado.IdCapacitacion = capacitacion.Id;
                         await _capacitacionEmpleadoService.CreateAsync(capacitacionEmpleado);
                     }
+                }
+            }
+            #endregion
+
+            return _mapper.Map<CapacitacionDto>(capacitacion);
+        }
+
+        public async Task<CapacitacionDto> EvaluarAsync(int id, CapacitacionSaveDto saveDto)
+        {
+            Capacitacion? capacitacion = await _capacitacionRepository.FindByIdAsync(id);
+
+            if (capacitacion is null) throw CapacitacionNotFound(id);
+
+            _mapper.Map<CapacitacionSaveDto, Capacitacion>(saveDto, capacitacion);
+
+            capacitacion.UpdatedAt = DateTime.UtcNow;
+            capacitacion.Evaluado = true;
+
+            await _capacitacionRepository.SaveAsync(capacitacion);
+
+            #region EMPLEADOS
+            if (saveDto.CapacitacionEmpleadosSave != null && saveDto.CapacitacionEmpleadosSave.Count > 0)
+            {
+                foreach (var capacitacionEmpleado in saveDto.CapacitacionEmpleadosSave)
+                {
+                    if (capacitacionEmpleado.Aprobado == true)
+                    {
+                        EmpleadoCursoSaveDto empleadoCursoSave = new EmpleadoCursoSaveDto()
+                        {
+                            IdCurso = capacitacion.IdCurso,
+                            IdEmpleado = capacitacionEmpleado.IdEmpleado,
+                        };
+
+                        await _empleadoCursoService.CreateAsync(empleadoCursoSave);
+                    }
+                    capacitacionEmpleado.IdCapacitacion = capacitacion.Id;
+                    await _capacitacionEmpleadoService.EditAsync(capacitacionEmpleado.Id ?? 0, capacitacionEmpleado);
                 }
             }
             #endregion
