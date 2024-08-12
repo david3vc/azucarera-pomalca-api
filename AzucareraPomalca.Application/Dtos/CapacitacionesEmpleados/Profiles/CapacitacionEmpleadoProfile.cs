@@ -7,7 +7,8 @@ namespace AzucareraPomalca.Application.Dtos.CapacitacionesEmpleados.Profiles
     {
         public CapacitacionEmpleadoProfile()
         {
-            CreateMap<CapacitacionEmpleado, CapacitacionEmpleadoDto>();
+            CreateMap<CapacitacionEmpleado, CapacitacionEmpleadoDto>()
+                .AfterMap<CapacitacionEmpleadoProfileAction>();
             CreateMap<CapacitacionEmpleado, CapacitacionEmpleadoSaveDto>().ReverseMap();
         }
     }

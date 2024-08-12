@@ -1,6 +1,4 @@
-﻿using AzucareraPomalca.Application.Dtos.Empleados;
-
-namespace AzucareraPomalca.Application.Dtos.CapacitacionesEmpleados
+﻿namespace AzucareraPomalca.Application.Dtos.CapacitacionesEmpleados
 {
     public class CapacitacionEmpleadoDto
     {
@@ -12,6 +10,12 @@ namespace AzucareraPomalca.Application.Dtos.CapacitacionesEmpleados
         public bool State { get; set; }
         public bool? Aprobado { get; set; }
 
-        public EmpleadoDto Empleado { get; set; }
+        //public EmpleadoDto Empleado { get; set; }
+        public string? NombreCompleto { get; set; }
+        public string? Puesto { get; set; }
+        public string? Gerencia { get; set; }
+        public string? Division { get; set; }
+        public string? Departamento { get; set; }
+        public string? Seccion { get; set; }
     }
 }

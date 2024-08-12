@@ -20,7 +20,10 @@ namespace AzucareraPomalca.Infrastructure.Persistences
                 .Include(t => t.Modalidad)
                 .Include(t => t.TipoFacilitador)
                 .Include(t => t.Curso).ThenInclude(t => t.TipoCurso)
-                .Include(t => t.CapacitacionEmpleados).ThenInclude(t => t.Empleado)
+                .Include(t => t.CapacitacionEmpleados).ThenInclude(t => t.Empleado).ThenInclude(t => t.Puesto).ThenInclude(t => t.Gerencia)
+                .Include(t => t.CapacitacionEmpleados).ThenInclude(t => t.Empleado).ThenInclude(t => t.Puesto).ThenInclude(t => t.Division)
+                .Include(t => t.CapacitacionEmpleados).ThenInclude(t => t.Empleado).ThenInclude(t => t.Puesto).ThenInclude(t => t.Departamento)
+                .Include(t => t.CapacitacionEmpleados).ThenInclude(t => t.Empleado).ThenInclude(t => t.Puesto).ThenInclude(t => t.Seccion)
                 .FirstOrDefaultAsync(t => t.Id == id);
         }
     }
