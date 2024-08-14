@@ -13,5 +13,6 @@
         public int? IdTipoFacilitador { get; set; }
         public int? IdModalidad { get; set; }
         public bool? Evaluado { get; set; }
+        public bool? State { get; set; }
     }
 }
