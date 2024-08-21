@@ -279,6 +279,11 @@ namespace AzucareraPomalca.Infrastructure.Persistences
             p_id_seccion.ParameterName = "@id_seccion";
             p_id_seccion.Value = request.IdSeccion;
             command.Parameters.Add(p_id_seccion);
+
+            var p_id_curso = command.CreateParameter();
+            p_id_curso.ParameterName = "@id_curso";
+            p_id_curso.Value = request.IdCurso;
+            command.Parameters.Add(p_id_curso);
             #endregion
 
             await connection.OpenAsync();

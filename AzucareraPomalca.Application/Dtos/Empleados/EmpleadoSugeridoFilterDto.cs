@@ -8,5 +8,6 @@
         public int? IdDivision { get; set; }
         public int? IdDepartamento { get; set; }
         public int? IdSeccion { get; set; }
+        public int? IdCurso { get; set; }
     }
 }

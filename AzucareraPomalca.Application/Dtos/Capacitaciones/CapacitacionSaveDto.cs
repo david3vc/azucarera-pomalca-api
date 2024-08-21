@@ -15,6 +15,8 @@ namespace AzucareraPomalca.Application.Dtos.Capacitaciones
         public int IdTipoFacilitador { get; set; }
         public int IdModalidad { get; set; }
         public bool Evaluado { get; set; }
+        public string? Profesor { get; set; }
+        public DateTime? FechaInicio { get; set; }
 
         public List<CapacitacionEmpleadoSaveDto>? CapacitacionEmpleadosSave { get; set; }
     }

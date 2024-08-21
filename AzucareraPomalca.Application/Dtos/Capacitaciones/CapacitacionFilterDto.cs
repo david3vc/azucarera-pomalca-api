@@ -14,5 +14,7 @@
         public int? IdModalidad { get; set; }
         public bool? Evaluado { get; set; }
         public bool? State { get; set; }
+        public string? Profesor { get; set; }
+        public DateTime? FechaInicio { get; set; }
     }
 }

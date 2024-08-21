@@ -17,5 +17,6 @@
         public int? IdSeccion { get; set; }
         public string? Seccion { get; set; }
         public int? CursosFaltantes { get; set; }
+        public int? IdCurso { get; set; }
     }
 }

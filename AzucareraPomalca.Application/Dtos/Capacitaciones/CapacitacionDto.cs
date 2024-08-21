@@ -21,6 +21,8 @@ namespace AzucareraPomalca.Application.Dtos.Capacitaciones
         public DateTime? UpdatedAt { get; set; }
         public bool State { get; set; }
         public bool Evaluado { get; set; }
+        public string? Profesor { get; set; }
+        public DateTime? FechaInicio { get; set; }
 
         public CursoDto Curso { get; set; }
         public TablaComunDto TipoFacilitador { get; set; }

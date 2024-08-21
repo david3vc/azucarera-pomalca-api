@@ -182,6 +182,8 @@ namespace AzucareraPomalca.Application.Services.Implementations
                 && (!filter.IdTipoFacilitador.HasValue || x.IdTipoFacilitador == filter.IdTipoFacilitador)
                 && (!filter.IdModalidad.HasValue || x.IdModalidad == filter.IdModalidad)
                 && (!filter.Evaluado.HasValue || x.Evaluado == filter.Evaluado)
+                && (string.IsNullOrWhiteSpace(filter.Profesor) || x.Profesor.ToUpper().Contains(filter.Profesor.ToUpper()))
+                && (!filter.FechaInicio.HasValue || x.FechaInicio == filter.FechaInicio)
                 && (!filter.State.HasValue || x.State == filter.State);
 
             List<Expression<Func<Capacitacion, object>>>? includes = new List<Expression<Func<Capacitacion, object>>>()
