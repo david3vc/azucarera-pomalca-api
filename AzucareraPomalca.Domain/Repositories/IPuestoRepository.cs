@@ -7,5 +7,6 @@ namespace AzucareraPomalca.Domain.Repositories
     {
         Task<List<Puesto>> FindByGerenciaAsync(string nombreGerencia);
         Task<List<Puesto>> SearchByUnidadOrganizacionalAsync(Puesto request);
+        Task<string> FindCodigoOrganizacionalByIdPuesto(int idPuesto);
     }
 }

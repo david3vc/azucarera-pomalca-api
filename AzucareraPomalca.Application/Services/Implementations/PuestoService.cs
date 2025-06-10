@@ -405,7 +405,11 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
             if (puesto is null) throw PuestoNotFound(id);
 
+            var codigoOrganizacional = await _puestoRepository.FindCodigoOrganizacionalByIdPuesto(id);
+
             var response = _mapper.Map<PuestoDto>(puesto);
+
+            response.CodigoOrganizacional = codigoOrganizacional;
 
             if (puesto.CoordinacionesPuestoCoordinador != null && puesto.CoordinacionesPuestoCoordinador.Count > 0)
             {

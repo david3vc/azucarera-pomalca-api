@@ -20,6 +20,7 @@ namespace AzucareraPomalca.Application.Dtos.Puestos
     {
         public int Id { get; set; }
         public string? Codigo { get; set; }
+        public string? CodigoOrganizacional { get; set; }
         public string? Nombre { get; set; }
         public string? AmbienteTrabajo { get; set; }
         public int? ExperienciaGeneralMinima { get; set; }

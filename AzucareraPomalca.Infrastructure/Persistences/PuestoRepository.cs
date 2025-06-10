@@ -2,7 +2,9 @@
 using AzucareraPomalca.Domain.Repositories;
 using AzucareraPomalca.Infrastructure.Cores.Contexts;
 using AzucareraPomalca.Infrastructure.Cores.Persistences;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace AzucareraPomalca.Infrastructure.Persistences
 {
@@ -60,6 +62,29 @@ namespace AzucareraPomalca.Infrastructure.Persistences
                 //.Include(t => t.EsfuerzoRequeridoPuestos.Where(t => t.State == true)).ThenInclude(t => t.Nivel)
                 .Include(t => t.PerfilCompetencias.Where(t => t.State == true)).ThenInclude(t => t.GradoDominio).ThenInclude(t => t.CompetenciaSimple).ThenInclude(t => t.TipoCompetencia)
                 .FirstOrDefaultAsync(t => t.Id == id);
+        }
+
+        public async Task<string> FindCodigoOrganizacionalByIdPuesto(int idPuesto)
+        {
+            using (var cnx = _dbContext.Database.GetDbConnection())
+            {
+                DynamicParameters parameters = new DynamicParameters();
+                parameters.Add("@idPuesto", idPuesto);
+
+                using (var reader = await cnx.ExecuteReaderAsync(
+                    "usp_ObtenerCodigoOrganizacionalByIdPuesto",
+                    param: parameters,
+                    commandType: CommandType.StoredProcedure))
+                {
+                    var result = "";
+
+                    while (reader.Read())
+                    {
+                        result = !reader.IsDBNull(reader.GetOrdinal("codigo_ubicacion")) ? reader.GetString(reader.GetOrdinal("codigo_ubicacion")) : "";
+                    }
+                    return result;
+                }
+            }
         }
 
         public async Task<List<Puesto>> SearchByUnidadOrganizacionalAsync(Puesto request)
