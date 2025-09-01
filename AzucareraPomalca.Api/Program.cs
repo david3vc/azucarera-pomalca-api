@@ -127,7 +127,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(c =>
+    {
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "AzucareraPomalca.Api v1");
+        c.RoutePrefix = "swagger"; // opcional, pero así será /swagger en PROD
+    });
 }
 
 app.UseMiddleware<ExceptionMiddleware>();
