@@ -5,5 +5,6 @@
         public int? Id { get; set; }
         public int IdCurso { get; set; }
         public int IdEmpleado { get; set; }
+        public decimal HorasAcumuladas { get; set; }
     }
 }

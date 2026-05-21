@@ -12,5 +12,7 @@ namespace AzucareraPomalca.Domain.Models
         public virtual TipoCompetencia TipoCompetencia { get; set; }
 
         public virtual ICollection<GradoDominio> GradoDominios { get; set; }
+        public virtual ICollection<CursoCompetencia>? CursoCompetencias { get; set; }
+        public virtual ICollection<PerfilCompetenciaEmpleado>? PerfilCompetenciaEmpleados { get; set; }
     }
 }

@@ -15,14 +15,16 @@ namespace AzucareraPomalca.Application.Services.Implementations
         private readonly ICapacitacionRepository _capacitacionRepository;
         private readonly ICapacitacionEmpleadoService _capacitacionEmpleadoService;
         private readonly IEmpleadoCursoService _empleadoCursoService;
+        private readonly IEquivalenciaService _equivalenciaService;
         private readonly IMapper _mapper;
 
-        public CapacitacionService(ICapacitacionRepository capacitacionRepository, IMapper mapper, ICapacitacionEmpleadoService capacitacionEmpleadoService, IEmpleadoCursoService empleadoCursoService)
+        public CapacitacionService(ICapacitacionRepository capacitacionRepository, IMapper mapper, ICapacitacionEmpleadoService capacitacionEmpleadoService, IEmpleadoCursoService empleadoCursoService, IEquivalenciaService equivalenciaService)
         {
             _capacitacionRepository = capacitacionRepository;
             _mapper = mapper;
             _capacitacionEmpleadoService = capacitacionEmpleadoService;
             _empleadoCursoService = empleadoCursoService;
+            _equivalenciaService = equivalenciaService;
         }
 
         public Task<IReadOnlyList<CapacitacionDto>> FindAllAsync()
@@ -148,6 +150,8 @@ namespace AzucareraPomalca.Application.Services.Implementations
                 }
             }
             #endregion
+
+            await _equivalenciaService.RecalcularPorCapacitacionAsync(capacitacion.Id);
 
             return _mapper.Map<CapacitacionDto>(capacitacion);
         }

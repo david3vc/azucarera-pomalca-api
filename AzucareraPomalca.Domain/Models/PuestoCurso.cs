@@ -6,6 +6,7 @@ namespace AzucareraPomalca.Domain.Models
     {
         public int IdCurso { get; set; }
         public int IdPuesto { get; set; }
+        public int HorasRequeridas { get; set; }
 
         public virtual Curso Curso { get; set; }
         public virtual Puesto Puesto { get; set; }

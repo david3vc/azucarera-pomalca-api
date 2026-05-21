@@ -7,6 +7,7 @@ namespace AzucareraPomalca.Application.Dtos.PuestosCursos
         public int Id { get; set; }
         public int IdCurso { get; set; }
         public int IdPuesto { get; set; }
+        public int HorasRequeridas { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
         public bool State { get; set; }

@@ -13,6 +13,7 @@ namespace AzucareraPomalca.Infrastructure.Configurations
             builder.Property(t => t.Id).HasColumnName("id_puesto_curso");
             builder.Property(t => t.IdCurso).HasColumnName("id_curso");
             builder.Property(t => t.IdPuesto).HasColumnName("id_puesto");
+            builder.Property(t => t.HorasRequeridas).HasColumnName("horas_requeridas").HasDefaultValue(0);
             builder.Property(t => t.CreatedAt).HasColumnName("created_at");
             builder.Property(t => t.UpdatedAt).HasColumnName("updated_at");
             builder.Property(t => t.State).HasColumnName("state");

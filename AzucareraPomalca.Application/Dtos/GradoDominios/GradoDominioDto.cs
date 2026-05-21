@@ -7,6 +7,7 @@ namespace AzucareraPomalca.Application.Dtos.GradoDominios
         public int Id { get; set; }
         public string Descripcion { get; set; }
         public int Nivel { get; set; }
+        public int HorasRequeridas { get; set; }
         public int IdCompetencia { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
