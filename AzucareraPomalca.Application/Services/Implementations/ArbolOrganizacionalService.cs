@@ -364,7 +364,25 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
         public async Task<List<NodoDto>> FindNodoPuestoById(int id)
         {
+            Puesto? puesto = await _puestoRepository.FindByIdAsync(id);
             List<Empleado> empleados = await _empleadoRepository.FindByIdPuestoAsync(id);
+
+            // Determinar si el puesto es jefe de su unidad organizacional
+            bool esJefe = false;
+            if (puesto != null)
+            {
+                var puestoRequest = new Puesto()
+                {
+                    IdGerencia = puesto.IdGerencia,
+                    IdDivision = puesto.IdDivision,
+                    IdDepartamento = puesto.IdDepartamento,
+                    IdSeccion = puesto.IdSeccion
+                };
+                List<Puesto> puestosHermanos = await _puestoRepository.SearchByUnidadOrganizacionalAsync(puestoRequest);
+                Puesto? puestoJefe = FindNodoPuestoJefe(puestosHermanos);
+                // Misma logica que en los demas metodos: es jefe si su supervisor no es el puesto jefe
+                esJefe = puesto.IdPuestoSupervisor != puestoJefe?.Id;
+            }
 
             List<NodoDto> nodosEmpleados = new List<NodoDto>();
 
@@ -375,7 +393,8 @@ namespace AzucareraPomalca.Application.Services.Implementations
                     Id = child.Id,
                     Key = $"{child.Id}-{child.AppellidoPaterno}-{child.AppellidoMaterno}-{child.Nombres}",
                     Nombre = $"{child.AppellidoPaterno} {child.AppellidoMaterno} {child.Nombres}",
-                    TipoNodo = TiposNodo.EMPLEADO
+                    TipoNodo = TiposNodo.EMPLEADO,
+                    EsJefe = esJefe
                 };
                 nodosEmpleados.Add(childNodo);
             }
