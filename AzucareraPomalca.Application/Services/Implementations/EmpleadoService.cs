@@ -238,7 +238,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
             var paging = new Paging() { PageNumber = request.Page, PageSize = request.PerPage };
 
             Expression<Func<Empleado, bool>> predicate = x =>
-                (string.IsNullOrWhiteSpace(filter.Nombres) || x.Nombres.ToUpper().Contains(filter.Nombres.ToUpper()))
+                (string.IsNullOrWhiteSpace(filter.Nombres) || (x.Nombres + " " + x.AppellidoPaterno + " " + x.AppellidoMaterno).ToUpper().Contains(filter.Nombres.ToUpper()))
                 && (string.IsNullOrWhiteSpace(filter.AppellidoPaterno) || x.AppellidoPaterno.ToUpper().Contains(filter.AppellidoPaterno.ToUpper()))
                 && (string.IsNullOrWhiteSpace(filter.AppellidoMaterno) || x.AppellidoMaterno.ToUpper().Contains(filter.AppellidoMaterno.ToUpper()))
                 && (!filter.IdCondicionEmpleado.HasValue || x.IdCondicionEmpleado == filter.IdCondicionEmpleado)
