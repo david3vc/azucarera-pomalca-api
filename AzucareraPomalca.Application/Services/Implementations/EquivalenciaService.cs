@@ -69,9 +69,13 @@ namespace AzucareraPomalca.Application.Services.Implementations
                 orderBy: q => q.OrderBy(g => g.Nivel)
             );
 
+            // El nivel alcanzado es el grado MÁS EXIGENTE cuyo umbral ya se cumplió, medido por
+            // HorasRequeridas (el umbral real), NO por el número de nivel. Así el cálculo es
+            // agnóstico a la convención de numeración: funciona tanto si "más difícil = nivel
+            // alto" (ascendente) como si "más difícil = Nivel 1" (descendente, ver R6/D-016).
             GradoDominio? gradoAlcanzado = grados
                 .Where(g => g.HorasRequeridas <= horasEquivalentes)
-                .OrderByDescending(g => g.Nivel)
+                .OrderByDescending(g => g.HorasRequeridas)
                 .FirstOrDefault();
 
             var pce = await _pceRepository.FindFirstOrDefaultAsync(

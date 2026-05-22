@@ -55,26 +55,27 @@ namespace AzucareraPomalca.Application.Services.Implementations
                 predicate: p => puestoIds.Contains(p.IdPuesto) && p.IdGradoDominio != null && p.State,
                 includes: perfilIncludes);
 
+            // Brecha medida por HORAS (umbral real), no por número de nivel: agnóstico a la
+            // convención de numeración (ver R6/D-016). El requisito de un puesto en una
+            // competencia es el umbral MÁS exigente que pide (Max HorasRequeridas).
             var requeridosPorPuesto = perfiles
                 .Where(p => p.GradoDominio != null)
                 .GroupBy(p => p.IdPuesto)
                 .ToDictionary(
                     g => g.Key,
-                    g => g.Select(p => new RequeridoComp(p.GradoDominio!.IdCompetencia, p.GradoDominio!.Nivel)).ToList());
+                    g => g.Select(p => new RequeridoComp(p.GradoDominio!.IdCompetencia, p.GradoDominio!.HorasRequeridas)).ToList());
 
-            // 4. Nivel alcanzado por empleado en cada competencia (PCE).
-            var pceIncludes = new List<Expression<Func<PerfilCompetenciaEmpleado, object>>> { x => x.GradoDominio! };
+            // 4. Horas equivalentes acumuladas por empleado en cada competencia (PCE).
             var pces = await _pceRepository.FindAllAsync(
-                predicate: x => empleadoIds.Contains(x.IdEmpleado) && x.State,
-                includes: pceIncludes);
+                predicate: x => empleadoIds.Contains(x.IdEmpleado) && x.State);
 
-            var nivelAlcanzado = new Dictionary<(int, int), int>();
+            var horasAlcanzadas = new Dictionary<(int, int), decimal>();
             foreach (var pce in pces)
             {
-                nivelAlcanzado[(pce.IdEmpleado, pce.IdCompetencia)] = pce.GradoDominio?.Nivel ?? 0;
+                horasAlcanzadas[(pce.IdEmpleado, pce.IdCompetencia)] = pce.HorasEquivalentes;
             }
 
-            // 5. Por empleado, competencias donde el nivel alcanzado < nivel requerido.
+            // 5. Por empleado, competencias donde las horas acumuladas < umbral requerido.
             var demanda = new Dictionary<int, HashSet<int>>(); // idCompetencia → empleados
             foreach (var emp in empleados)
             {
@@ -82,8 +83,8 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
                 foreach (var r in reqs)
                 {
-                    int alcanzado = nivelAlcanzado.TryGetValue((emp.Id, r.IdCompetencia), out var n) ? n : 0;
-                    if (alcanzado < r.Nivel)
+                    decimal alcanzado = horasAlcanzadas.TryGetValue((emp.Id, r.IdCompetencia), out var h) ? h : 0m;
+                    if (alcanzado < r.HorasRequeridas)
                     {
                         if (!demanda.TryGetValue(r.IdCompetencia, out var set))
                         {
@@ -148,38 +149,37 @@ namespace AzucareraPomalca.Application.Services.Implementations
             if (puestoIds.Count == 0) return new List<EmpleadoSugeridoDto>();
             var puestoById = puestos.ToDictionary(p => p.Id, p => p);
 
-            // 2. Nivel requerido de la competencia objetivo por puesto (el mayor exigido).
+            // 2. Umbral de horas requerido de la competencia objetivo por puesto (el mayor exigido).
+            //    Brecha medida por horas (no por número de nivel) → agnóstico a la convención (R6/D-016).
             var perfilIncludes = new List<Expression<Func<PerfilCompetencia, object>>> { p => p.GradoDominio! };
             var perfiles = await _perfilCompetenciaRepository.FindAllAsync(
                 predicate: p => puestoIds.Contains(p.IdPuesto) && p.IdGradoDominio != null && p.State,
                 includes: perfilIncludes);
 
-            var nivelRequeridoPorPuesto = perfiles
+            var horasRequeridasPorPuesto = perfiles
                 .Where(p => p.GradoDominio != null && p.GradoDominio.IdCompetencia == filter.IdCompetencia)
                 .GroupBy(p => p.IdPuesto)
-                .ToDictionary(g => g.Key, g => g.Max(p => p.GradoDominio!.Nivel));
+                .ToDictionary(g => g.Key, g => g.Max(p => p.GradoDominio!.HorasRequeridas));
 
-            if (nivelRequeridoPorPuesto.Count == 0) return new List<EmpleadoSugeridoDto>();
+            if (horasRequeridasPorPuesto.Count == 0) return new List<EmpleadoSugeridoDto>();
 
             // 3. Empleados activos en esos puestos.
             var empleados = await _empleadoRepository.FindAllAsync(e => e.State && puestoIds.Contains(e.IdPuesto));
             var empleadoIds = empleados.Select(e => e.Id).ToList();
             if (empleadoIds.Count == 0) return new List<EmpleadoSugeridoDto>();
 
-            // 4. Nivel alcanzado por empleado en esa competencia (PCE).
-            var pceIncludes = new List<Expression<Func<PerfilCompetenciaEmpleado, object>>> { x => x.GradoDominio! };
+            // 4. Horas equivalentes acumuladas por empleado en esa competencia (PCE).
             var pces = await _pceRepository.FindAllAsync(
-                predicate: x => empleadoIds.Contains(x.IdEmpleado) && x.IdCompetencia == filter.IdCompetencia && x.State,
-                includes: pceIncludes);
-            var nivelAlcanzado = new Dictionary<int, int>();
-            foreach (var pce in pces) nivelAlcanzado[pce.IdEmpleado] = pce.GradoDominio?.Nivel ?? 0;
+                predicate: x => empleadoIds.Contains(x.IdEmpleado) && x.IdCompetencia == filter.IdCompetencia && x.State);
+            var horasAlcanzadas = new Dictionary<int, decimal>();
+            foreach (var pce in pces) horasAlcanzadas[pce.IdEmpleado] = pce.HorasEquivalentes;
 
-            // 5. Empleados cuyo nivel alcanzado < nivel requerido por su puesto.
+            // 5. Empleados cuyas horas acumuladas < umbral requerido por su puesto.
             var result = new List<EmpleadoSugeridoDto>();
             foreach (var emp in empleados)
             {
-                if (!nivelRequeridoPorPuesto.TryGetValue(emp.IdPuesto, out var requerido)) continue;
-                int alcanzado = nivelAlcanzado.TryGetValue(emp.Id, out var n) ? n : 0;
+                if (!horasRequeridasPorPuesto.TryGetValue(emp.IdPuesto, out var requerido)) continue;
+                decimal alcanzado = horasAlcanzadas.TryGetValue(emp.Id, out var h) ? h : 0m;
                 if (alcanzado >= requerido) continue;
 
                 puestoById.TryGetValue(emp.IdPuesto, out var pst);
@@ -199,6 +199,6 @@ namespace AzucareraPomalca.Application.Services.Implementations
             return result.OrderBy(x => x.NombreCompleto).ToList();
         }
 
-        private readonly record struct RequeridoComp(int IdCompetencia, int Nivel);
+        private readonly record struct RequeridoComp(int IdCompetencia, int HorasRequeridas);
     }
 }
