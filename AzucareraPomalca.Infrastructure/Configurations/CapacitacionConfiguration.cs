@@ -27,10 +27,14 @@ namespace AzucareraPomalca.Infrastructure.Configurations
             builder.Property(t => t.Evaluado).HasColumnName("evaluado");
             builder.Property(t => t.Profesor).HasColumnName("profesor");
             builder.Property(t => t.FechaInicio).HasColumnName("fecha_inicio");
+            builder.Property(t => t.IdPlanCapacitacion).HasColumnName("id_plan_capacitacion");
+            builder.Property(t => t.IdCompetencia).HasColumnName("id_competencia");
 
             builder.HasOne(one => one.Curso).WithMany(many => many.Capacitaciones).HasForeignKey(fk => fk.IdCurso);
-            builder.HasOne(one => one.TipoFacilitador).WithMany(many => many.CapacitacionesTipoFacilitador).HasForeignKey(fk => fk.IdTipoFacilitador);
-            builder.HasOne(one => one.Modalidad).WithMany(many => many.CapacitacionesModalidad).HasForeignKey(fk => fk.IdModalidad);
+            builder.HasOne(one => one.TipoFacilitador).WithMany(many => many.CapacitacionesTipoFacilitador).HasForeignKey(fk => fk.IdTipoFacilitador).IsRequired(false).OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(one => one.Modalidad).WithMany(many => many.CapacitacionesModalidad).HasForeignKey(fk => fk.IdModalidad).IsRequired(false).OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(one => one.PlanCapacitacion).WithMany(many => many.Capacitaciones).HasForeignKey(fk => fk.IdPlanCapacitacion).OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(one => one.Competencia).WithMany().HasForeignKey(fk => fk.IdCompetencia).OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

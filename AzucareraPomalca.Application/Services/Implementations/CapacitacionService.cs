@@ -16,15 +16,17 @@ namespace AzucareraPomalca.Application.Services.Implementations
         private readonly ICapacitacionEmpleadoService _capacitacionEmpleadoService;
         private readonly IEmpleadoCursoService _empleadoCursoService;
         private readonly IEquivalenciaService _equivalenciaService;
+        private readonly ICursoCompetenciaRepository _cursoCompetenciaRepository;
         private readonly IMapper _mapper;
 
-        public CapacitacionService(ICapacitacionRepository capacitacionRepository, IMapper mapper, ICapacitacionEmpleadoService capacitacionEmpleadoService, IEmpleadoCursoService empleadoCursoService, IEquivalenciaService equivalenciaService)
+        public CapacitacionService(ICapacitacionRepository capacitacionRepository, IMapper mapper, ICapacitacionEmpleadoService capacitacionEmpleadoService, IEmpleadoCursoService empleadoCursoService, IEquivalenciaService equivalenciaService, ICursoCompetenciaRepository cursoCompetenciaRepository)
         {
             _capacitacionRepository = capacitacionRepository;
             _mapper = mapper;
             _capacitacionEmpleadoService = capacitacionEmpleadoService;
             _empleadoCursoService = empleadoCursoService;
             _equivalenciaService = equivalenciaService;
+            _cursoCompetenciaRepository = cursoCompetenciaRepository;
         }
 
         public Task<IReadOnlyList<CapacitacionDto>> FindAllAsync()
@@ -53,6 +55,8 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
         public async Task<CapacitacionDto> CreateAsync(CapacitacionSaveDto saveDto)
         {
+            await ValidarVinculoCompetenciaAsync(saveDto);
+
             Capacitacion capacitacion = _mapper.Map<Capacitacion>(saveDto);
             capacitacion.CreatedAt = DateTime.UtcNow;
             capacitacion.State = true;
@@ -87,6 +91,8 @@ namespace AzucareraPomalca.Application.Services.Implementations
             Capacitacion? capacitacion = await _capacitacionRepository.FindByIdAsync(id);
 
             if (capacitacion is null) throw CapacitacionNotFound(id);
+
+            await ValidarVinculoCompetenciaAsync(saveDto);
 
             _mapper.Map<CapacitacionSaveDto, Capacitacion>(saveDto, capacitacion);
 
@@ -200,6 +206,25 @@ namespace AzucareraPomalca.Application.Services.Implementations
             var response = await _capacitacionRepository.FindAllPaginatedAsync(paging: paging, predicate: predicate, includes: includes);
 
             return _mapper.Map<PageResponse<CapacitacionDto>>(response);
+        }
+
+        // R-E: si la línea apunta a una competencia (eje blando), el curso vehículo
+        // debe estar vinculado a esa competencia en CursoCompetencia; si no, el cierre
+        // de brecha blanda (CalcularNivelAsync) nunca tocaría la competencia objetivo.
+        private async Task ValidarVinculoCompetenciaAsync(CapacitacionSaveDto saveDto)
+        {
+            if (!saveDto.IdCompetencia.HasValue) return;
+
+            CursoCompetencia? vinculo = await _cursoCompetenciaRepository.FindFirstOrDefaultAsync(
+                predicate: x => x.IdCurso == saveDto.IdCurso
+                                && x.IdCompetencia == saveDto.IdCompetencia.Value
+                                && x.State);
+
+            if (vinculo is null)
+                throw new BadRequestCoreException(
+                    "El curso seleccionado no está vinculado a la competencia objetivo. " +
+                    "Vincúlelos en la pantalla de competencias (Cursos que aportan) para que la " +
+                    "brecha blanda cierre al evaluar.");
         }
 
         private NotFoundCoreException CapacitacionNotFound(int id)

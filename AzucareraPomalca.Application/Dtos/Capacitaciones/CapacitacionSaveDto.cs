@@ -12,11 +12,13 @@ namespace AzucareraPomalca.Application.Dtos.Capacitaciones
         public decimal CostoXTrabjador { get; set; }
         public decimal CostoXHorasHombre { get; set; }
         public int IdCurso { get; set; }
-        public int IdTipoFacilitador { get; set; }
-        public int IdModalidad { get; set; }
+        public int? IdTipoFacilitador { get; set; }
+        public int? IdModalidad { get; set; }
         public bool Evaluado { get; set; }
         public string? Profesor { get; set; }
         public DateTime? FechaInicio { get; set; }
+        public int? IdPlanCapacitacion { get; set; }
+        public int? IdCompetencia { get; set; }
 
         public List<CapacitacionEmpleadoSaveDto>? CapacitacionEmpleadosSave { get; set; }
     }
