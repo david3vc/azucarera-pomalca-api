@@ -10,16 +10,19 @@ namespace AzucareraPomalca.Application.Services.Implementations
     {
         private readonly IMapper _mapper;
         private readonly IPerfilCompetenciaEmpleadoRepository _perfilCompetenciaEmpleadoRepository;
+        private readonly IGradoDominioRepository _gradoDominioRepository;
 
-        public PerfilCompetenciaEmpleadoService(IMapper mapper, IPerfilCompetenciaEmpleadoRepository perfilCompetenciaEmpleadoRepository)
+        public PerfilCompetenciaEmpleadoService(IMapper mapper, IPerfilCompetenciaEmpleadoRepository perfilCompetenciaEmpleadoRepository, IGradoDominioRepository gradoDominioRepository)
         {
             _mapper = mapper;
             _perfilCompetenciaEmpleadoRepository = perfilCompetenciaEmpleadoRepository;
+            _gradoDominioRepository = gradoDominioRepository;
         }
 
         public async Task<PerfilCompetenciaEmpleadoDto> CreateAsync(PerfilCompetenciaEmpleadoSaveDto saveDto)
         {
             PerfilCompetenciaEmpleado perfilCompetenciaEmpleado = _mapper.Map<PerfilCompetenciaEmpleado>(saveDto);
+            await InferirIdCompetenciaAsync(perfilCompetenciaEmpleado);
             perfilCompetenciaEmpleado.CreatedAt = DateTime.UtcNow;
             perfilCompetenciaEmpleado.State = true;
 
@@ -41,11 +44,27 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
             _mapper.Map<PerfilCompetenciaEmpleadoSaveDto, PerfilCompetenciaEmpleado>(saveDto, perfilCompetenciaEmpleado);
 
+            await InferirIdCompetenciaAsync(perfilCompetenciaEmpleado);
+
             perfilCompetenciaEmpleado.UpdatedAt = DateTime.UtcNow;
 
             await _perfilCompetenciaEmpleadoRepository.SaveAsync(perfilCompetenciaEmpleado);
 
             return _mapper.Map<PerfilCompetenciaEmpleadoDto>(perfilCompetenciaEmpleado);
+        }
+
+        // El frontend (PerfilCompetencias.tsx) solo envía IdGradoDominio; la competencia
+        // se infiere del grado (su fuente de verdad: GradoDominio.IdCompetencia). Sin esto
+        // se persistiría IdCompetencia=0 y reventaría la FK a competencia (500). En edición,
+        // AutoMapper sobrescribe el IdCompetencia cargado con 0, por eso se re-infiere aquí.
+        // Ver CONTEXTO.md D-017.
+        private async Task InferirIdCompetenciaAsync(PerfilCompetenciaEmpleado perfil)
+        {
+            if (perfil.IdGradoDominio.HasValue && perfil.IdCompetencia == 0)
+            {
+                GradoDominio? grado = await _gradoDominioRepository.FindByIdAsync(perfil.IdGradoDominio.Value);
+                if (grado != null) perfil.IdCompetencia = grado.IdCompetencia;
+            }
         }
 
         public Task<IReadOnlyList<PerfilCompetenciaEmpleadoDto>> FindAllAsync()
