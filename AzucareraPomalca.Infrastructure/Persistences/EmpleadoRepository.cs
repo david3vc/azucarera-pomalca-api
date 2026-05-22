@@ -103,9 +103,11 @@ namespace AzucareraPomalca.Infrastructure.Persistences
 
 
 
-            using (var cnx = _dbContext.Database.GetDbConnection())
-            {
-                DynamicParameters parameters = new DynamicParameters();
+            // No disponer la conexión COMPARTIDA del DbContext (mismo bug que PuestoRepository):
+            // el `using` borra su ConnectionString y rompe queries EF posteriores del request.
+            var cnx = _dbContext.Database.GetDbConnection();
+
+            DynamicParameters parameters = new DynamicParameters();
                 parameters.Add("@numeroDocumento", numeroDocumento);
 
                 using (var reader = await cnx.ExecuteReaderAsync(
@@ -140,7 +142,6 @@ namespace AzucareraPomalca.Infrastructure.Persistences
                     }
                     return result;
                 }
-            }
         }
 
         public async void GuardarMasivoAsync(List<DtEmpleado> empleados)

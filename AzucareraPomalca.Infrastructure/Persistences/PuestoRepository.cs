@@ -66,24 +66,28 @@ namespace AzucareraPomalca.Infrastructure.Persistences
 
         public async Task<string> FindCodigoOrganizacionalByIdPuesto(int idPuesto)
         {
-            using (var cnx = _dbContext.Database.GetDbConnection())
+            // No envolver GetDbConnection() en `using`: devuelve la conexión COMPARTIDA del
+            // DbContext. Disponerla aquí borra su ConnectionString y rompe la siguiente query
+            // EF del mismo request (p.ej. el loop de coordinaciones en
+            // PuestoService.FindByIdAsync) con "The ConnectionString property has not been
+            // initialized" => 500 en puestos que tienen coordinaciones.
+            var cnx = _dbContext.Database.GetDbConnection();
+
+            DynamicParameters parameters = new DynamicParameters();
+            parameters.Add("@idPuesto", idPuesto);
+
+            using (var reader = await cnx.ExecuteReaderAsync(
+                "usp_ObtenerCodigoOrganizacionalByIdPuesto",
+                param: parameters,
+                commandType: CommandType.StoredProcedure))
             {
-                DynamicParameters parameters = new DynamicParameters();
-                parameters.Add("@idPuesto", idPuesto);
+                var result = "";
 
-                using (var reader = await cnx.ExecuteReaderAsync(
-                    "usp_ObtenerCodigoOrganizacionalByIdPuesto",
-                    param: parameters,
-                    commandType: CommandType.StoredProcedure))
+                while (reader.Read())
                 {
-                    var result = "";
-
-                    while (reader.Read())
-                    {
-                        result = !reader.IsDBNull(reader.GetOrdinal("codigo_ubicacion")) ? reader.GetString(reader.GetOrdinal("codigo_ubicacion")) : "";
-                    }
-                    return result;
+                    result = !reader.IsDBNull(reader.GetOrdinal("codigo_ubicacion")) ? reader.GetString(reader.GetOrdinal("codigo_ubicacion")) : "";
                 }
+                return result;
             }
         }
 
