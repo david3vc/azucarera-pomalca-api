@@ -16,5 +16,6 @@
         public bool? State { get; set; }
         public string? Profesor { get; set; }
         public DateTime? FechaInicio { get; set; }
+        public int? IdPlanCapacitacion { get; set; }
     }
 }

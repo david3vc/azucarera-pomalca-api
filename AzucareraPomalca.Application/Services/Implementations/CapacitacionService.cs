@@ -225,6 +225,7 @@ namespace AzucareraPomalca.Application.Services.Implementations
                 && (!filter.Evaluado.HasValue || x.Evaluado == filter.Evaluado)
                 && (string.IsNullOrWhiteSpace(filter.Profesor) || x.Profesor.ToUpper().Contains(filter.Profesor.ToUpper()))
                 && (!filter.FechaInicio.HasValue || x.FechaInicio == filter.FechaInicio)
+                && (!filter.IdPlanCapacitacion.HasValue || x.IdPlanCapacitacion == filter.IdPlanCapacitacion)
                 && (!filter.State.HasValue || x.State == filter.State);
 
             List<Expression<Func<Capacitacion, object>>>? includes = new List<Expression<Func<Capacitacion, object>>>()
@@ -235,7 +236,10 @@ namespace AzucareraPomalca.Application.Services.Implementations
                 t => t.PlanCapacitacion.EstadoPlan
             };
 
-            var response = await _capacitacionRepository.FindAllPaginatedAsync(paging: paging, predicate: predicate, includes: includes);
+            Func<IQueryable<Capacitacion>, IOrderedQueryable<Capacitacion>> orderBy =
+                q => q.OrderByDescending(c => c.CreatedAt).ThenByDescending(c => c.Id);
+
+            var response = await _capacitacionRepository.FindAllPaginatedAsync(paging: paging, predicate: predicate, orderBy: orderBy, includes: includes);
 
             return _mapper.Map<PageResponse<CapacitacionDto>>(response);
         }

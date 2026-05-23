@@ -11,7 +11,9 @@ namespace AzucareraPomalca.Application.Dtos.Capacitaciones.Profiles
         {
             CreateMap<Capacitacion, CapacitacionDto>()
                 .ForMember(d => d.EstadoPlan,
-                    o => o.MapFrom(s => s.PlanCapacitacion != null ? s.PlanCapacitacion.EstadoPlan : null));
+                    o => o.MapFrom(s => s.PlanCapacitacion != null ? s.PlanCapacitacion.EstadoPlan : null))
+                .ForMember(d => d.Plan, o => o.MapFrom(s => s.PlanCapacitacion));
+            CreateMap<PlanCapacitacion, CapacitacionPlanDto>();
             CreateMap<Capacitacion, CapacitacionSaveDto>().ReverseMap();
             CreateMap<Capacitacion, CapacitacionFilterDto>().ReverseMap();
 

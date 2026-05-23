@@ -30,6 +30,14 @@ namespace AzucareraPomalca.Application.Dtos.Capacitaciones
         public TablaComunDto? TipoFacilitador { get; set; }
         public TablaComunDto? Modalidad { get; set; }
         public TablaComunDto? EstadoPlan { get; set; }
+        public CapacitacionPlanDto? Plan { get; set; }
         public List<CapacitacionEmpleadoDto> CapacitacionEmpleados { get; set; }
+    }
+
+    public class CapacitacionPlanDto
+    {
+        public int Id { get; set; }
+        public int Anio { get; set; }
+        public string? Descripcion { get; set; }
     }
 }
