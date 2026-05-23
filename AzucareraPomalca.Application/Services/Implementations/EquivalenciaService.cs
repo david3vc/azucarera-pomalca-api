@@ -157,11 +157,14 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
             if (empleadosAprobados.Count == 0) return;
 
-            // Eje duro: recalcular acumulado por (empleado, curso) — siempre se hace.
-            foreach (var idEmpleado in empleadosAprobados)
-            {
-                await RecalcularHorasCursoAsync(idEmpleado, capacitacion.IdCurso);
-            }
+            // HORAS-DURAS-DESACTIVADO (D-022): los cursos duros (Específicos/SSOMMA/RSE) pasaron a
+            // ser binarios (lo lleva o no); el cumplimiento lo decide CapacitacionEmpleado.Aprobado
+            // y la fila binaria en empleado_curso. Ya NO se recalculan horas acumuladas duras.
+            // Para REVERTIR a horas, descomentar este loop (RecalcularHorasCursoAsync sigue intacto).
+            //foreach (var idEmpleado in empleadosAprobados)
+            //{
+            //    await RecalcularHorasCursoAsync(idEmpleado, capacitacion.IdCurso);
+            //}
 
             // Eje blando: si el curso está vinculado a competencias, recalcular niveles.
             var vinculos = await _cursoCompetenciaRepository.FindByCursoAsync(capacitacion.IdCurso);
@@ -197,29 +200,31 @@ namespace AzucareraPomalca.Application.Services.Implementations
                 result.ProcesadosBlandos++;
             }
 
-            // Eje duro: EmpleadoCurso con HorasAcumuladas == 0 → sembrar con PuestoCurso del puesto del empleado
-            var ecLegacy = await _empleadoCursoRepository.FindAllAsync(
-                predicate: x => x.HorasAcumuladas == 0m,
-                disableTracking: false
-            );
-
-            foreach (var ec in ecLegacy)
-            {
-                var empleado = await _empleadoRepository.FindByIdAsync(ec.IdEmpleado);
-                if (empleado is null) { result.Omitidos++; continue; }
-
-                var pc = await _puestoCursoRepository.FindFirstOrDefaultAsync(
-                    predicate: x => x.IdPuesto == empleado.IdPuesto && x.IdCurso == ec.IdCurso
-                );
-
-                if (pc is null) { result.Omitidos++; continue; }
-
-                ec.HorasAcumuladas = pc.HorasRequeridas;
-                ec.FechaCalculo = DateTime.UtcNow;
-                ec.UpdatedAt = DateTime.UtcNow;
-                await _empleadoCursoRepository.SaveAsync(ec);
-                result.ProcesadosDuros++;
-            }
+            // HORAS-DURAS-DESACTIVADO (D-022): el eje duro pasó a binario (lo lleva o no). Ya no se
+            // siembran horas acumuladas duras desde puesto_curso.horas_requeridas. Se conserva el
+            // bloque (comentado) y las columnas en BD para poder REVERTIR a horas en el futuro.
+            //var ecLegacy = await _empleadoCursoRepository.FindAllAsync(
+            //    predicate: x => x.HorasAcumuladas == 0m,
+            //    disableTracking: false
+            //);
+            //
+            //foreach (var ec in ecLegacy)
+            //{
+            //    var empleado = await _empleadoRepository.FindByIdAsync(ec.IdEmpleado);
+            //    if (empleado is null) { result.Omitidos++; continue; }
+            //
+            //    var pc = await _puestoCursoRepository.FindFirstOrDefaultAsync(
+            //        predicate: x => x.IdPuesto == empleado.IdPuesto && x.IdCurso == ec.IdCurso
+            //    );
+            //
+            //    if (pc is null) { result.Omitidos++; continue; }
+            //
+            //    ec.HorasAcumuladas = pc.HorasRequeridas;
+            //    ec.FechaCalculo = DateTime.UtcNow;
+            //    ec.UpdatedAt = DateTime.UtcNow;
+            //    await _empleadoCursoRepository.SaveAsync(ec);
+            //    result.ProcesadosDuros++;
+            //}
 
             return result;
         }
