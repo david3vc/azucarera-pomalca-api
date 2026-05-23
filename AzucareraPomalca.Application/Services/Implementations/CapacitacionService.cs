@@ -6,6 +6,7 @@ using AzucareraPomalca.Application.Dtos.EmpleadoCursos;
 using AzucareraPomalca.Domain.Cores.Models;
 using AzucareraPomalca.Domain.Models;
 using AzucareraPomalca.Domain.Repositories;
+using AzucareraPomalca.Utils.Constants;
 using System.Linq.Expressions;
 
 namespace AzucareraPomalca.Application.Services.Implementations
@@ -17,9 +18,11 @@ namespace AzucareraPomalca.Application.Services.Implementations
         private readonly IEmpleadoCursoService _empleadoCursoService;
         private readonly IEquivalenciaService _equivalenciaService;
         private readonly ICursoCompetenciaRepository _cursoCompetenciaRepository;
+        private readonly IPlanCapacitacionRepository _planRepository;
+        private readonly ITablaComunRepository _tablaComunRepository;
         private readonly IMapper _mapper;
 
-        public CapacitacionService(ICapacitacionRepository capacitacionRepository, IMapper mapper, ICapacitacionEmpleadoService capacitacionEmpleadoService, IEmpleadoCursoService empleadoCursoService, IEquivalenciaService equivalenciaService, ICursoCompetenciaRepository cursoCompetenciaRepository)
+        public CapacitacionService(ICapacitacionRepository capacitacionRepository, IMapper mapper, ICapacitacionEmpleadoService capacitacionEmpleadoService, IEmpleadoCursoService empleadoCursoService, IEquivalenciaService equivalenciaService, ICursoCompetenciaRepository cursoCompetenciaRepository, IPlanCapacitacionRepository planRepository, ITablaComunRepository tablaComunRepository)
         {
             _capacitacionRepository = capacitacionRepository;
             _mapper = mapper;
@@ -27,6 +30,8 @@ namespace AzucareraPomalca.Application.Services.Implementations
             _empleadoCursoService = empleadoCursoService;
             _equivalenciaService = equivalenciaService;
             _cursoCompetenciaRepository = cursoCompetenciaRepository;
+            _planRepository = planRepository;
+            _tablaComunRepository = tablaComunRepository;
         }
 
         public Task<IReadOnlyList<CapacitacionDto>> FindAllAsync()
@@ -94,7 +99,14 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
             await ValidarVinculoCompetenciaAsync(saveDto);
 
+            // Editar (completar datos diferidos) no reasigna la línea de plan; preservarlo (ver CONTEXTO §3 D-019).
+            int? idPlanCapacitacion = capacitacion.IdPlanCapacitacion;
+            int? idCompetencia = capacitacion.IdCompetencia;
+
             _mapper.Map<CapacitacionSaveDto, Capacitacion>(saveDto, capacitacion);
+
+            capacitacion.IdPlanCapacitacion = idPlanCapacitacion;
+            capacitacion.IdCompetencia = idCompetencia;
 
             capacitacion.UpdatedAt = DateTime.UtcNow;
             capacitacion.Evaluado = false;
@@ -129,7 +141,26 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
             if (capacitacion is null) throw CapacitacionNotFound(id);
 
+            // REGLA R11: una línea de plan en Borrador no se evalúa, solo se edita
+            // (de Aprobado en adelante sí). Ver CONTEXTO §3 D-021.
+            if (capacitacion.IdPlanCapacitacion.HasValue)
+            {
+                PlanCapacitacion? plan = await _planRepository.FindByIdAsync(capacitacion.IdPlanCapacitacion.Value);
+                int borradorId = await ResolverEstadoBorradorIdAsync();
+                if (plan is not null && plan.IdEstadoPlan == borradorId)
+                    throw new BadRequestCoreException(
+                        "No se puede evaluar una capacitación de un plan en Borrador. " +
+                        "Apruebe el plan antes de evaluar; mientras tanto solo puede editarla.");
+            }
+
+            // El vínculo al plan no se gestiona al evaluar; preservarlo (ver CONTEXTO §3 D-019).
+            int? idPlanCapacitacion = capacitacion.IdPlanCapacitacion;
+            int? idCompetencia = capacitacion.IdCompetencia;
+
             _mapper.Map<CapacitacionSaveDto, Capacitacion>(saveDto, capacitacion);
+
+            capacitacion.IdPlanCapacitacion = idPlanCapacitacion;
+            capacitacion.IdCompetencia = idCompetencia;
 
             capacitacion.UpdatedAt = DateTime.UtcNow;
             capacitacion.Evaluado = true;
@@ -200,7 +231,8 @@ namespace AzucareraPomalca.Application.Services.Implementations
             {
                 t => t.Modalidad,
                 t => t.TipoFacilitador,
-                t => t.Curso.TipoCurso
+                t => t.Curso.TipoCurso,
+                t => t.PlanCapacitacion.EstadoPlan
             };
 
             var response = await _capacitacionRepository.FindAllPaginatedAsync(paging: paging, predicate: predicate, includes: includes);
@@ -225,6 +257,20 @@ namespace AzucareraPomalca.Application.Services.Implementations
                     "El curso seleccionado no está vinculado a la competencia objetivo. " +
                     "Vincúlelos en la pantalla de competencias (Cursos que aportan) para que la " +
                     "brecha blanda cierre al evaluar.");
+        }
+
+        // Resuelve el id surrogate del estado Borrador por (id_tabla, id_fila) sin
+        // hardcodearlo (espeja PlanCapacitacionService.ResolverEstadoIdAsync).
+        private async Task<int> ResolverEstadoBorradorIdAsync()
+        {
+            TablaComun? estado = await _tablaComunRepository.FindFirstOrDefaultAsync(
+                predicate: x => x.IdTabla == EstadosPlan.ID_TABLA && x.IdFila == EstadosPlan.FILA_BORRADOR && x.State);
+
+            if (estado is null)
+                throw new BadRequestCoreException(
+                    "Catálogo Estado del Plan no sembrado. Ejecute 20260522_plan_capacitacion.sql.");
+
+            return estado.Id;
         }
 
         private NotFoundCoreException CapacitacionNotFound(int id)
