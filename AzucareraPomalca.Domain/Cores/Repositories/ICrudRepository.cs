@@ -7,6 +7,7 @@ namespace AzucareraPomalca.Domain.Cores.Repositories
         Task<IReadOnlyList<T>> FindAllAsync();
         Task<T?> FindByIdAsync(ID id);
         Task<T> SaveAsync(T entity);
+        Task ExecuteInTransactionAsync(Func<Task> action);
         Task<T> UpdateAsync(T entity);
         Task<T?> FindByIdAsync(Expression<Func<T, bool>> predicate,
                                        List<Expression<Func<T, object>>>? includes = null,

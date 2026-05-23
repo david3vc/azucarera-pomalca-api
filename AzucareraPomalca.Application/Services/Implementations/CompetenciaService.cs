@@ -28,13 +28,17 @@ namespace AzucareraPomalca.Application.Services.Implementations
             competencia.CreatedAt = DateTime.UtcNow;
             competencia.State = true;
 
-            await _competenciaRepository.SaveAsync(competencia);
-
-            foreach (var gradoDominio in saveDto.GradosDominioSave)
+            // Transacción: crear la competencia y sus grados es todo-o-nada (cf. CONTEXTO §3 D-020).
+            await _competenciaRepository.ExecuteInTransactionAsync(async () =>
             {
-                gradoDominio.IdCompetencia = competencia.Id;
-                await _gradoDominioService.CreateAsync(gradoDominio);
-            }
+                await _competenciaRepository.SaveAsync(competencia);
+
+                foreach (var gradoDominio in saveDto.GradosDominioSave)
+                {
+                    gradoDominio.IdCompetencia = competencia.Id;
+                    await _gradoDominioService.CreateAsync(gradoDominio);
+                }
+            });
 
             return _mapper.Map<CompetenciaDto>(competencia);
         }
@@ -62,16 +66,22 @@ namespace AzucareraPomalca.Application.Services.Implementations
 
             competencia.UpdatedAt = DateTime.UtcNow;
 
-            await _competenciaRepository.SaveAsync(competencia);
-
-            foreach (var gradoDominio in saveDto.GradosDominioSave)
+            // Transacción: actualizar la competencia y todos sus grados es todo-o-nada.
+            // Sin ella, una excepción a mitad del bucle (ej. FK / grado inexistente)
+            // dejaba los grados a medio escribir y datos inconsistentes (cf. CONTEXTO §3 D-020).
+            await _competenciaRepository.ExecuteInTransactionAsync(async () =>
             {
-                gradoDominio.IdCompetencia = competencia.Id;
-                if (gradoDominio.Id != 0 && gradoDominio.Id != null)
-                    await _gradoDominioService.EditAsync(gradoDominio.Id ?? 0, gradoDominio);
-                else
-                    await _gradoDominioService.CreateAsync(gradoDominio);
-            }
+                await _competenciaRepository.SaveAsync(competencia);
+
+                foreach (var gradoDominio in saveDto.GradosDominioSave)
+                {
+                    gradoDominio.IdCompetencia = competencia.Id;
+                    if (gradoDominio.Id != 0 && gradoDominio.Id != null)
+                        await _gradoDominioService.EditAsync(gradoDominio.Id ?? 0, gradoDominio);
+                    else
+                        await _gradoDominioService.CreateAsync(gradoDominio);
+                }
+            });
 
             return _mapper.Map<CompetenciaDto>(competencia);
         }

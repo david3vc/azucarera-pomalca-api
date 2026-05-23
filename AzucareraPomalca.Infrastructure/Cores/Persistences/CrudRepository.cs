@@ -49,6 +49,29 @@ namespace AzucareraPomalca.Infrastructure.Cores.Persistences
             return entity;
         }
 
+        public async Task ExecuteInTransactionAsync(Func<Task> action)
+        {
+            // Si ya hay una transacción activa (ej. servicio anidado), reusa el ámbito
+            // existente para no abrir transacciones anidadas (no soportadas).
+            if (_dbContext.Database.CurrentTransaction is not null)
+            {
+                await action();
+                return;
+            }
+
+            await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            try
+            {
+                await action();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+
         public virtual async Task<T> UpdateAsync(T entity)
         {
             try
