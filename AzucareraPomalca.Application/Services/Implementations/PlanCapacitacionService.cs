@@ -137,6 +137,8 @@ namespace AzucareraPomalca.Application.Services.Implementations
                 (!filter.Anio.HasValue || x.Anio == filter.Anio)
                 && (!filter.IdEstadoPlan.HasValue || x.IdEstadoPlan == filter.IdEstadoPlan)
                 && (string.IsNullOrWhiteSpace(filter.Descripcion) || (x.Descripcion != null && x.Descripcion.ToUpper().Contains(filter.Descripcion.ToUpper())))
+                && (!filter.PresupuestoMinimo.HasValue || x.PresupuestoTotal >= filter.PresupuestoMinimo)
+                && (!filter.PresupuestoMaximo.HasValue || x.PresupuestoTotal <= filter.PresupuestoMaximo)
                 && (!filter.State.HasValue || x.State == filter.State);
 
             List<Expression<Func<PlanCapacitacion, object>>>? includes = new List<Expression<Func<PlanCapacitacion, object>>>()
